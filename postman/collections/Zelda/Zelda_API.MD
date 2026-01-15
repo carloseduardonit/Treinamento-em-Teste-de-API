@@ -24,11 +24,22 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     - Efeitos
 
 ### Jogos
+#### Configuração
+
+##### Base Url:
+``` 
+  https://zelda.fanapis.com/
+```
 #### Obter apenas dois jogos
-##### Url:
+#####  Url:
 ``` 
  GET https://zelda.fanapis.com/api/games?limit=2
 ```
+##### Url:
+``` 
+ GET {{BaseUrl}}/api/games?limit=2
+```
+
 ##### Script  de teste de Post-response:
 ```
 var template = `
@@ -149,7 +160,15 @@ function constructVisualizerPayload() {
 pm.visualizer.set(template, constructVisualizerPayload());
 ```
 Resultado esperado: Retorna uma lista com dois jogos da série The Legend of Zelda.
-![Obter apenas dois jogos](Obter apenas dois jogos.png)
+![Obter apenas dois jogos](postman\collections\Zelda\Obter apenas dois jogos.png)
+
+#### Obter todos os jogos
+
+##### Url:
+``` 
+ GET https://zelda.fanapis.com/api/games
+```
+
 
 ### Personagens
 
@@ -158,4 +177,4 @@ Resultado esperado: Retorna uma lista com dois jogos da série The Legend of Zel
 
 ## Bibliografia:
 - [Documentação Oficial da Zelda API](https://docs.zelda.fanapis.com/docs)
-- [Postman Learning Center](https://learning.postman.com/docs/gett
+- [Postman Learning Center](https://learning.postman.com/docs/getting-started/introduction)
