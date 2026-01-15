@@ -1,6 +1,6 @@
 # Meu treinamento de teste de API
 
-https://img.shields.io/badge/Postman-FF6C37.svg?style=for-the-badge&logo=Postman&logoColor=white https://img.shields.io/badge/JSON-000000.svg?style=for-the-badge&logo=JSON&logoColor=white https://img.shields.io/badge/curl-073551.svg?style=for-the-badge&logo=curl&logoColor=white
+https://img.shields.io/badge/Postman-FF6C37.svg?style=for-the-badge&logo=Postman&logoColor=white https://img.shields.io/badge/JSON-000000.svg?style=for-the-badge&logo=JSON&logoColor=white https://img.shields.io/badge/curl-073551.svg?style=for-the-badge&logo=curl&logoColor=white ![https://img.shields.io/badge/Swagger-85EA2D.svg?style=for-the-badge&logo=Swagger&logoColor=white](https://)
 
 Este repositório contém um projeto de teste de API desenvolvido como parte do meu treinamento em desenvolvimento de software. O objetivo deste projeto é demonstrar minhas habilidades na criação, teste e documentação de APIs RESTful.
 
