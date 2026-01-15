@@ -40,7 +40,8 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [Trafle](https://www.trafle.com/)
 - [⏳] [unsplash API](https://unsplash.com/developers)
 - [⏳] [youtube API](https://developers.google.com/youtube/v3)
-- [⏳] [Zelda API](https://zelda.fanapis.com/)
+- [⚙️] [Zelda API](https://zelda.fanapis.com/)
+       - [Coleção em andamento de estudos e testes na Zelda API.](postman/collections/Zelda/Zelda_API.MD)
 
 ### Legendas
 - [⏳]  Aguardando teste

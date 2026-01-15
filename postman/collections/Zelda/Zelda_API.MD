@@ -10,13 +10,22 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 
 ## Endpoints Incluídos
+- Categorias principais:
+    - Jogos
+        - Obter todos os jogos
+        - Obter jogo por ID    
+    - Personagens
 
-- Personagens
-- Itens
-- Localizações
-- Jogos
-- Habilidades
-- Efeitos
+    - Itens
+    - Localizações
+    - Jogos
+    - Habilidades
+    - Efeitos
+
+### Jogos
+
+### Personagens
+
 
 ## Como Usar Esta Coleção
 
