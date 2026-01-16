@@ -11,18 +11,20 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ## Endpoints Incluídos
 - Categorias principais:
-    -  ⚙️ [1 - Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
-        - ✅ [1.1 Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos)
-        - ✅ [1.2 Obter todos os jogos](#obter-todos-os-jogos)
-        - ⚙️ [1.3 Obter jogo por ID](#obter-jogo-por-id)
-        - ✅ [1.4 Obter jogos por nome](#obter-jogos-por-nome)
-        - ⚙️ [1.5 Obter jogos por desenvolvedor](#obter-jogos-por-desenvolvedor)
-    - Personagens
-    - Itens
-    - Localizações
-    - Jogos
-    - Habilidades
-    - Efeitos
+  -  ⚙️ [1 - Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
+    - ✅ [1.1 Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos)
+    - ✅ [1.2 Obter todos os jogos](#obter-todos-os-jogos)
+    - ⚙️ [1.3 Obter jogo por ID](#obter-jogo-por-id)
+    - ✅ [1.4 Obter jogos por nome](#obter-jogos-por-nome)
+    - ⚙️ [1.5 Obter jogos por desenvolvedor](#obter-jogos-por-desenvolvedor)
+  -  ⚙️ [2 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
+    - ✅ [2.1 Obter todos os personagens](#obter-todos-os-personagens)
+    - ⚙️ [2.2 Obter personagem por ID](#obter-personagem-por-id)
+  - Itens
+  - Localizações
+  - Jogos
+  - Habilidades
+  - Efeitos
 ## Legendas
 - ⏳ Aguardando teste
 - ⚙️ Teste em andamento
@@ -440,6 +442,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
  GET {{BaseUrlZelda}}/api/characters/:characterId
 ```
+##### Resultado Obtido: 
+- Retorna os detalhes do personagem correspondente ao ID fornecido.
+---
 ## Como Usar Esta Coleção
 
 ## Bibliografia:
