@@ -25,7 +25,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     - Habilidades
     - Efeitos
 
-<Details about each endpoint can be added here>
+
 ### Jogos
 
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
@@ -165,9 +165,10 @@ function constructVisualizerPayload() {
 
 pm.visualizer.set(template, constructVisualizerPayload());
 ```
-##### Resultado esperado: 
+##### Resultado Obtido: 
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
-![Obter apenas dois jogos](\Obterapenasdoisjogos.png)
+
+![Obter apenas dois jogos](Obterapenasdoisjogos.png)
 
 #### Obter todos os jogos
 
@@ -175,8 +176,11 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` 
  GET {{BaseUrl}}/api/games
 ```
+##### Resultado Obtido: 
+- Retorna uma lista com todos os jogos da série The Legend of Zelda.
 
 ![Obter todos os jogos](Obtertodososjogos.gif)
+
 ### Personagens
 
 
