@@ -11,20 +11,22 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ## Endpoints Incluídos
 - Categorias principais:
-    - [Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
+    -  ⚙️ [Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
         - [Obter apenas dois jogos](#obter-apenas-dois-jogos)
         - [Obter todos os jogos](#obter-todos-os-jogos)
         - [Obter jogo por ID](#obter-jogo-por-id)
         - [Obter jogos por nome](#obter-jogos-por-nome)
         - [Obter jogos por desenvolvedor](#obter-jogos-por-desenvolvedor)
     - Personagens
-
     - Itens
     - Localizações
     - Jogos
     - Habilidades
     - Efeitos
-
+## Legendas
+- ⏳ Aguardando teste
+- ⚙️ Teste em andamento
+- ✅ Teste concluído
 
 ### Jogos
 
@@ -172,7 +174,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 #### Obter todos os jogos
 > [!NOTE]
-> estou utilazando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
+> estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
 ``` Postman
@@ -189,6 +191,17 @@ pm.visualizer.set(template, constructVisualizerPayload());
  GET {{BaseUrlZelda}}/api/games/:gameId
 ``` 
 #### Obter jogos por nome  
+> [!NOTE]
+> estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
+
+##### Url:
+``` Postman
+ GET {{BaseUrlZelda}}/api/games?name=:{{NomeJogo}}
+```
+##### Resultado Obtido: 
+- Retorna os jogos que correspondem ao nome fornecido.
+[Obter jogos por nome](Obterjogospornome.gif)
+
 #### Obter jogos por desenvolvedor
 
 ### Personagens
