@@ -14,9 +14,9 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     - [Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
         - [Obter apenas dois jogos](#obter-apenas-dois-jogos)
         - [Obter todos os jogos](#obter-todos-os-jogos)
-        - Obter jogo por ID  
-        - Obter jogos por nome  
-        - Obter jogos por desenvolvedor
+        - [Obter jogo por ID](#obter-jogo-por-id)
+        - [Obter jogos por nome](#obter-jogos-por-nome)
+        - [Obter jogos por desenvolvedor](#obter-jogos-por-desenvolvedor)
     - Personagens
 
     - Itens
@@ -32,7 +32,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 #### Configuração
 
-##### Base Url:
+##### Base Url do Zelda :
 ``` 
   https://zelda.fanapis.com/
 ```
@@ -43,7 +43,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ```
 ##### Url:
 ``` 
- GET {{BaseUrl}}/api/games?limit=2
+ GET {{BaseUrlZelda}}/api/games?limit=2
 ```
 
 ##### Script  de teste de Post-response:
@@ -171,15 +171,25 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ![Obter apenas dois jogos](Obterapenasdoisjogos.png)
 
 #### Obter todos os jogos
+> [!NOTE]
+> estou utilazando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
-``` 
- GET {{BaseUrl}}/api/games
+``` Postman
+ GET {{BaseUrlZelda}}/api/games
 ```
 ##### Resultado Obtido: 
 - Retorna uma lista com todos os jogos da série The Legend of Zelda.
 
 ![Obter todos os jogos](Obtertodososjogos.gif)
+
+#### Obter jogo por ID 
+##### Url:
+``` Postman
+ GET {{BaseUrlZelda}}/api/games/:gameId
+``` 
+#### Obter jogos por nome  
+#### Obter jogos por desenvolvedor
 
 ### Personagens
 
