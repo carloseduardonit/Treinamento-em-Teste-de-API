@@ -1,3 +1,5 @@
-/postman/collections/Zelda/Jogos/Obterapenasdoisjogos.png
-/postman/collections/Zelda/Jogos/Obterjogospornome.gif
-/postman/collections/Zelda/Jogos/Obtertodososjogos.gif
+# Ignore image files in the postman collections Zelda Jogos directory
+postman/collections/Zelda/Jogos/Obterapenasdoisjogos.png
+postman/collections/Zelda/Jogos/Obterjogospornome.gif
+postman/collections/Zelda/Jogos/Obtertodososjogos.gif
+# Ignore image files in the postman collections
