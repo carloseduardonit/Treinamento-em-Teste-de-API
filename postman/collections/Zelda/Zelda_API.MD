@@ -17,10 +17,11 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ⚙️ [1.3 Obter jogo por ID](#13-obter-jogo-por-id)
        - ✅ [1.4 Obter jogos por nome](#14-obter-jogos-por-nome)
        - ⚙️ [1.5 Obter jogos por desenvolvedor](#15-obter-jogos-por-desenvolvedor)
-  - ⚙️ [2 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
-       - ✅ [2.1 Obter todos os personagens](#21-obter-todos-os-personagens)
-       - ⚙️ [2.2 Obter personagem por ID](#22-obter-personagem-por-id)
-       - ⚙️ [2.3 Obter personagens por nome](#23-obter-personagens-por-nome)
+  - ⚙️ [2 - Funcionários]()
+  - ⚙️ [3 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
+       - ✅ [3.1 Obter todos os personagens](#31-obter-todos-os-personagens)
+       - ✅ [3.2 Obter personagem por ID](#32-obter-personagem-por-id)
+       - ✅ [3.3 Obter personagens por nome](#33-obter-personagens-por-nome)
        -
   - Itens
   - Localizações
@@ -31,9 +32,10 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 - ⏳ Aguardando teste
 - ⚙️ Teste em andamento
 - ✅ Teste concluído
-
+<details>
+<summary>
 ### 1 - Jogos
-
+</summary>
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
 
 #### 1.0 - Configuração
@@ -210,9 +212,13 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
  GET {{BaseUrlZelda}}/api/games?developer={{NomeDesenvolvedor}}
 ```
-### 2. Personagens
+</details>
+---
+### 2. Funcionarios
+- [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
+### 3. Personagens
 - [Documentação para personagens](https://docs.zelda.fanapis.com/docs/characters)
-#### 2.1 Obter todos os personagens
+#### 3.1 Obter todos os personagens
 ##### Url:
 ``` Postman
  GET {{BaseUrlZelda}}/api/characters
@@ -439,7 +445,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna uma lista com todos os personagens da série The Legend of Zelda.
 ![Obter todos os personagens](Personagens/Obtertodosospersonagens.gif)
 ---
-#### 2.2 Obter personagem por ID
+#### 3.2 Obter personagem por ID
 ##### Url:
 ``` Postman
  GET {{BaseUrlZelda}}/api/characters/:characterId
@@ -541,7 +547,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna os detalhes do personagem correspondente ao ID fornecido.
 ![Obter personagem por ID](Personagens/Obterpersonagemporid.gif)
 ---
-#### 2.3 Obter personagens por nome
+#### 3.3 Obter personagens por nome
 > [!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [2.1 Obter todos os personagens](#21-obter-todos-os-personagens) para melhor visualização dos dados retornados.
 ##### Url:
@@ -555,6 +561,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna os personagens que correspondem ao nome fornecido.
 ![Obter personagens por nome](Personagens/Obterpersonagenspornome.gif)
 ---
+
+
+
 ## Como Usar Esta Coleção
 
 ## Bibliografia:
