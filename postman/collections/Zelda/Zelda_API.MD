@@ -171,9 +171,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ```
 ##### Resultado Obtido: 
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
-
 ![Obter apenas dois jogos](Jogos/Obterapenasdoisjogos.png)
----
+
+
 #### 1.2 Obter todos os jogos
 > [!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
@@ -442,8 +442,102 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
  GET {{BaseUrlZelda}}/api/characters/:characterId
 ```
+##### Script  de teste de Post-response:
+``` Js
+// Parse the JSON response
+const response = pm.response.json();
+
+// Build the visualization template
+var template = `
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+    th { background-color: #4a90d9; color: white; font-weight: bold; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    tr:hover { background-color: #f1f1f1; }
+    .cell-content { max-width: 400px; word-wrap: break-word; }
+</style>
+
+<h3>Response Data</h3>
+<table>
+    <thead>
+        <tr>
+            {{#each headers}}
+            <th>{{this}}</th>
+            {{/each}}
+        </tr>
+    </thead>
+    <tbody>
+        {{#each rows}}
+        <tr>
+            {{#each this}}
+            <td><div class="cell-content">{{this}}</div></td>
+            {{/each}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+`;
+
+// Function to construct the visualizer payload
+function constructVisualizerPayload() {
+    let dataArray = [];
+    
+    // Handle different response structures
+    if (response.data) {
+        // If data is an array, use it directly
+        if (Array.isArray(response.data)) {
+            dataArray = response.data;
+        } else {
+            // If data is a single object, wrap it in an array
+            dataArray = [response.data];
+        }
+    } else if (response.results) {
+        // Handle response.results structure
+        if (Array.isArray(response.results)) {
+            dataArray = response.results;
+        } else {
+            dataArray = [response.results];
+        }
+    } else if (Array.isArray(response)) {
+        // If response itself is an array
+        dataArray = response;
+    } else {
+        // If response is a single object without data/results wrapper
+        dataArray = [response];
+    }
+    
+    // Get headers from the first item's keys
+    let headers = [];
+    if (dataArray.length > 0) {
+        headers = Object.keys(dataArray[0]);
+    }
+    
+    // Build rows with safely stringified values
+    let rows = dataArray.map(function(item) {
+        return headers.map(function(key) {
+            let value = item[key];
+            // Safely stringify nested objects/arrays
+            if (value === null || value === undefined) {
+                return '';
+            } else if (typeof value === 'object') {
+                return JSON.stringify(value);
+            } else {
+                return String(value);
+            }
+        });
+    });
+    
+    return { headers: headers, rows: rows };
+}
+
+// Set the visualizer
+pm.visualizer.set(template, constructVisualizerPayload());
+```
 ##### Resultado Obtido: 
 - Retorna os detalhes do personagem correspondente ao ID fornecido.
+![Obter personagem por ID](Personagens/Obterpersonagemporid.gif)
 ---
 ## Como Usar Esta Coleção
 
