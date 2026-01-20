@@ -12,6 +12,7 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [Animes API](https://animechan.vercel.app/)
 - [⏳] [Clash of Clans API](https://developer.clashofclans.com/)
 - [⏳] [deck of cards API](https://deckofcardsapi.com/)
+- [⏳] [Design Patterns](https://refactoring.guru/pt-br/design-patterns/builder/java/example#lang-features)
 - [⏳] [Disney API](https://disneyapi.dev/)
 - [⏳] [Food Fact API](https://world.openfoodfacts.org/data)
 - [⏳] [Fortnite API](https://fortniteapi.com/)
@@ -31,6 +32,7 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [pubg API](https://developer.pubg.com/)
 - [⏳] [QR Code API](https://goqr.me/api/)
 - [⏳] [REST Countries](https://restcountries.com/)
+- [⏳] [Restful-Booker](https://restful-booker.herokuapp.com)
 - [⏳] [Rick and Morty API](https://rickandmortyapi.com/)
 - [⏳] [Riot Games API](https://developer.riotgames.com/)
 - [⏳] [SpaceX API](https://api.spacexdata.com/v4/)
@@ -41,6 +43,8 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [youtube API](https://developers.google.com/youtube/v3)
 - [⚙️] [Zelda API](https://zelda.fanapis.com/)
        - [⚙️] [Coleção em andamento de estudos e testes na Zelda API.](postman/collections/Zelda/Zelda_API.MD)
+
+
 
 ### Legendas
 - [⏳]  Aguardando teste
