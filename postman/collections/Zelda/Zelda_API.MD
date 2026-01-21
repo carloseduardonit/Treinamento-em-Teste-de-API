@@ -54,7 +54,8 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 - ✅ Teste concluído
 <details>
 <summary>
-    ### 1 - Jogos
+
+### 1 - Jogos
 </summary>
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
 
@@ -69,7 +70,6 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ``` 
  GET https://zelda.fanapis.com/api/games?limit=2
 ```
-##### Url:
 ``` 
  GET {{BaseUrlZelda}}/api/games?limit=2
 ```
@@ -197,7 +197,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
 ![Obter apenas dois jogos](Jogos/Obterapenasdoisjogos.png)
 
-
 #### 1.2 Obter todos os jogos
 > [!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
@@ -237,6 +236,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 [Topo](#estudo-no-zelda-api)
 <details>
 <summary>
+
 ### 2. Funcionários
 </summary>
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
@@ -245,11 +245,12 @@ pm.visualizer.set(template, constructVisualizerPayload());
 [Topo](#estudo-no-zelda-api)
 <details>
 <summary>
-### 2. Funcionários
-</summary>
-- [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
-</details>
+
+<details>
+<summary>
+
 ### 3. Personagens
+</summary>
 - [Documentação para personagens](https://docs.zelda.fanapis.com/docs/characters)
 #### 3.1 Obter todos os personagens
 ##### Url:
@@ -594,7 +595,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna os personagens que correspondem ao nome fornecido.
 ![Obter personagens por nome](Personagens/Obterpersonagenspornome.gif)
 ---
-
+</details>
 
 
 ## Como Usar Esta Coleção
