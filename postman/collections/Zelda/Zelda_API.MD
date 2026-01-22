@@ -233,6 +233,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ```
 </details>
 ---
+
 [Topo](#estudo-no-zelda-api)
 <details>
 <summary>
@@ -241,6 +242,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 </summary>
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
 </details>
+
 ---
 [Topo](#estudo-no-zelda-api)
 <details>
