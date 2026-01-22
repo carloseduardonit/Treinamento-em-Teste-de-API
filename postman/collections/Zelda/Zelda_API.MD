@@ -23,31 +23,31 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ✅ [3.2 Obter personagem por ID](#32-obter-personagem-por-id)
        - ✅ [3.3 Obter personagens por nome](#33-obter-personagens-por-nome)
        - testes
-  - ⏳ [4 - Monstros]()
+  - ⏳ [4 - Monstros](#url-7)
        - ⏳ [4.1 Obter todos os monstros](#41-obter-todos-os-monstros)
        - ⏳ [4.2 Obter monstro por ID](#42-obter-monstro-por-id)
        - ⏳ [4.3 Obter monstros por nome](#43-obter-monstros-por-nome)
        - testes
-  - ⏳ [5 - Chefes]()
+  - ⏳ [5 - Chefes](#url-8)
        - ⏳ [5.1 Obter todos os chefes](#51-obter-todos-os-chefes)
        - ⏳ [5.2 Obter chefe por ID](#52-obter-chefe-por-id)
        - ⏳ [5.3 Obter chefes por nome](#53-obter-chefes-por-nome)
        - testes
-  - ⏳ [6 - Masmorras]()
-        - ⏳ [6.1 Obter todas as masmorras](#61-obter-todas-as-masmorras)
-        - ⏳ [6.2 Obter masmorra por ID](#62-obter-masmorra-por-id)
-        - ⏳ [6.3 Obter masmorras por nome](#63-obter-masmorras-por-nome)
-        - testes
+  - ⏳ [6 - Masmorras](#url-9)
+       - ⏳ [6.1 Obter todas as masmorras](#61-obter-todas-as-masmorras)
+       - ⏳ [6.2 Obter masmorra por ID](#62-obter-masmorra-por-id)
+       - ⏳ [6.3 Obter masmorras por nome](#63-obter-masmorras-por-nome)
+       - testes
   - ⏳ [7 - Lugares]()
-        - ⏳ [7.1 Obter todos os lugares](#71-obter-todos-os-lugares)
-        - ⏳ [7.2 Obter lugar por ID](#72-obter-lugar-por-id)
-        - ⏳ [7.3 Obter lugares por nome](#73-obter-lugares-por-nome)
-        - testes
+       - ⏳ [7.1 Obter todos os lugares](#71-obter-todos-os-lugares)
+       - ⏳ [7.2 Obter lugar por ID](#72-obter-lugar-por-id)
+       - ⏳ [7.3 Obter lugares por nome](#73-obter-lugares-por-nome)
+       - testes
   - ⏳ [8 - Itens]()
-        - ⏳ [8.1 Obter todos os itens](#81-obter-todos-os-itens)
-        - ⏳ [8.2 Obter item por ID](#82-obter-item-por-id)
-        - ⏳ [8.3 Obter itens por nome](#83-obter-itens-por-nome)
-        - testes
+       - ⏳ [8.1 Obter todos os itens](#81-obter-todos-os-itens)
+       - ⏳ [8.2 Obter item por ID](#82-obter-item-por-id)
+       - ⏳ [8.3 Obter itens por nome](#83-obter-itens-por-nome)
+       - testes
 ## Legendas
 - ⏳ Aguardando teste
 - ⚙️ Teste em andamento
