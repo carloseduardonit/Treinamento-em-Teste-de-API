@@ -56,6 +56,29 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 
 [Topo](#estudo-no-zelda-api)
+### 0 - Configuração Inicial da Coleção
+- Definição de Variáveis de Ambiente:
+  - `BaseUrlZelda`: Define a URL base para a API da Zelda.
+    - Valor: `https://zelda.fanapis.com/`
+  - `URLJogos`: Define a URL base para o endpoint de jogos.
+    - Valor: `{{BaseUrlZelda}}/api/games`
+  - `NomeJogo`: Variável para armazenar o nome do jogo a ser pesquisado.
+    - Valor: Exemplo: `The Legend of Zelda: Majora's Mask`
+  - `IDJogoZelda`: Variável para armazenar o ID do jogo a ser pesquisado.
+    - Valor: Exemplo: `5f6ce9d805615a85623ec2b9`
+  - `NomePersonagem`: Variável para armazenar o nome do personagem a ser pesquisado.
+    - Valor: Exemplo: `Link`
+  - `NomeDesenvolvedor`: Variável para armazenar o nome do desenvolvedor a ser pesquisado.
+    - Valor: Exemplo: `Nintendo`
+  - `IDPersonagemZelda`: Variável para armazenar o ID do personagem a ser pesquisado.
+    - Valor: Exemplo: `5f6ce9d805615a85623ec2c3`
+  -
+  
+
+---
+[Topo](#estudo-no-zelda-api)
+
+
 
 <details>
 <summary>
@@ -231,6 +254,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 #### 1.4 Obter jogos por nome  
 
 > [!NOTE]
+>
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
@@ -260,6 +284,8 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ### 2. Funcionários
 </summary>
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
+
+#### 
 </details>
 
 ---
