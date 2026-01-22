@@ -242,6 +242,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     GET {{BaseUrlZelda}}/api/games?developer={{NomeDesenvolvedor}}
 ```
 </details>
+
 ---
 
 [Topo](#estudo-no-zelda-api)
