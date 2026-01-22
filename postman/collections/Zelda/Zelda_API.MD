@@ -52,6 +52,11 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 - ⏳ Aguardando teste
 - ⚙️ Teste em andamento
 - ✅ Teste concluído
+
+---
+
+[Topo](#estudo-no-zelda-api)
+
 <details>
 <summary>
 
@@ -246,6 +251,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 
 [Topo](#estudo-no-zelda-api)
+
 <details>
 <summary>
 
