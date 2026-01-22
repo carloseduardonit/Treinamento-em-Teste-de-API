@@ -62,157 +62,165 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 #### 1.0 - Configuração
 
 ##### Base Url do Zelda :
-``` 
-  https://zelda.fanapis.com/
+
+``` url
+    https://zelda.fanapis.com/
 ```
 #### 1.1 Obter apenas dois jogos
+
 #####  Url:
-``` 
- GET https://zelda.fanapis.com/api/games?limit=2
+
+``` url
+    GET https://zelda.fanapis.com/api/games?limit=2
 ```
-``` 
- GET {{BaseUrlZelda}}/api/games?limit=2
+``` url
+    GET {{BaseUrlZelda}}/api/games?limit=2
 ```
 
 ##### Script  de teste de Post-response:
+
 ```
-var template = `
-<style>
-  .games-table-container {
-    font-family: Arial, sans-serif;
-    padding: 16px;
-  }
-  .games-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  .games-table th, .games-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
-  .games-table th {
-    background-color: #4a90d9;
-    color: white;
-    font-weight: bold;
-  }
-  .games-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  .games-table tr:hover {
-    background-color: #f1f1f1;
-  }
-  .error-message {
-    color: #d9534f;
-    padding: 20px;
-    text-align: center;
-    font-size: 16px;
-  }
-  .description-cell {
-    max-width: 200px;
-  }
-</style>
-
-<div class="games-table-container">
-  {{#if error}}
-    <div class="error-message">{{error}}</div>
-  {{else}}
-    <h3>Games List ({{count}} results)</h3>
-    <table class="games-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Console</th>
-          <th>Publisher</th>
-          <th>Released Year</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each games}}
-        <tr>
-        <td>{{id}}</td>
-          <td>{{name}}</td>
-          <td>{{developer}}</td>
-          <td>{{publisher}}</td>
-          <td>{{releasedYear}}</td>
-          
-          <td class="description-cell">{{description}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  {{/if}}
-</div>
-`;
-
-function constructVisualizerPayload() {
-    var response = pm.response.json();
-    
-    // Handle error cases
-    if (!response || response.success === false) {
-        return { error: "Request was not successful. Please check the API response." };
+    var template = `
+    <style>
+    .games-table-container {
+        font-family: Arial, sans-serif;
+        padding: 16px;
     }
-    
-    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-        return { error: "No game data available in the response." };
+    .games-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
     }
-    
-    // Process games data
-    var games = response.data.map(function(game) {
-        // Truncate description to 120 chars with ellipsis
-        var desc = game.description || "";
-        var truncatedDesc = desc.length > 120 ? desc.substring(0, 120) + "..." : desc;
+    .games-table th, .games-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .games-table th {
+        background-color: #4a90d9;
+        color: white;
+        font-weight: bold;
+    }
+    .games-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .games-table tr:hover {
+        background-color: #f1f1f1;
+    }
+    .error-message {
+        color: #d9534f;
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .description-cell {
+        max-width: 200px;
+    }
+    </style>
+
+    <div class="games-table-container">
+    {{#if error}}
+        <div class="error-message">{{error}}</div>
+    {{else}}
+        <h3>Games List ({{count}} results)</h3>
+        <table class="games-table">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Console</th>
+            <th>Publisher</th>
+            <th>Released Year</th>
+            <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each games}}
+            <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{developer}}</td>
+            <td>{{publisher}}</td>
+            <td>{{releasedYear}}</td>
+            
+            <td class="description-cell">{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{/if}}
+    </div>
+    `;
+
+    function constructVisualizerPayload() {
+        var response = pm.response.json();
         
-        // Extract year from released_date
-        var releasedYear = "N/A";
-        if (game.released_date) {
-            var yearMatch = game.released_date.match(/(\d{4})/);
-            if (yearMatch) {
-                releasedYear = yearMatch[1];
-            }
+        // Handle error cases
+        if (!response || response.success === false) {
+            return { error: "Request was not successful. Please check the API response." };
         }
         
+        if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+            return { error: "No game data available in the response." };
+        }
+        
+        // Process games data
+        var games = response.data.map(function(game) {
+            // Truncate description to 120 chars with ellipsis
+            var desc = game.description || "";
+            var truncatedDesc = desc.length > 120 ? desc.substring(0, 120) + "..." : desc;
+            
+            // Extract year from released_date
+            var releasedYear = "N/A";
+            if (game.released_date) {
+                var yearMatch = game.released_date.match(/(\d{4})/);
+                if (yearMatch) {
+                    releasedYear = yearMatch[1];
+                }
+            }
+            
+            return {
+                name: game.name || "N/A",
+                developer: game.developer || "N/A",
+                publisher: game.publisher || "N/A",
+                releasedYear: releasedYear,
+                id: game.id || "N/A",
+                description: truncatedDesc || "N/A"
+            };
+        });
+        
         return {
-            name: game.name || "N/A",
-            developer: game.developer || "N/A",
-            publisher: game.publisher || "N/A",
-            releasedYear: releasedYear,
-            id: game.id || "N/A",
-            description: truncatedDesc || "N/A"
+            games: games,
+            count: response.count || games.length
         };
-    });
-    
-    return {
-        games: games,
-        count: response.count || games.length
-    };
-}
+    }
 
-pm.visualizer.set(template, constructVisualizerPayload());
+    pm.visualizer.set(template, constructVisualizerPayload());
 ```
 ##### Resultado Obtido: 
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
 ![Obter apenas dois jogos](Jogos/Obterapenasdoisjogos.png)
 
 #### 1.2 Obter todos os jogos
+
 > [!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
+
 ``` Postman
- GET {{BaseUrlZelda}}/api/games
+    GET {{BaseUrlZelda}}/api/games
 ```
 ##### Resultado Obtido: 
 - Retorna uma lista com todos os jogos da série The Legend of Zelda.
 ![Obter todos os jogos](Jogos/Obtertodososjogos.gif)
 ---
-#### 1.3 Obter jogo por ID 
+#### 1.3 Obter jogo por ID
+
 ##### Url:
+
 ``` Postman
- GET {{BaseUrlZelda}}/api/games/:gameId
+    GET {{BaseUrlZelda}}/api/games/:gameId
 ``` 
 #### 1.4 Obter jogos por nome  
 > [!NOTE]
@@ -227,9 +235,11 @@ pm.visualizer.set(template, constructVisualizerPayload());
 [Obter jogos por nome](Jogos/Obterjogospornome.gif)
 ---
 #### 1.5 Obter jogos por desenvolvedor
+
 ##### Url:
+
 ``` Postman
- GET {{BaseUrlZelda}}/api/games?developer={{NomeDesenvolvedor}}
+    GET {{BaseUrlZelda}}/api/games?developer={{NomeDesenvolvedor}}
 ```
 </details>
 ---
@@ -254,330 +264,338 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ### 3. Personagens
 </summary>
 - [Documentação para personagens](https://docs.zelda.fanapis.com/docs/characters)
+
 #### 3.1 Obter todos os personagens
+
 ##### Url:
+
 ``` Postman
- GET {{BaseUrlZelda}}/api/characters
+    GET {{BaseUrlZelda}}/api/characters
 ```
 ##### Script  de teste de Post-response:
+
 ```
-// Visualization Script
+    // Visualization Script
 
-var template = `
-<style>
-    .viz-container {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-    }
-    .char-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 30px;
-    }
-    .char-table th, .char-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    .char-table th {
-        background-color: #4CAF50;
-        color: white;
-    }
-    .char-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    .char-table tr:hover {
-        background-color: #ddd;
-    }
-    .charts-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: flex-start;
-        gap: 20px;
-    }
-    .chart-wrapper {
-        flex: 1;
-        max-width: 45%;
-    }
-</style>
+    var template = `
+    <style>
+        .viz-container {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .char-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .char-table th, .char-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .char-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .char-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .char-table tr:hover {
+            background-color: #ddd;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .chart-wrapper {
+            flex: 1;
+            max-width: 45%;
+        }
+    </style>
 
-<div class="viz-container">
-    <h3>Character Data</h3>
-    <table class="char-table">
+    <div class="viz-container">
+        <h3>Character Data</h3>
+        <table class="char-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Race</th>
+                    <th>First Appearance</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {{#each characters}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{gender}}</td>
+                    <td>{{race}}</td>
+                    <td>{{firstAppearance}}</td>
+                    
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <canvas id="genderChart"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="raceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        pm.getData(function (err, value) {
+            // Chart A: Gender Distribution (Bar Chart)
+            var genderCtx = document.getElementById("genderChart");
+            new Chart(genderCtx, {
+                type: "bar",
+                data: {
+                    labels: value.genderLabels,
+                    datasets: [{
+                        label: "Characters by Gender",
+                        data: value.genderCounts,
+                        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                        borderColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Character Distribution by Gender"
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: { beginAtZero: true },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Count"
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Gender"
+                            }
+                        }]
+                    }
+                }
+            });
+
+            // Chart B: Top 10 Races (Horizontal Bar Chart)
+            var raceCtx = document.getElementById("raceChart");
+            new Chart(raceCtx, {
+                type: "horizontalBar",
+                data: {
+                    labels: value.raceLabels,
+                    datasets: [{
+                        label: "Characters by Race",
+                        data: value.raceCounts,
+                        backgroundColor: "#4BC0C0",
+                        borderColor: "#4BC0C0",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Top 10 Races"
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: { beginAtZero: true },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Count"
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Race"
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    </script>
+    `;
+
+    function constructVisualizerPayload() {
+        var response = pm.response.json();
+        var data = response.data || [];
+
+        // Prepare table data
+        var characters = data.map(function(char) {
+            return {
+                name: char.name || "",
+                gender: char.gender || "",
+                race: char.race || "",
+                firstAppearance: (char.appearances && char.appearances.length > 0) ? char.appearances[0] : "",
+                id: char.id || ""
+            };
+        });
+
+        // Prepare gender chart data
+        var genderMap = {};
+        data.forEach(function(char) {
+            var gender = char.gender || "Unknown";
+            genderMap[gender] = (genderMap[gender] || 0) + 1;
+        });
+        var genderLabels = Object.keys(genderMap);
+        var genderCounts = genderLabels.map(function(label) {
+            return genderMap[label];
+        });
+
+        // Prepare race chart data (top 10)
+        var raceMap = {};
+        data.forEach(function(char) {
+            var race = char.race || "Unknown";
+            raceMap[race] = (raceMap[race] || 0) + 1;
+        });
+        var raceEntries = Object.keys(raceMap).map(function(key) {
+            return { label: key, count: raceMap[key] };
+        });
+        raceEntries.sort(function(a, b) {
+            return b.count - a.count;
+        });
+        var top10Races = raceEntries.slice(0, 10);
+        var raceLabels = top10Races.map(function(entry) {
+            return entry.label;
+        });
+        var raceCounts = top10Races.map(function(entry) {
+            return entry.count;
+        });
+
+        return {
+            characters: characters,
+            genderLabels: genderLabels,
+            genderCounts: genderCounts,
+            raceLabels: raceLabels,
+            raceCounts: raceCounts
+        };
+    }
+
+    pm.visualizer.set(template, constructVisualizerPayload());
+```
+##### Resultado Obtido: 
+
+- Retorna uma lista com todos os personagens da série The Legend of Zelda.
+![Obter todos os personagens](Personagens/Obtertodosospersonagens.gif)
+---
+
+#### 3.2 Obter personagem por ID
+
+##### Url:
+
+```text
+    GET {{BaseUrlZelda}}/api/characters/:characterId
+```
+##### Script  de teste de Post-response:
+``` Js
+    // Parse the JSON response
+    const response = pm.response.json();
+
+    // Build the visualization template
+    var template = `
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
+        th { background-color: #4a90d9; color: white; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        .cell-content { max-width: 400px; word-wrap: break-word; }
+    </style>
+
+    <h3>Response Data</h3>
+    <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Race</th>
-                <th>First Appearance</th>
-                
+                {{#each headers}}
+                <th>{{this}}</th>
+                {{/each}}
             </tr>
         </thead>
         <tbody>
-            {{#each characters}}
+            {{#each rows}}
             <tr>
-                <td>{{id}}</td>
-                <td>{{name}}</td>
-                <td>{{gender}}</td>
-                <td>{{race}}</td>
-                <td>{{firstAppearance}}</td>
-                
+                {{#each this}}
+                <td><div class="cell-content">{{this}}</div></td>
+                {{/each}}
             </tr>
             {{/each}}
         </tbody>
     </table>
+    `;
 
-    <div class="charts-container">
-        <div class="chart-wrapper">
-            <canvas id="genderChart"></canvas>
-        </div>
-        <div class="chart-wrapper">
-            <canvas id="raceChart"></canvas>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-<script>
-    pm.getData(function (err, value) {
-        // Chart A: Gender Distribution (Bar Chart)
-        var genderCtx = document.getElementById("genderChart");
-        new Chart(genderCtx, {
-            type: "bar",
-            data: {
-                labels: value.genderLabels,
-                datasets: [{
-                    label: "Characters by Gender",
-                    data: value.genderCounts,
-                    backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
-                    borderColor: ["#36A2EB", "#FF6384", "#FFCE56"],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: "Character Distribution by Gender"
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: { beginAtZero: true },
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Count"
-                        }
-                    }],
-                    xAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Gender"
-                        }
-                    }]
-                }
-            }
-        });
-
-        // Chart B: Top 10 Races (Horizontal Bar Chart)
-        var raceCtx = document.getElementById("raceChart");
-        new Chart(raceCtx, {
-            type: "horizontalBar",
-            data: {
-                labels: value.raceLabels,
-                datasets: [{
-                    label: "Characters by Race",
-                    data: value.raceCounts,
-                    backgroundColor: "#4BC0C0",
-                    borderColor: "#4BC0C0",
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: "Top 10 Races"
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: { beginAtZero: true },
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Count"
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Race"
-                        }
-                    }]
-                }
-            }
-        });
-    });
-</script>
-`;
-
-function constructVisualizerPayload() {
-    var response = pm.response.json();
-    var data = response.data || [];
-
-    // Prepare table data
-    var characters = data.map(function(char) {
-        return {
-            name: char.name || "",
-            gender: char.gender || "",
-            race: char.race || "",
-            firstAppearance: (char.appearances && char.appearances.length > 0) ? char.appearances[0] : "",
-            id: char.id || ""
-        };
-    });
-
-    // Prepare gender chart data
-    var genderMap = {};
-    data.forEach(function(char) {
-        var gender = char.gender || "Unknown";
-        genderMap[gender] = (genderMap[gender] || 0) + 1;
-    });
-    var genderLabels = Object.keys(genderMap);
-    var genderCounts = genderLabels.map(function(label) {
-        return genderMap[label];
-    });
-
-    // Prepare race chart data (top 10)
-    var raceMap = {};
-    data.forEach(function(char) {
-        var race = char.race || "Unknown";
-        raceMap[race] = (raceMap[race] || 0) + 1;
-    });
-    var raceEntries = Object.keys(raceMap).map(function(key) {
-        return { label: key, count: raceMap[key] };
-    });
-    raceEntries.sort(function(a, b) {
-        return b.count - a.count;
-    });
-    var top10Races = raceEntries.slice(0, 10);
-    var raceLabels = top10Races.map(function(entry) {
-        return entry.label;
-    });
-    var raceCounts = top10Races.map(function(entry) {
-        return entry.count;
-    });
-
-    return {
-        characters: characters,
-        genderLabels: genderLabels,
-        genderCounts: genderCounts,
-        raceLabels: raceLabels,
-        raceCounts: raceCounts
-    };
-}
-
-pm.visualizer.set(template, constructVisualizerPayload());
-```
-##### Resultado Obtido: 
-- Retorna uma lista com todos os personagens da série The Legend of Zelda.
-![Obter todos os personagens](Personagens/Obtertodosospersonagens.gif)
----
-#### 3.2 Obter personagem por ID
-##### Url:
-``` Postman
- GET {{BaseUrlZelda}}/api/characters/:characterId
-```
-##### Script  de teste de Post-response:
-``` Js
-// Parse the JSON response
-const response = pm.response.json();
-
-// Build the visualization template
-var template = `
-<style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; vertical-align: top; }
-    th { background-color: #4a90d9; color: white; font-weight: bold; }
-    tr:nth-child(even) { background-color: #f9f9f9; }
-    tr:hover { background-color: #f1f1f1; }
-    .cell-content { max-width: 400px; word-wrap: break-word; }
-</style>
-
-<h3>Response Data</h3>
-<table>
-    <thead>
-        <tr>
-            {{#each headers}}
-            <th>{{this}}</th>
-            {{/each}}
-        </tr>
-    </thead>
-    <tbody>
-        {{#each rows}}
-        <tr>
-            {{#each this}}
-            <td><div class="cell-content">{{this}}</div></td>
-            {{/each}}
-        </tr>
-        {{/each}}
-    </tbody>
-</table>
-`;
-
-// Function to construct the visualizer payload
-function constructVisualizerPayload() {
-    let dataArray = [];
-    
-    // Handle different response structures
-    if (response.data) {
-        // If data is an array, use it directly
-        if (Array.isArray(response.data)) {
-            dataArray = response.data;
-        } else {
-            // If data is a single object, wrap it in an array
-            dataArray = [response.data];
-        }
-    } else if (response.results) {
-        // Handle response.results structure
-        if (Array.isArray(response.results)) {
-            dataArray = response.results;
-        } else {
-            dataArray = [response.results];
-        }
-    } else if (Array.isArray(response)) {
-        // If response itself is an array
-        dataArray = response;
-    } else {
-        // If response is a single object without data/results wrapper
-        dataArray = [response];
-    }
-    
-    // Get headers from the first item's keys
-    let headers = [];
-    if (dataArray.length > 0) {
-        headers = Object.keys(dataArray[0]);
-    }
-    
-    // Build rows with safely stringified values
-    let rows = dataArray.map(function(item) {
-        return headers.map(function(key) {
-            let value = item[key];
-            // Safely stringify nested objects/arrays
-            if (value === null || value === undefined) {
-                return '';
-            } else if (typeof value === 'object') {
-                return JSON.stringify(value);
+    // Function to construct the visualizer payload
+    function constructVisualizerPayload() {
+        let dataArray = [];
+        
+        // Handle different response structures
+        if (response.data) {
+            // If data is an array, use it directly
+            if (Array.isArray(response.data)) {
+                dataArray = response.data;
             } else {
-                return String(value);
+                // If data is a single object, wrap it in an array
+                dataArray = [response.data];
             }
+        } else if (response.results) {
+            // Handle response.results structure
+            if (Array.isArray(response.results)) {
+                dataArray = response.results;
+            } else {
+                dataArray = [response.results];
+            }
+        } else if (Array.isArray(response)) {
+            // If response itself is an array
+            dataArray = response;
+        } else {
+            // If response is a single object without data/results wrapper
+            dataArray = [response];
+        }
+        
+        // Get headers from the first item's keys
+        let headers = [];
+        if (dataArray.length > 0) {
+            headers = Object.keys(dataArray[0]);
+        }
+        
+        // Build rows with safely stringified values
+        let rows = dataArray.map(function(item) {
+            return headers.map(function(key) {
+                let value = item[key];
+                // Safely stringify nested objects/arrays
+                if (value === null || value === undefined) {
+                    return '';
+                } else if (typeof value === 'object') {
+                    return JSON.stringify(value);
+                } else {
+                    return String(value);
+                }
+            });
         });
-    });
-    
-    return { headers: headers, rows: rows };
-}
+        
+        return { headers: headers, rows: rows };
+    }
 
-// Set the visualizer
-pm.visualizer.set(template, constructVisualizerPayload());
+    // Set the visualizer
+    pm.visualizer.set(template, constructVisualizerPayload());
 ```
 ##### Resultado Obtido: 
 - Retorna os detalhes do personagem correspondente ao ID fornecido.
@@ -588,10 +606,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
 > estou utilizando o mesmo recurso de Post-Response do item: [2.1 Obter todos os personagens](#21-obter-todos-os-personagens) para melhor visualização dos dados retornados.
 ##### Url:
 ``` Postman
- GET {{BaseUrlZelda}}/api/characters?name={{NomePersonagem}}
+    GET {{BaseUrlZelda}}/api/characters?name={{NomePersonagem}}
 ```
 ```
-{{URLPersonagens}}?name={{nomePersonagem}}
+    {{URLPersonagens}}?name={{nomePersonagem}}
 ```
 ##### Resultado Obtido: 
 - Retorna os personagens que correspondem ao nome fornecido.
