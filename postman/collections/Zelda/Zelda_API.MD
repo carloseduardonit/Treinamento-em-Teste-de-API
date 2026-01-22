@@ -209,6 +209,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 #### 1.2 Obter todos os jogos
 
 > [!NOTE]
+>
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
@@ -228,6 +229,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     GET {{BaseUrlZelda}}/api/games/:gameId
 ``` 
 #### 1.4 Obter jogos por nome  
+
 > [!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
