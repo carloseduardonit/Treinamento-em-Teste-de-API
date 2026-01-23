@@ -60,20 +60,29 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 - Definição de Variáveis de Ambiente:
   - `BaseUrlZelda`: Define a URL base para a API da Zelda.
     - Valor: `https://zelda.fanapis.com/`
+- Definição de Variáveis do Jogo:
   - `URLJogos`: Define a URL base para o endpoint de jogos.
     - Valor: `{{BaseUrlZelda}}/api/games`
   - `NomeJogo`: Variável para armazenar o nome do jogo a ser pesquisado.
     - Valor: Exemplo: `The Legend of Zelda: Majora's Mask`
   - `IDJogoZelda`: Variável para armazenar o ID do jogo a ser pesquisado.
     - Valor: Exemplo: `5f6ce9d805615a85623ec2b9`
-  - `NomePersonagem`: Variável para armazenar o nome do personagem a ser pesquisado.
-    - Valor: Exemplo: `Link`
   - `NomeDesenvolvedor`: Variável para armazenar o nome do desenvolvedor a ser pesquisado.
     - Valor: Exemplo: `Nintendo`
+- Definição de Variáveis de Funcionario:
+  - `URLFuncionarios`: Define a URL base para o endpoint de funcionários.
+    - Valor: `{{BaseUrlZelda}}/api/staff`
+  - `NomeFuncionario`: Variável para armazenar o nome do funcionário a ser pesquisado.
+    - Valor: Exemplo: ``
+  - `IDFuncionarioZelda`: Variável para armazenar o ID do funcionário a ser pesquisado.
+    - Valor: Exemplo: ``
+- Definição de Variáveis de Personagem:
+  - `URLPersonagens`: Define a URL base para o endpoint de personagens.
+    - Valor: `{{BaseUrlZelda}}/api/characters`
+  - `NomePersonagem`: Variável para armazenar o nome do personagem a ser pesquisado.
+    - Valor: Exemplo: `Link`    
   - `IDPersonagemZelda`: Variável para armazenar o ID do personagem a ser pesquisado.
     - Valor: Exemplo: `5f6ce9d805615a85623ec2c3`
-  -
-  
 
 ---
 [Topo](#estudo-no-zelda-api)
