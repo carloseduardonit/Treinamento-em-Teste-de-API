@@ -17,7 +17,11 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ⚙️ [1.3 Obter jogo por ID](#13-obter-jogo-por-id)
        - ✅ [1.4 Obter jogos por nome](#14-obter-jogos-por-nome)
        - ⚙️ [1.5 Obter jogos por desenvolvedor](#15-obter-jogos-por-desenvolvedor)
-  - ⚙️ [2 - Funcionários]()
+  - ⚙️ [2 - Funcionários](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-28aec2f2-336b-4ac3-ad3b-1682bec767b5?action=share&source=copy-link&creator=25933468&active-environment=68141a6c-873f-4116-90ba-17c51a394a4c)
+        - ⚙️ [2.1 Obter todos os funcionários](#url-6)
+        - ⚙️ [2.2 Obter funcionário por ID](#url-7)
+        - ⚙️ [2.3 Obter funcionários por nome](#url-8)
+        - testes
   - ⚙️ [3 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
        - ✅ [3.1 Obter todos os personagens](#31-obter-todos-os-personagens)
        - ✅ [3.2 Obter personagem por ID](#32-obter-personagem-por-id)
@@ -294,7 +298,47 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 </summary>
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
 
-#### 
+#### 2.1 Obter todos os funcionários
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/staff
+```
+
+##### Script de teste de Post-response
+
+#### Resultado Obtido: 
+- Retorna uma lista com todos os funcionários envolvidos na criação dos jogos da série The Legend of Zelda.
+![Obter todos os funcionários](Funcionarios/Obtertodososfuncionarios.gif)
+
+#### 2.2 Obter funcionário por ID
+
+##### Url:
+
+``` Postman
+    GET {{URLFuncionario}}/:staffId
+```
+#### Resultado Obtido: 
+- Retorna os detalhes do funcionário correspondente ao ID fornecido.
+![Obter funcionário por ID](Funcionarios/Obterfuncionarioporid.gif)
+
+---
+
+#### 2.3 Obter funcionários por nome
+
+##### Url:
+
+``` Postman
+    GET {{URLFuncionario}}?name={{NomeFuncionario}}
+```
+
+#### Resultado Obtido: 
+- Retorna os funcionários que correspondem ao nome fornecido.
+![Obter funcionários por nome](Funcionarios/Obterfuncionariospornome.gif)
+
+---
+
 </details>
 
 ---
