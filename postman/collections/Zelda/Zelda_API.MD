@@ -18,9 +18,9 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ✅ [1.4 Obter jogos por nome](#14-obter-jogos-por-nome)
        - ⚙️ [1.5 Obter jogos por desenvolvedor](#15-obter-jogos-por-desenvolvedor)
   - ⚙️ [2 - Funcionários](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-28aec2f2-336b-4ac3-ad3b-1682bec767b5?action=share&source=copy-link&creator=25933468&active-environment=68141a6c-873f-4116-90ba-17c51a394a4c)
-        - ⚙️ [2.1 Obter todos os funcionários](#url-6)
-        - ⚙️ [2.2 Obter funcionário por ID](#url-7)
-        - ⚙️ [2.3 Obter funcionários por nome](#url-8)
+        - ⚙️ [2.1 Obter todos os funcionários](#21-Obter-todos-os-funcionários)
+        - ⚙️ [2.2 Obter funcionário por ID](#22-Obter-funcionário-por-ID)
+        - ⚙️ [2.3 Obter funcionários por nome](#23-Obter-funcionários-por-nome)
         - testes
   - ⚙️ [3 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
        - ✅ [3.1 Obter todos os personagens](#31-obter-todos-os-personagens)
@@ -60,6 +60,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 
 [Topo](#estudo-no-zelda-api)
+
 ### 0 - Configuração Inicial da Coleção
 - Definição de Variáveis de Ambiente:
   - `BaseUrlZelda`: Define a URL base para a API da Zelda.
@@ -87,6 +88,41 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     - Valor: Exemplo: `Link`    
   - `IDPersonagemZelda`: Variável para armazenar o ID do personagem a ser pesquisado.
     - Valor: Exemplo: `5f6ce9d805615a85623ec2c3`
+- Definição de Variáveis de Monstro:
+  - `URLMonstros`: Define a URL base para o endpoint de monstros.
+    - Valor: `{{BaseUrlZelda}}/api/monsters`
+  - `NomeMonstro`: Variável para armazenar o nome do monstro a ser pesquisado.
+    - Valor: Exemplo: ``
+  - `IDMonstroZelda`: Variável para armazenar o ID do monstro a ser pesquisado.
+    - Valor: Exemplo: ``
+- Definição de Variáveis de Chefe:
+  - `URLChefes`: Define a URL base para o endpoint de chefes.
+    - Valor: `{{BaseUrlZelda}}/api/bosses`
+  - `NomeChefe`: Variável para armazenar o nome do chefe a ser pesquisado.
+    - Valor: Exemplo: ``
+  - `IDChefeZelda`: Variável para armazenar o ID do chefe a ser pesquisado.
+    - Valor: Exemplo: ``
+- Definição de Variáveis de Masmorra:
+  - `URLMasmorras`: Define a URL base para o endpoint de masmorras.
+    - Valor: `{{BaseUrlZelda}}/api/dungeons`
+    - `NomeMasmorra`: Variável para armazenar o nome da masmorra a ser pesquisada.
+      - Valor: Exemplo: ``
+    - `IDMasmorraZelda`: Variável para armazenar o ID da masmorra a ser pesquisada.
+      - Valor: Exemplo: ``
+- Definição de Variáveis de Lugar:
+  - `URLLugares`: Define a URL base para o endpoint de lugares.
+    - Valor: `{{BaseUrlZelda}}/api/locations`
+    - `NomeLugar`: Variável para armazenar o nome do lugar a ser pesquisado.
+      - Valor: Exemplo: ``
+    - `IDLugarZelda`: Variável para armazenar o ID do lugar a ser pesquisado.
+      - Valor: Exemplo: ``
+- Definição de Variáveis de Item:
+  - `URLItens`: Define a URL base para o endpoint de itens.
+    - Valor: `{{BaseUrlZelda}}/api/items`
+    - `NomeItem`: Variável para armazenar o nome do item a ser pesquisado.
+      - Valor: Exemplo: ``
+    - `IDItemZelda`: Variável para armazenar o ID do item a ser pesquisado.
+      - Valor: Exemplo: ``
 
 ---
 [Topo](#estudo-no-zelda-api)
@@ -705,8 +741,16 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 </details>
 
+### 4. Monstros
 
-## Como Usar Esta Coleção
+### 5. Chefes
+
+### 6. Masmorras
+
+### 7. Lugares
+
+### 8. Itens
+
 
 ## Bibliografia:
 - [Documentação Oficial da Zelda API](https://docs.zelda.fanapis.com/docs)
