@@ -332,6 +332,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ### 2. Funcionários
 </summary>
+
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
 
 #### 2.1 Obter todos os funcionários
@@ -379,8 +380,6 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ---
 [Topo](#estudo-no-zelda-api)
-<details>
-<summary>
 
 <details>
 <summary>
@@ -793,7 +792,6 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 </details>
 
----
 [Topo](#estudo-no-zelda-api)
 
 <details>
