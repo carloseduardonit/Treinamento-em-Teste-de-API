@@ -386,7 +386,9 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 <summary>
 
 ### 3. Personagens
+
 </summary>
+
 - [Documentação para personagens](https://docs.zelda.fanapis.com/docs/characters)
 
 #### 3.1 Obter todos os personagens
@@ -748,7 +750,9 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 <summary>
 
 ### 4. Monstros
+
 </summary>
+
 - [Documentação para monstros](https://docs.zelda.fanapis.com/docs/monsters)
 
 #### 4.1 Obter todos os monstros
