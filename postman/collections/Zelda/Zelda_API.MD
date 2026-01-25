@@ -27,10 +27,10 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ✅ [3.2 Obter personagem por ID](#32-obter-personagem-por-id)
        - ✅ [3.3 Obter personagens por nome](#33-obter-personagens-por-nome)
        - testes
-  - ⏳ [4 - Monstros](#url-7)
-       - ⏳ [4.1 Obter todos os monstros](#41-obter-todos-os-monstros)
-       - ⏳ [4.2 Obter monstro por ID](#42-obter-monstro-por-id)
-       - ⏳ [4.3 Obter monstros por nome](#43-obter-monstros-por-nome)
+  - ⚙️ [4 - Monstros](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-f263c356-f0e0-460a-80f1-f97659de9d11?action=share&creator=25933468&ctx=documentation&active-environment=25933468-68141a6c-873f-4116-90ba-17c51a394a4c)
+       - ⚙️ [4.1 Obter todos os monstros](#41-obter-todos-os-monstros)
+       - ⚙️ [4.2 Obter monstro por ID](#42-obter-monstro-por-id)
+       - ⚙️ [4.3 Obter monstros por nome](#43-obter-monstros-por-nome)
        - testes
   - ⏳ [5 - Chefes](#url-8)
        - ⏳ [5.1 Obter todos os chefes](#51-obter-todos-os-chefes)
@@ -741,9 +741,94 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ---
 </details>
 
+---
+[Topo](#estudo-no-zelda-api)
+
+<details>
+<summary>
+
 ### 4. Monstros
+</summary>
+- [Documentação para monstros](https://docs.zelda.fanapis.com/docs/monsters)
+
+#### 4.1 Obter todos os monstros
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/monsters
+```
+##### Script  de teste de Post-response:
+```
+```
+##### Resultado Obtido: 
+- Retorna uma lista com todos os monstros da série The Legend of Zelda.
+![Obter todos os monstros](Monstros/Obtertodososmonstros.gif)
+---
+#### 4.2 Obter monstro por ID
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/monsters/:monsterId
+```
+#### Resultado Obtido: 
+- Retorna os detalhes do monstro correspondente ao ID fornecido.
+![Obter monstro por ID](Monstros/Obtermonstroporid.gif)
+---
+#### 4.3 Obter monstros por nome
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/monsters?name={{NomeMonstro}}
+```
+#### Resultado Obtido: 
+- Retorna os monstros que correspondem ao nome fornecido.
+![Obter monstros por nome](Monstros/Obtermonstrospornome.gif)
+---
+</details>
+
+---
+[Topo](#estudo-no-zelda-api)
+
+<details>
+<summary>
 
 ### 5. Chefes
+
+</summary>
+
+- [Documentação para chefes](https://docs.zelda.fanapis.com/docs/bosses)
+
+#### 5.1 Obter todos os chefes
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/bosses
+```
+
+#### 5.2 Obter chefe por ID
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/bosses/:bossId
+```
+
+#### 5.3 Obter chefes por nome
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/bosses?name={{NomeChefe}}
+```
+</details>
+
+---
+
+[Topo](#estudo-no-zelda-api)
 
 ### 6. Masmorras
 
