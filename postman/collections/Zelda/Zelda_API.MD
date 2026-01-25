@@ -32,25 +32,25 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ⚙️ [4.2 Obter monstro por ID](#42-obter-monstro-por-id)
        - ⚙️ [4.3 Obter monstros por nome](#43-obter-monstros-por-nome)
        - testes
-  - ⏳ [5 - Chefes](#url-8)
-       - ⏳ [5.1 Obter todos os chefes](#51-obter-todos-os-chefes)
-       - ⏳ [5.2 Obter chefe por ID](#52-obter-chefe-por-id)
-       - ⏳ [5.3 Obter chefes por nome](#53-obter-chefes-por-nome)
+  - ⚙️ [5 - Chefes](#https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-61e7d48f-3a18-43f5-bed8-c796bc02dabc?action=share&source=copy-link&creator=25933468&ctx=documentation)
+       - ⚙️ [5.1 Obter todos os chefes](#51-obter-todos-os-chefes)
+       - ⚙️ [5.2 Obter chefe por ID](#52-obter-chefe-por-id)
+       - ⚙️ [5.3 Obter chefes por nome](#53-obter-chefes-por-nome)
        - testes
-  - ⏳ [6 - Masmorras](#url-9)
-       - ⏳ [6.1 Obter todas as masmorras](#61-obter-todas-as-masmorras)
-       - ⏳ [6.2 Obter masmorra por ID](#62-obter-masmorra-por-id)
-       - ⏳ [6.3 Obter masmorras por nome](#63-obter-masmorras-por-nome)
+  - ⚙️ [6 - Masmorras](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-77ed6c47-d9f6-4afc-a069-f40e8259e229?action=share&source=copy-link&creator=25933468&ctx=documentation)
+       - ⚙️ [6.1 Obter todas as masmorras](#61-obter-todas-as-masmorras)
+       - ⚙️ [6.2 Obter masmorra por ID](#62-obter-masmorra-por-id)
+       - ⚙️ [6.3 Obter masmorras por nome](#63-obter-masmorras-por-nome)
        - testes
-  - ⏳ [7 - Lugares]()
-       - ⏳ [7.1 Obter todos os lugares](#71-obter-todos-os-lugares)
-       - ⏳ [7.2 Obter lugar por ID](#72-obter-lugar-por-id)
-       - ⏳ [7.3 Obter lugares por nome](#73-obter-lugares-por-nome)
+  - ⚙️ [7 - Lugares](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-df3a6bf4-391f-4b67-b39a-967aa2ad9df4?action=share&source=copy-link&creator=25933468&ctx=documentation)
+       - ⚙️ [7.1 Obter todos os lugares](#71-obter-todos-os-lugares)
+       - ⚙️ [7.2 Obter lugar por ID](#72-obter-lugar-por-id)
+       - ⚙️ [7.3 Obter lugares por nome](#73-obter-lugares-por-nome)
        - testes
-  - ⏳ [8 - Itens]()
-       - ⏳ [8.1 Obter todos os itens](#81-obter-todos-os-itens)
-       - ⏳ [8.2 Obter item por ID](#82-obter-item-por-id)
-       - ⏳ [8.3 Obter itens por nome](#83-obter-itens-por-nome)
+  - ⚙️ [8 - Itens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-d31f6922-786d-401b-8ad4-9983c4df060b?action=share&source=copy-link&creator=25933468&ctx=documentation)
+       - ⚙️ [8.1 Obter todos os itens](#81-obter-todos-os-itens)
+       - ⚙️ [8.2 Obter item por ID](#82-obter-item-por-id)
+       - ⚙️ [8.3 Obter itens por nome](#83-obter-itens-por-nome)
        - testes
 ## Legendas
 - ⏳ Aguardando teste
@@ -308,11 +308,11 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ##### Url:
 ``` Postman
- GET {{BaseUrlZelda}}/api/games?name={{NomeJogo}}
+    GET {{BaseUrlZelda}}/api/games?name={{NomeJogo}}
 ```
 ##### Resultado Obtido: 
 - Retorna os jogos que correspondem ao nome fornecido.
-[Obter jogos por nome](Jogos/Obterjogospornome.gif)
+![Obter jogos por nome](Jogos/Obterjogospornome.gif)
 ---
 #### 1.5 Obter jogos por desenvolvedor
 
@@ -832,7 +832,43 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 [Topo](#estudo-no-zelda-api)
 
+<details>
+
+<summary>
+
 ### 6. Masmorras
+
+</summary>
+
+- [Documentação para masmorras](https://docs.zelda.fanapis.com/docs/dungeons)
+
+#### 6.1 Obter todas as masmorras
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/dungeons
+```
+
+#### 6.2 Obter masmorra por ID
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/dungeons/:dungeonId
+```
+
+#### 6.3 Obter masmorras por nome
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/dungeons?name={{NomeMasmorra}}
+```
+
+</details>
+---
+[Topo](#estudo-no-zelda-api)
 
 ### 7. Lugares
 
