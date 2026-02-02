@@ -61,7 +61,12 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 [Topo](#estudo-no-zelda-api)
 
+<details>
+<summary>
+
 ### 0 - Configuração Inicial da Coleção
+</summary>
+
 - Definição de Variáveis de Ambiente:
   - `BaseUrlZelda`: Define a URL base para a API da Zelda.
     - Valor: `https://zelda.fanapis.com/`
@@ -123,17 +128,18 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
       - Valor: Exemplo: ``
     - `IDItemZelda`: Variável para armazenar o ID do item a ser pesquisado.
       - Valor: Exemplo: ``
+</details>
 
 ---
+
 [Topo](#estudo-no-zelda-api)
 
-
-
-<details>
+<details open>
 <summary>
 
 ### 1 - Jogos
 </summary>
+
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
 
 #### 1.1 Obter apenas dois jogos
@@ -306,24 +312,163 @@ pm.test("Conferir os dados do segundo game", function () {
 
     pm.visualizer.set(template, constructVisualizerPayload());
 ```
+
 ##### Resultado Obtido: 
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
 ![Obter apenas dois jogos](01_Jogos/Obterapenasdoisjogos.png)
 
 #### 1.2 Obter todos os jogos
 
-> [!NOTE]
->
-> estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#1.1-obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
-
 ##### Url:
 
 ``` Postman
     GET {{BaseUrlZelda}}/api/games
 ```
+##### Script  de teste de Post-response:
+
+- Implrmentação do codigo para o teste de API:
+
+``` Js   
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Verificar os dados do jogo", function (){
+    var jsonData = pm.response.json();
+    var nome = pm.environment.get("NomeJogo");
+    pm.expect(jsonData.success).to.be.true;
+    pm.expect(jsonData.count).to.equal(1);
+    pm.expect(jsonData.data[0].name).to.equal(nome);
+    pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
+    pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
+    pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
+});
+```
+
+- Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
+
+``` html
+var template = `
+    <style>
+    .games-table-container {
+        font-family: Arial, sans-serif;
+        padding: 16px;
+    }
+    .games-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .games-table th, .games-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .games-table th {
+        background-color: #4a90d9;
+        color: white;
+        font-weight: bold;
+    }
+    .games-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .games-table tr:hover {
+        background-color: #f1f1f1;
+    }
+    .error-message {
+        color: #d9534f;
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .description-cell {
+        max-width: 200px;
+    }
+    </style>
+
+    <div class="games-table-container">
+    {{#if error}}
+        <div class="error-message">{{error}}</div>
+    {{else}}
+        <h3>Games List ({{count}} results)</h3>
+        <table class="games-table">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Console</th>
+            <th>Publisher</th>
+            <th>Released Year</th>
+            <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each games}}
+            <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{developer}}</td>
+            <td>{{publisher}}</td>
+            <td>{{releasedYear}}</td>
+            
+            <td class="description-cell">{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{/if}}
+    </div>
+`;
+
+function constructVisualizerPayload() {
+    var response = pm.response.json();
+    
+    // Handle error cases
+    if (!response || response.success === false) {
+        return { error: "Request was not successful. Please check the API response." };
+    }
+    
+    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+        return { error: "No game data available in the response." };
+    }
+    
+    // Process games data
+    var games = response.data.map(function(game) {
+        // Truncate description to 120 chars with ellipsis
+        var desc = game.description || "";
+        var truncatedDesc = desc.length > 120 ? desc.substring(0, 120) + "..." : desc;
+        
+        // Extract year from released_date
+        var releasedYear = "N/A";
+        if (game.released_date) {
+            var yearMatch = game.released_date.match(/(\d{4})/);
+            if (yearMatch) {
+                releasedYear = yearMatch[1];
+            }
+        }
+        
+        return {
+            name: game.name || "N/A",
+            developer: game.developer || "N/A",
+            publisher: game.publisher || "N/A",
+            releasedYear: releasedYear,
+            id: game.id || "N/A",
+            description: truncatedDesc || "N/A"
+        };
+    });
+    
+    return {
+        games: games,
+        count: response.count || games.length
+    };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
+```
+
 ##### Resultado Obtido: 
 - Retorna uma lista com todos os jogos da série The Legend of Zelda.
-![Obter todos os jogos](Jogos/Obtertodososjogos.gif)
+![Obter todos os jogos](01_Jogos/Obtertodososjogos.gif)
 ---
 #### 1.3 Obter jogo por ID
 
