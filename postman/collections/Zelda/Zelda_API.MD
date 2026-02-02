@@ -77,8 +77,6 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
     - Valor: Exemplo: `The Legend of Zelda: Majora's Mask`
   - `IDJogoZelda`: Variável para armazenar o ID do jogo a ser pesquisado.
     - Valor: Exemplo: `5f6ce9d805615a85623ec2b9`
-  - `NomeDesenvolvedor`: Variável para armazenar o nome do desenvolvedor a ser pesquisado.
-    - Valor: Exemplo: `Nintendo`
 - Definição de Variáveis de Funcionario:
   - `URLFuncionarios`: Define a URL base para o endpoint de funcionários.
     - Valor: `{{BaseUrlZelda}}/api/staff`
@@ -154,7 +152,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ```
 
 ##### Script  de teste de Post-response:
-- Implrmentação do codigo para o teste de API:
+- Implementação do codigo para o teste de API:
 ``` js
 
 
@@ -481,24 +479,156 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 #### 1.4 Obter jogos por nome  
 
-> [!NOTE]
-> estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
-
 ##### Url:
 ``` Postman
     GET {{BaseUrlZelda}}/api/games?name={{NomeJogo}}
 ```
+##### Script  de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+``` js
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Verificar os dados do jogo", function (){
+    var jsonData = pm.response.json();
+    var nome = pm.environment.get("NomeJogo");
+    pm.expect(jsonData.success).to.be.true;
+    pm.expect(jsonData.count).to.equal(1);
+    pm.expect(jsonData.data[0].name).to.equal(nome);
+    pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
+    pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
+    pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
+});
+```
+
+- Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
+
+``` html
+var template = `
+    <style>
+    .games-table-container {
+        font-family: Arial, sans-serif;
+        padding: 16px;
+    }
+    .games-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .games-table th, .games-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .games-table th {
+        background-color: #4a90d9;
+        color: white;
+        font-weight: bold;
+    }
+    .games-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .games-table tr:hover {
+        background-color: #f1f1f1;
+    }
+    .error-message {
+        color: #d9534f;
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .description-cell {
+        max-width: 200px;
+    }
+    </style>
+
+    <div class="games-table-container">
+    {{#if error}}
+        <div class="error-message">{{error}}</div>
+    {{else}}
+        <h3>Games List ({{count}} results)</h3>
+        <table class="games-table">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Console</th>
+            <th>Publisher</th>
+            <th>Released Year</th>
+            <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each games}}
+            <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{developer}}</td>
+            <td>{{publisher}}</td>
+            <td>{{releasedYear}}</td>
+            
+            <td class="description-cell">{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{/if}}
+    </div>
+`;
+
+function constructVisualizerPayload() {
+    var response = pm.response.json();
+    
+    // Handle error cases
+    if (!response || response.success === false) {
+        return { error: "Request was not successful. Please check the API response." };
+    }
+    
+    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+        return { error: "No game data available in the response." };
+    }
+    
+    // Process games data
+    var games = response.data.map(function(game) {
+        // Truncate description to 120 chars with ellipsis
+        var desc = game.description || "";
+        var truncatedDesc = desc.length > 120 ? desc.substring(0, 120) + "..." : desc;
+        
+        // Extract year from released_date
+        var releasedYear = "N/A";
+        if (game.released_date) {
+            var yearMatch = game.released_date.match(/(\d{4})/);
+            if (yearMatch) {
+                releasedYear = yearMatch[1];
+            }
+        }
+        
+        return {
+            name: game.name || "N/A",
+            developer: game.developer || "N/A",
+            publisher: game.publisher || "N/A",
+            releasedYear: releasedYear,
+            id: game.id || "N/A",
+            description: truncatedDesc || "N/A"
+        };
+    });
+    
+    return {
+        games: games,
+        count: response.count || games.length
+    };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
+```
+
 ##### Resultado Obtido: 
 - Retorna os jogos que correspondem ao nome fornecido.
-![Obter jogos por nome](Jogos/Obterjogospornome.gif)
+![Obter jogos por nome](01_Jogos/Obterjogospornome.gif)
 ---
-#### 1.5 Obter jogos por desenvolvedor
 
-##### Url:
-
-``` Postman
-    GET {{BaseUrlZelda}}/api/games?developer={{NomeDesenvolvedor}}
-```
 </details>
 
 ---
