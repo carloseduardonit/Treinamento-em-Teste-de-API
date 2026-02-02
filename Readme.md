@@ -35,6 +35,7 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [Restful-Booker](https://restful-booker.herokuapp.com)
 - [⏳] [Rick and Morty API](https://rickandmortyapi.com/)
 - [⏳] [Riot Games API](https://developer.riotgames.com/)
+- [⏳] [Serverest](https://serverest.dev/) | [Front do Serverest](https://front.serverest.dev/login)
 - [⏳] [SpaceX API](https://api.spacexdata.com/v4/)
 - [⏳] [Spotify API](https://developer.spotify.com/documentation/web-api/)
 - [⏳] [Star Wars API (SWAPI)](https://swapi.dev/)
@@ -54,6 +55,7 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 ## Estrutura do Projeto
 
 - `Readme.md`: Este arquivo de documentação do projeto.
+- `postman/collections/`: Contém as coleções do Postman utilizadas para testar as APIs.
 
 ## Biliografia:
 
@@ -61,3 +63,12 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [Guia de APIs RESTful](https://restfulapi.net/)
 - [Artigo: 10 APIs gratuitas que todo desenvolvedor deveria conhecer da DevMedia](https://www.linkedin.com/feed/update/urn:li:activity:7395926993323708416/)
 - [Artigo: 🤘 APIs públicas para seus projetos do Iuri Silva](https://www.linkedin.com/feed/update/urn:li:activity:7393661020264730624/)
+- [Many | Testes e Qualidade de Software](https://www.youtube.com/@lumestack)
+   - [Video no Youtube: Testes de API com Postman [Tutorial Completo para QAs]](https://www.youtube.com/watch?v=p5qoiuFA4hs)
+   - [Aprenda a inserir dados usando o Postman](https://www.youtube.com/watch?v=-nLV9eUTaus)
+- [Labenu](https://www.youtube.com/@labenu_)
+   - [Postman: tudo o que você precisa saber na prática](https://www.youtube.com/watch?v=IaJghBTNMzw)
+- [Alura](https://www.youtube.com/@alura)
+   - [Introdução ao Postman](https://www.youtube.com/watch?v=op81bMbgZXs)
+- [LuizTools](https://www.youtube.com/@LuizTools)
+   - [(Live) Aulão de testes de API com Postman: do básico ao avançado](https://www.youtube.com/watch?v=imPpWmWvMvM)

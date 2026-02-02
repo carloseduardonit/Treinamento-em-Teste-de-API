@@ -1,0 +1,46 @@
+{{#if error}}
+<p style="color: red">{{error}}</p>
+{{else}}
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Descrição</th>
+    <th>Games</th>
+  </tr>
+  {{#each itens}}
+  <tr>
+    <td>{{this.id}}</td>
+    <td>{{this.nome}}</td>
+    <td>{{this.desc}}</td>
+    <td>
+      <table border="1">
+        <tr>
+          <th>Nome</th>
+          <th>Developer</th>
+          <th>Publisher</th>
+          <th>Released</th>
+        </tr>
+        {{#each this.games}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{developer}}</td>
+          <td>{{publisher}}</td>
+          <td>{{released_date}}</td>
+        </tr>
+        {{/each}}
+      </table>
+    </td>
+  </tr>
+  {{/each}}
+</table>
+{{/if}} `; unction visao() { var resposta_item = pm.response.json();
+if(!resposta_item || !resposta_item.success) { return { error: "Erro na
+requisiçãodo Item" }; } 
+if (resposta_item.code === 200 || resposta_item.success){ 
+  var itens = resposta_item.data.map(function(item){ var desc =
+item.description ||""; var truncatedDesc = desc.length > 50 ? desc.substring(0,
+50) + "..." : desc; 
+return { error:
+null, itens: itens }; } 
+pm.visualizer.set(template, visao());

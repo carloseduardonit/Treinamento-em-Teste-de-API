@@ -865,15 +865,136 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ``` Postman
     GET {{BaseUrlZelda}}/api/dungeons?name={{NomeMasmorra}}
 ```
-
 </details>
+
 ---
 [Topo](#estudo-no-zelda-api)
 
+<details>
+<summary>
+
+
 ### 7. Lugares
 
-### 8. Itens
+- [Documentação para lugares](https://docs.zelda.fanapis.com/docs/locations)
 
+#### 7.1 Obter todos os lugares
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/locations
+```
+
+#### 7.2 Obter lugar por ID
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/locations/:locationId
+```
+
+#### 7.3 Obter lugares por nome
+
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/locations?name={{NomeLugar}}
+```
+</details>
+
+---
+[Topo](#estudo-no-zelda-api)
+
+<details>
+<summary>
+
+### 8. Itens
+</summary>
+
+- [Documentação para itens](https://docs.zelda.fanapis.com/docs/items)
+
+#### 8.1 Obter todos os itens
+##### Url:
+
+``` Postman
+    GET {{BaseUrlZelda}}/api/items
+```
+#### 8.2 Obter item por ID
+##### Url:
+
+``` Postman
+    GET {{URLItens}}/:itemId
+```
+#### 8.3 Obter itens por nome
+
+##### Url:
+
+``` Postman
+    GET {{URLItens}}/?name={{NomeItem}}
+```
+##### Script  de teste de Post-response:
+
+- Teste
+```
+    var ID = pm.response.json().data[0].id;
+    var Nome = pm.response.json().data[0].name; // Nome do item
+    const gameIds = pm.response.json().data[0].games; // Array de IDs de jogos
+    var URLGame = gameIds[0];
+
+    pm.test(" 1 - O Status e  igual a 200",function(){
+        pm.expect(pm.response.code).to.eql(200);
+    });
+
+    pm.test("2 - O nome do item é igual a Ancient Battle Axe", function(){
+    var Lnome = pm.environment.get("NomeItem");
+        pm.expect(Nome).to.eql(Lnome);
+    });
+
+    pm.test("3 - O ID do item é igual a 5f6e9a9dfee1a5347127c76e", function () {
+        var Lid = "5f6e9a9dfee1a5347127c76e";
+        pm.expect(ID).to.eql(Lid);
+    });
+
+    pm.sendRequest(URLGame,function(err, res){
+        let count = gameIds.length;
+        if(count > 0){
+        pm.test("4.0 - O jogo foi encontrado ", function(){
+            pm.expect(count).to.be.above(0);
+        });
+        pm.test("4.1 - O nome do jogo é igual a The Legend of Zelda: Breath of the Wild", function () {
+                var LnomeJogo = "The Legend of Zelda: Breath of the Wild";
+                pm.expect(res.json().data.name).to.eql(LnomeJogo);
+            });
+            pm.test("4.2 - O nome do desenvolvedor do jogo é igual a Nintendo", function () {
+                var LnomeDesenvolvedor = "Nintendo";
+                pm.expect(res.json().data.developer).to.eql(LnomeDesenvolvedor);
+            });
+            pm.test("4.3 - O nome do Publicado do jogo é igual a Nintendo",function(){
+                var Lpublisher = "Nintendo";
+                pm.expect(res.json().data.publisher).to.eql(Lpublisher);
+            });
+            pm.test("4.4 - A data de Lançamento do jogo é igual a March 3, 2017", function () {
+                var Lreleased_date = " March 3, 2017";
+                pm.expect(res.json().data.released_date).to.eql(Lreleased_date)
+            });
+
+        } else {
+            pm.test("4.0 - O jogo não foi encontrado", function () {
+                pm.expect(count).to.eql(0);
+            });
+        }
+    });
+
+```
+
+##### Resultado Obtido:
+- 
+
+</details>
+
+---
+[Topo](#estudo-no-zelda-api)
 
 ## Bibliografia:
 - [Documentação Oficial da Zelda API](https://docs.zelda.fanapis.com/docs)
