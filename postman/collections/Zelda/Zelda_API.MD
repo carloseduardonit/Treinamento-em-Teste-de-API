@@ -470,6 +470,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Retorna uma lista com todos os jogos da série The Legend of Zelda.
 ![Obter todos os jogos](01_Jogos/Obtertodososjogos.gif)
 ---
+
 #### 1.3 Obter jogo por ID
 
 ##### Url:
@@ -477,10 +478,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/games/:gameId
 ``` 
+
 #### 1.4 Obter jogos por nome  
 
 > [!NOTE]
->
 > estou utilizando o mesmo recurso de Post-Response do item: [Obter apenas dois jogos](#obter-apenas-dois-jogos) para melhor visualização dos dados retornados.
 
 ##### Url:
