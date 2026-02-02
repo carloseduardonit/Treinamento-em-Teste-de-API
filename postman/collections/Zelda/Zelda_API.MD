@@ -18,10 +18,10 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ✅ [1.4 Obter jogos por nome](#14-obter-jogos-por-nome)
        - ⚙️ [1.5 Obter jogos por desenvolvedor](#15-obter-jogos-por-desenvolvedor)
   - ⚙️ [2 - Funcionários](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-28aec2f2-336b-4ac3-ad3b-1682bec767b5?action=share&source=copy-link&creator=25933468&active-environment=68141a6c-873f-4116-90ba-17c51a394a4c)
-        - ⚙️ [2.1 Obter todos os funcionários](#21-Obter-todos-os-funcionários)
-        - ⚙️ [2.2 Obter funcionário por ID](#22-Obter-funcionário-por-ID)
-        - ⚙️ [2.3 Obter funcionários por nome](#23-Obter-funcionários-por-nome)
-        - testes
+       - ⚙️ [2.1 Obter todos os funcionários](#21-Obter-todos-os-funcionários)
+       - ⚙️ [2.2 Obter funcionário por ID](#22-Obter-funcionário-por-ID)
+       - ⚙️ [2.3 Obter funcionários por nome](#23-Obter-funcionários-por-nome)
+       - testes
   - ⚙️ [3 - Personagens](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
        - ✅ [3.1 Obter todos os personagens](#31-obter-todos-os-personagens)
        - ✅ [3.2 Obter personagem por ID](#32-obter-personagem-por-id)
@@ -136,13 +136,6 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 </summary>
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
 
-#### 1.0 - Configuração
-
-##### Base Url do Zelda :
-
-``` url
-    https://zelda.fanapis.com/
-```
 #### 1.1 Obter apenas dois jogos
 
 #####  Url:
@@ -155,8 +148,47 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ```
 
 ##### Script  de teste de Post-response:
+- Implrmentação do codigo para o teste de API:
+``` js
 
+
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("A quantidade de Games e igual a dois",function(){
+    var quantidadeArray = pm.response.json().data.length;
+    var count = pm.response.json().count;
+    pm.expect(quantidadeArray).to.eql(count);
+
+});
+
+pm.test("Conferir os dados  do primeiro game", function(){
+    var primeiroGame = pm.response.json().data[0];
+    pm.expect(primeiroGame.name).to.eql("The Legend of Zelda");
+    pm.expect(primeiroGame.developer).to.eql("Nintendo R&D 4");
+    pm.expect(primeiroGame.publisher).to.eql("Nintendo");
+    pm.expect(primeiroGame.released_date).to.eql(" February 21, 1986");
+    pm.expect(primeiroGame.id).to.eql("5f6ce9d805615a85623ec2b7");
+});
+
+pm.test("Conferir os dados do segundo game", function () {
+    var segundoGame = pm.response.json().data[1];
+    pm.expect(segundoGame).to.include(
+         {
+            "name": "The Legend of Zelda: A Link to the Past",
+            "description": "One day, a band of evil thieves managed to open the gateway to the Sacred Realm, where the mystical Triforce was hidden. Upon finding the sacred golden relic, the leader of the thieves, Ganondorf, slew his followers and claimed it as his own. Before long, dark power began to flow forth from the Sacred Realm. People were drawn into this darkness, and never heard from again. As a result, the King of Hyrule ordered the seven sages to seal the entrance to the Sacred Realm. A great battle ensued—monsters poured into the Light World from the sacred land and attacked the castle. The Knights of Hyrule defended the sages during the great battle against evil, and, though most of them perished in the struggle, the sages were able to cast their seal, stopping the flow of darkness and trapping the evil king Ganon within. This battle became known as the Imprisoning War. ",
+            "developer": "Nintendo",
+            "publisher": "Nintendo",
+            
+            "id": "5f6ce9d805615a85623ec2b8"
+         }
+    )
+});
 ```
+- Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
+``` html
+    // Visualization Script
     var template = `
     <style>
     .games-table-container {
@@ -276,7 +308,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ```
 ##### Resultado Obtido: 
 - Retorna uma lista com dois jogos da série The Legend of Zelda.
-![Obter apenas dois jogos](Jogos/Obterapenasdoisjogos.png)
+![Obter apenas dois jogos](01_Jogos/Obterapenasdoisjogos.png)
 
 #### 1.2 Obter todos os jogos
 
