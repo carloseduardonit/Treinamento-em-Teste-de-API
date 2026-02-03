@@ -11,10 +11,10 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 ## Endpoints Incluídos
 - Categorias principais:
-  - ⚙️ [1 - Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
+  - ✅ [1 - Jogos](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-ab5a89ac-ddce-4f29-9687-004e74410d75?action=share&creator=25933468&ctx=documentation)
        - ✅ [1.1 Obter apenas dois jogos](#11-obter-apenas-dois-jogos)
        - ✅ [1.2 Obter todos os jogos](#12-obter-todos-os-jogos)
-       - ⚙️ [1.3 Obter jogo por ID](#13-obter-jogo-por-id)
+       - ✅ [1.3 Obter jogo por ID](#13-obter-jogo-por-id)
        - ✅ [1.4 Obter jogos por nome](#14-obter-jogos-por-nome)
   - ⚙️ [2 - Funcionários](https://lunar-sunset-96432.postman.co/workspace/Treinamento-em-Teste-de-API~21da8795-e275-4045-84aa-84927b2ed259/folder/25933468-28aec2f2-336b-4ac3-ad3b-1682bec767b5?action=share&source=copy-link&creator=25933468&active-environment=68141a6c-873f-4116-90ba-17c51a394a4c)
        - ⚙️ [2.1 Obter todos os funcionários](#21-Obter-todos-os-funcionários)
