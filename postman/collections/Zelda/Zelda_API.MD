@@ -477,6 +477,151 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/games/:gameId
 ``` 
 
+##### Script  de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+
+``` js
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("verificar  os dados  do id game", function () {
+   var json = pm.response.json();
+    pm.expect(json).to.have.property('success', true);
+    pm.expect(json.data.id).to.eql(pm.environment.get("IdZelda"));
+    pm.expect(json.data.name).to.eql("The Legend of Zelda: Oracle of Ages");
+    pm.expect(json.data.developer).to.eql("Capcom");
+    pm.expect(json.data.publisher).to.eql("Nintendo");
+    pm.expect(json.data.released_date).to.eql(" May 14, 2001");
+
+});
+``` 
+
+- Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
+``` html
+var template = `
+    <style>
+    .games-table-container {
+        font-family: Arial, sans-serif;
+        padding: 16px;
+    }
+    .games-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .games-table th, .games-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .games-table th {
+        background-color: #4a90d9;
+        color: white;
+        font-weight: bold;
+    }
+    .games-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .games-table tr:hover {
+        background-color: #f1f1f1;
+    }
+    .error-message {
+        color: #d9534f;
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .description-cell {
+        max-width: 200px;
+    }
+    </style>
+
+    <div class="games-table-container">
+    {{#if error}}
+        <div class="error-message">{{error}}</div>
+    {{else}}
+        <h3>Games List ({{count}} results)</h3>
+        <table class="games-table">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Console</th>
+            <th>Publisher</th>
+            <th>Released Year</th>
+            <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each games}}
+            <tr>
+            <td>{{id}}</td>
+            <td>{{name}}</td>
+            <td>{{developer}}</td>
+            <td>{{publisher}}</td>
+            <td>{{releasedYear}}</td>
+            
+            <td class="description-cell">{{description}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+    {{/if}}
+    </div>
+`;
+
+function constructVisualizerPayload() {
+    var response = pm.response.json();
+    
+    // Handle error cases
+    if (!response || response.success === false) {
+        return { error: "Request was not successful. Please check the API response." };
+    }
+    
+    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+        return { error: "No game data available in the response." };
+    }
+    
+    // Process games data
+    var games = response.data.map(function(game) {
+        // Truncate description to 120 chars with ellipsis
+        var desc = game.description || "";
+        var truncatedDesc = desc.length > 120 ? desc.substring(0, 120) + "..." : desc;
+        
+        // Extract year from released_date
+        var releasedYear = "N/A";
+        if (game.released_date) {
+            var yearMatch = game.released_date.match(/(\d{4})/);
+            if (yearMatch) {
+                releasedYear = yearMatch[1];
+            }
+        }
+        
+        return {
+            name: game.name || "N/A",
+            developer: game.developer || "N/A",
+            publisher: game.publisher || "N/A",
+            releasedYear: releasedYear,
+            id: game.id || "N/A",
+            description: truncatedDesc || "N/A"
+        };
+    });
+    
+    return {
+        games: games,
+        count: response.count || games.length
+    };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
+```
+##### Resultado Obtido:
+- Retorna os detalhes do jogo correspondente ao ID fornecido.
+![Obter jogo por ID](01_Jogos/Obterjogoporid.gif)
+---
+
 #### 1.4 Obter jogos por nome  
 
 ##### Url:
@@ -627,7 +772,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ##### Resultado Obtido: 
 - Retorna os jogos que correspondem ao nome fornecido.
 ![Obter jogos por nome](01_Jogos/Obterjogospornome.gif)
----
 
 </details>
 
