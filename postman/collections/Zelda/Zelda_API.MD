@@ -796,10 +796,19 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 ##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
 
 #### Resultado Obtido: 
 - Retorna uma lista com todos os funcionários envolvidos na criação dos jogos da série The Legend of Zelda.
-![Obter todos os funcionários](Funcionarios/Obtertodososfuncionarios.gif)
+![Obter todos os funcionários](02_Funcionarios/Obtertodososfuncionarios.gif)
 
 #### 2.2 Obter funcionário por ID
 
@@ -808,9 +817,21 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{URLFuncionario}}/:staffId
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### Resultado Obtido: 
 - Retorna os detalhes do funcionário correspondente ao ID fornecido.
-![Obter funcionário por ID](Funcionarios/Obterfuncionarioporid.gif)
+![Obter funcionário por ID](02_Funcionarios/Obterfuncionarioporid.gif)
 
 ---
 
@@ -822,11 +843,20 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{URLFuncionario}}?name={{NomeFuncionario}}
 ```
 
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### Resultado Obtido: 
 - Retorna os funcionários que correspondem ao nome fornecido.
-![Obter funcionários por nome](Funcionarios/Obterfuncionariospornome.gif)
-
----
+![Obter funcionários por nome](02_Funcionarios/Obterfuncionariospornome.gif)
 
 </details>
 
@@ -1186,8 +1216,20 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/characters?name={{NomePersonagem}}
 ```
 ```
-    {{URLPersonagens}}?name={{nomePersonagem}}
+    GET {{URLPersonagens}}?name={{nomePersonagem}}
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 ##### Resultado Obtido: 
 - Retorna os personagens que correspondem ao nome fornecido.
 ![Obter personagens por nome](Personagens/Obterpersonagenspornome.gif)
@@ -1213,9 +1255,18 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/monsters
 ```
-##### Script  de teste de Post-response:
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
 ```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
 ```
+
 ##### Resultado Obtido: 
 - Retorna uma lista com todos os monstros da série The Legend of Zelda.
 ![Obter todos os monstros](Monstros/Obtertodososmonstros.gif)
@@ -1227,6 +1278,18 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/monsters/:monsterId
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### Resultado Obtido: 
 - Retorna os detalhes do monstro correspondente ao ID fornecido.
 ![Obter monstro por ID](Monstros/Obtermonstroporid.gif)
@@ -1238,10 +1301,23 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/monsters?name={{NomeMonstro}}
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### Resultado Obtido: 
 - Retorna os monstros que correspondem ao nome fornecido.
 ![Obter monstros por nome](Monstros/Obtermonstrospornome.gif)
 ---
+
 </details>
 
 [Topo](#estudo-no-zelda-api)
@@ -1263,12 +1339,34 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/bosses
 ```
 
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### 5.2 Obter chefe por ID
 
 ##### Url:
 
 ``` Postman
     GET {{BaseUrlZelda}}/api/bosses/:bossId
+```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
 ```
 
 #### 5.3 Obter chefes por nome
@@ -1278,6 +1376,19 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/bosses?name={{NomeChefe}}
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+
 </details>
 
 ---
@@ -1302,12 +1413,35 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/dungeons
 ```
 
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+
 #### 6.2 Obter masmorra por ID
 
 ##### Url:
 
 ``` Postman
     GET {{BaseUrlZelda}}/api/dungeons/:dungeonId
+```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
 ```
 
 #### 6.3 Obter masmorras por nome
@@ -1317,6 +1451,18 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/dungeons?name={{NomeMasmorra}}
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 </details>
 
 ---
@@ -1338,6 +1484,18 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/locations
 ```
 
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+
 #### 7.2 Obter lugar por ID
 
 ##### Url:
@@ -1346,12 +1504,35 @@ pm.visualizer.set(template, constructVisualizerPayload());
     GET {{BaseUrlZelda}}/api/locations/:locationId
 ```
 
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+
 #### 7.3 Obter lugares por nome
 
 ##### Url:
 
 ``` Postman
     GET {{BaseUrlZelda}}/api/locations?name={{NomeLugar}}
+```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
 ```
 </details>
 
@@ -1372,12 +1553,37 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` Postman
     GET {{BaseUrlZelda}}/api/items
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### 8.2 Obter item por ID
+
 ##### Url:
 
 ``` Postman
     GET {{URLItens}}/:itemId
 ```
+
+##### Script de teste de Post-response
+- Implementação do codigo para o teste de API:
+
+``` js
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
 #### 8.3 Obter itens por nome
 
 ##### Url:
