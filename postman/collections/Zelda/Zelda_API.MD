@@ -63,7 +63,7 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 <details>
 <summary>
 
-### 0 - Configuração Inicial da Coleção
+### 0 - Configuração Inicial da Coleção 
 </summary>
 
 - Definição de Variáveis de Ambiente:
@@ -131,10 +131,10 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 
 [Topo](#estudo-no-zelda-api)
 
-<details open>
+<details>
 <summary>
 
-### 1 - Jogos
+### 1 - Jogos ✅
 </summary>
 
 - [documentação para jogos](https://docs.zelda.fanapis.com/docs/games)
@@ -748,10 +748,11 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 [Topo](#estudo-no-zelda-api)
 
-<details>
+<details open>
+
 <summary>
 
-### 2. Funcionários
+### 2. Funcionários ⚙️
 </summary>
 
 - [Documentação para funcionários](https://docs.zelda.fanapis.com/docs/staff)
@@ -773,6 +774,107 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
 ``` html
+var template = `
+<style>
+    .people-table-container {
+        font-family: Arial, sans-serif;
+        padding: 16px;
+    }
+    .people-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    .people-table th, .people-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    .people-table th {
+        background-color: #4a90d9;
+        color: white;
+        font-weight: bold;
+    }
+    .people-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .people-table tr:hover {
+        background-color: #f1f1f1;
+    }
+    .error-message {
+        color: #d9534f;
+        padding: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .games-cell {
+        max-width: 300px;
+        word-wrap: break-word;
+    }
+</style>
+
+<div class="people-table-container">
+{{#if error}}
+    <div class="error-message">{{error}}</div>
+{{else}}
+    <h3>People List ({{count}} results)</h3>
+    <table class="people-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Games Count</th>
+                <th>Games IDs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each people}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{gamesCount}}</td>
+                <td class="games-cell">{{games}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{/if}}
+</div>
+`;
+
+function constructVisualizerPayload() {
+    var response = pm.response.json();
+
+    // Validação básica da resposta
+    if (!response || response.success === false) {
+        return { error: "Request was not successful. Please check the API response." };
+    }
+
+    if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+        return { error: "No people data available in the response." };
+    }
+
+    // Processamento dos dados
+    var people = response.data.map(function(person) {
+        var gamesList = Array.isArray(person.worked_on)
+            ? person.worked_on.map(url => url.split('/').pop()).join(', ')
+            : "N/A";
+
+        return {
+            id: person.id || "N/A",
+            name: person.name || "N/A",
+            gamesCount: person.worked_on ? person.worked_on.length : 0,
+            games: gamesList
+        };
+    });
+
+    return {
+        people: people,
+        count: response.count || people.length
+    };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 #### Resultado Obtido: 
@@ -796,6 +898,76 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
 ``` html
+onst responseJson = pm.response.json();
+
+// Safely handle different shapes: if data is an object with properties, normalize to array
+let people = [];
+if (Array.isArray(responseJson.data)) {
+    people = responseJson.data;
+} else if (responseJson.data && typeof responseJson.data === 'object') {
+    // If data is an object representing one person or keyed object, convert to array of values
+    if (responseJson.data.name || responseJson.data.id || responseJson.data.worked_on) {
+        people = [responseJson.data];
+    } else {
+        people = Object.values(responseJson.data);
+    }
+}
+
+// Extract game URLs, IDs and store unique game IDs in environment
+const allGameUrls = people.flatMap(person => person.worked_on || []);
+const gameIds = allGameUrls.map(url => url && typeof url === 'string' ? url.split('/').pop() : null).filter(Boolean);
+const uniqueGameIds = [...new Set(gameIds)];
+pm.environment.set("gameIds", JSON.stringify(uniqueGameIds));
+
+// Prepare rows for the table
+const rows = people.map(person => {
+    const urls = person.worked_on || [];
+    const ids = urls.map(u => u.split('/').pop());
+    return {
+        id: person.id || '',
+        name: person.name || '',
+        games_count: urls.length,
+        games_ids: ids.join(', ')
+    };
+});
+
+// Handlebars template for a simple table
+const template = `
+<style>
+  table { border-collapse: collapse; width: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  th { background-color: #f2f2f2; font-weight: 600; }
+  tbody tr:nth-child(even){background-color: #fafafa;}
+  .muted { color: #666; font-size: 0.9em; }
+</style>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Number of Games</th>
+      <th>Game IDs</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.name}}</td>
+        <td>{{this.games_count}}</td>
+        <td class="muted">{{this.games_ids}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+`;
+
+// Provide data to the visualizer
+function constructVisualizerPayload() {
+    return { rows: rows };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 #### Resultado Obtido: 
@@ -832,7 +1004,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ---
 [Topo](#estudo-no-zelda-api)
 
-<details>
+<details open>
 <summary>
 
 ### 3. Personagens
@@ -850,7 +1022,37 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ```
 ##### Script  de teste de Post-response:
 
+- Implementação do codigo para o teste de API:
+
+``` js
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Validar a estrutura json do personagem", function () {
+    var json = pm.response.json();
+    // O status 200 foi retornado e o campo success é true
+    pm.expect(json.success).to.be.true;
+    // O campo count é maior ou igual a zero
+    pm.expect(json.count).to.be.at.least(0);
+    // O campo data é um array
+    pm.expect(json.data).to.be.an('array');
+    // O campo data não está vazio
+    pm.expect(json.data).to.not.be.empty;
+    // O campo data contém objetos com as propriedades esperadas
+    pm.expect(json.data[0]).to.have.property('name');
+    pm.expect(json.data[0]).to.have.property('gender');
+    pm.expect(json.data[0]).to.have.property('race');
+    pm.expect(json.data[0]).to.have.property('appearances');
+    pm.expect(json.data[0]).to.have.property('id');
+    // O campo appearances é um array   
+    pm.expect(json.data[0].appearances).to.be.an('array');
+});
 ```
+
+- Payload de visualização personalizado para exibir os dados dos personagens em uma tabela formatada, juntamente com gráficos de distribuição por gênero e raça.
+
+``` html
     // Visualization Script
 
     var template = `
