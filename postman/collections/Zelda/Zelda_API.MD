@@ -1649,6 +1649,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 >[!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [2.1 Obter todos os personagens](#21-obter-todos-os-personagens) para melhor visualização dos dados retornados.
+
 ##### Url:
 ``` Postman
     GET {{BaseUrlZelda}}/api/characters?name={{NomePersonagem}}
@@ -1666,6 +1667,221 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
 ``` html
+    // Visualization Script
+
+    var template = `
+    <style>
+        .viz-container {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .char-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .char-table th, .char-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .char-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .char-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .char-table tr:hover {
+            background-color: #ddd;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .chart-wrapper {
+            flex: 1;
+            max-width: 45%;
+        }
+    </style>
+
+    <div class="viz-container">
+        <h3>Character Data</h3>
+        <table class="char-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Race</th>
+                    <th>First Appearance</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {{#each characters}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{name}}</td>
+                    <td>{{gender}}</td>
+                    <td>{{race}}</td>
+                    <td>{{firstAppearance}}</td>
+                    
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <canvas id="genderChart"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="raceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        pm.getData(function (err, value) {
+            // Chart A: Gender Distribution (Bar Chart)
+            var genderCtx = document.getElementById("genderChart");
+            new Chart(genderCtx, {
+                type: "bar",
+                data: {
+                    labels: value.genderLabels,
+                    datasets: [{
+                        label: "Characters by Gender",
+                        data: value.genderCounts,
+                        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                        borderColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Character Distribution by Gender"
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: { beginAtZero: true },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Count"
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Gender"
+                            }
+                        }]
+                    }
+                }
+            });
+
+            // Chart B: Top 10 Races (Horizontal Bar Chart)
+            var raceCtx = document.getElementById("raceChart");
+            new Chart(raceCtx, {
+                type: "horizontalBar",
+                data: {
+                    labels: value.raceLabels,
+                    datasets: [{
+                        label: "Characters by Race",
+                        data: value.raceCounts,
+                        backgroundColor: "#4BC0C0",
+                        borderColor: "#4BC0C0",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Top 10 Races"
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: { beginAtZero: true },
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Count"
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Race"
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    </script>
+    `;
+
+    function constructVisualizerPayload() {
+        var response = pm.response.json();
+        var data = response.data || [];
+
+        // Prepare table data
+        var characters = data.map(function(char) {
+            return {
+                name: char.name || "",
+                gender: char.gender || "",
+                race: char.race || "",
+                firstAppearance: (char.appearances && char.appearances.length > 0) ? char.appearances[0] : "",
+                id: char.id || ""
+            };
+        });
+
+        // Prepare gender chart data
+        var genderMap = {};
+        data.forEach(function(char) {
+            var gender = char.gender || "Unknown";
+            genderMap[gender] = (genderMap[gender] || 0) + 1;
+        });
+        var genderLabels = Object.keys(genderMap);
+        var genderCounts = genderLabels.map(function(label) {
+            return genderMap[label];
+        });
+
+        // Prepare race chart data (top 10)
+        var raceMap = {};
+        data.forEach(function(char) {
+            var race = char.race || "Unknown";
+            raceMap[race] = (raceMap[race] || 0) + 1;
+        });
+        var raceEntries = Object.keys(raceMap).map(function(key) {
+            return { label: key, count: raceMap[key] };
+        });
+        raceEntries.sort(function(a, b) {
+            return b.count - a.count;
+        });
+        var top10Races = raceEntries.slice(0, 10);
+        var raceLabels = top10Races.map(function(entry) {
+            return entry.label;
+        });
+        var raceCounts = top10Races.map(function(entry) {
+            return entry.count;
+        });
+
+        return {
+            characters: characters,
+            genderLabels: genderLabels,
+            genderCounts: genderCounts,
+            raceLabels: raceLabels,
+            raceCounts: raceCounts
+        };
+    }
+
+    pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 ##### Resultado Obtido: 
