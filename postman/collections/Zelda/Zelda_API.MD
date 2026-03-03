@@ -952,6 +952,68 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    let responseJSON = pm.response.json();
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+
+    pm.test("Resposta e sucesso",()=>{
+        pm.expect(responseJSON.success).to.be.true;
+    });
+    var ID = pm.environment.get("idFuncionario");
+    pm.test("Verificar se o primeiro funcionario tem o ID '"+ID+"'", function () {
+        pm.expect(responseJSON.data.id).to.eql(ID);
+    });
+
+    pm.test("Verificar se o primeiro funcionario tem o nome 'Airi Nagano'", function () {
+        
+        pm.expect(responseJSON.data.name).to.eql("Airi Nagano");
+    });
+    let work = responseJSON.data.worked_on[0]; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
+    pm.test("URL do primeiro funcionario deve estar presente", function () {
+        var url = work; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
+        pm.expect(url).to.not.be.null;
+        pm.expect(url).to.not.be.undefined;
+        pm.expect(url).to.eql("https://zelda.fanapis.com/api/games/5f6ce9d805615a85623ec2c9"); // Verifica se a URL é válida
+        var test = url; // Fixed syntax error
+        test = test.replace(/"/g, ''); // Remove as aspas da string
+        console.log(test + 1);
+    });
+
+    let resquest = {
+        url: work,
+        method: 'GET',
+    } 
+
+    pm.sendRequest(resquest, function (err, response) {
+        let data = response.json().data
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(data); 
+            var nome = data.name;
+            var dev = data.developer;
+            var pub = data.publisher;
+            var date = data.released_date; 
+
+            pm.test("Status de resposta está OK", function () {
+                pm.expect(response.status).to.eql('OK'); // Ensure response is defined
+            });
+            pm.test("O primeiro funcionario trabalha em um jogo", function () {
+                pm.expect(nome).to.eql("The Legend of Zelda: Breath of the Wild"); 
+            });
+            pm.test("O primeiro funcionario foi desenvolvido pelo Nintendo", function () {
+                pm.expect("Nintendo").to.eql(dev);
+            });
+            pm.test("O primeiro funcionario foi publicado pela Nintendo", function () {
+                pm.expect("Nintendo").to.eql(pub);
+            });
+            pm.test("O primeiro funcionario trabalhou em um jogo lançado em 2017", function () {
+                pm.expect(" March 3, 2017").to.eql(date); 
+            });
+
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
@@ -1047,6 +1109,67 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+
+    pm.test("Resposta e sucesso",()=>{
+        pm.expect(pm.response.json().success).to.be.true;
+    });
+    pm.test("Verificar se o primeiro funcionario tem o ID '5f6d127156b0219cac2f5226'", function () {
+        pm.expect(pm.response.json().data[0].id).to.eql("5f6d127156b0219cac2f5226");
+    });
+    var nomeFuncionario = pm.environment.get("nomeFuncionario");
+    pm.test("Verificar se o primeiro funcionario tem o nome '"+nomeFuncionario+"'", function () {
+    
+    pm.expect(pm.response.json().data[0].name).to.eql(nomeFuncionario);
+    });
+    let work = pm.response.json().data[0].worked_on[0]; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
+    pm.test("URL do primeiro funcionario deve estar presente", function () {
+        var url = work; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
+        pm.expect(url).to.not.be.null;
+        pm.expect(url).to.not.be.undefined;
+        pm.expect(url).to.eql("https://zelda.fanapis.com/api/games/5f6ce9d805615a85623ec2c9"); // Verifica se a URL é válida
+        var test = url; 
+        test = test.replace(/"/g, ''); // Remove as aspas da string
+        console.log(test + 1);
+    });
+
+    let resquest = {
+        url: work,
+        method: 'GET',
+    } 
+
+    pm.sendRequest(resquest, function (err, response) {
+        let data = response.json().data
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(data); 
+            var nome = data.name;
+            var dev = data.developer;
+            var pub = data.publisher;
+            var date = data.released_date; 
+
+            pm.test("Status de resposta está OK", function () {
+                pm.expect(response.status).to.eql('OK'); // Ensure response is defined
+            });
+            pm.test("O primeiro funcionario trabalha em um jogo", function () {
+                pm.expect(nome).to.eql("The Legend of Zelda: Breath of the Wild"); 
+            });
+            pm.test("O primeiro funcionario foi desenvolvido pelo Nintendo", function () {
+                pm.expect("Nintendo").to.eql(dev);
+            });
+            pm.test("O primeiro funcionario foi publicado pela Nintendo", function () {
+                pm.expect("Nintendo").to.eql(pub);
+            });
+            pm.test("O primeiro funcionario trabalhou em um jogo lançado em 2017", function () {
+                pm.expect(" March 3, 2017").to.eql(date); 
+            });
+
+        }
+    });
+
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
