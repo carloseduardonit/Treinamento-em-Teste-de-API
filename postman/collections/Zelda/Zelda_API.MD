@@ -1207,29 +1207,62 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
 
-pm.test("Validar a estrutura json do personagem", function () {
-    var json = pm.response.json();
-    // O status 200 foi retornado e o campo success é true
-    pm.expect(json.success).to.be.true;
-    // O campo count é maior ou igual a zero
-    pm.expect(json.count).to.be.at.least(0);
-    // O campo data é um array
-    pm.expect(json.data).to.be.an('array');
-    // O campo data não está vazio
-    pm.expect(json.data).to.not.be.empty;
-    // O campo data contém objetos com as propriedades esperadas
-    pm.expect(json.data[0]).to.have.property('name');
-    pm.expect(json.data[0]).to.have.property('gender');
-    pm.expect(json.data[0]).to.have.property('race');
-    pm.expect(json.data[0]).to.have.property('appearances');
-    pm.expect(json.data[0]).to.have.property('id');
-    // O campo appearances é um array   
-    pm.expect(json.data[0].appearances).to.be.an('array');
-});
+    pm.test("Validar a estrutura json do personagem", function () {
+        var json = pm.response.json();
+        // O status 200 foi retornado e o campo success é true
+        pm.expect(json.success).to.be.true;
+        // O campo count é maior ou igual a zero
+        pm.expect(json.count).to.be.at.least(0);
+        // O campo data é um array
+        pm.expect(json.data).to.be.an('array');
+        // O campo data não está vazio
+        pm.expect(json.data).to.not.be.empty;
+        // O campo data contém objetos com as propriedades esperadas
+        pm.expect(json.data[0]).to.have.property('name');
+        pm.expect(json.data[0]).to.have.property('gender');
+        pm.expect(json.data[0]).to.have.property('race');
+        pm.expect(json.data[0]).to.have.property('appearances');
+        pm.expect(json.data[0]).to.have.property('id');
+        // O campo appearances é um array   
+        pm.expect(json.data[0].appearances).to.be.an('array');
+    });
+    var app = pm.response.json().data[0].appearances[0]
+
+    let resquest = {
+        url: app,
+        method: "GET",
+    }
+
+    pm.sendRequest(resquest, function (err, response) {
+        if (err) {
+            console.error(err);
+        } else {
+            let data = response.json().data
+            pm.test("O Status do jogo é OK", function () {
+                pm.expect(response.status).to.eql("OK");
+            });
+            pm.test("O ID do jogo é 5f6ce9d805615a85623ec2c5", function () {
+                pm.expect(data.id).to.eql("5f6ce9d805615a85623ec2c5");
+            });
+            pm.test("O nome do jogo é The Legend of Zelda: Spirit Tracks", function () {
+                pm.expect(data.name).to.eql("The Legend of Zelda: Spirit Tracks");
+            });
+            pm.test("O nome do desenvolvedor é Nintendo EAD", function () {
+                pm.expect(data.developer).to.eql("Nintendo EAD");
+            });
+            pm.test("O nome do publicado é Nintendo",()=>{
+                pm.expect(data.publisher).to.eql("Nintendo");
+            });
+            pm.test("A data de publicação do game e December 7, 2009",()=>{
+                pm.expect(data.released_date).to.eql(" December 7, 2009");
+            });
+        }
+    });
+
 ```
 
 - Payload de visualização personalizado para exibir os dados dos personagens em uma tabela formatada, juntamente com gráficos de distribuição por gênero e raça.
@@ -1465,7 +1498,58 @@ pm.test("Validar a estrutura json do personagem", function () {
     GET {{BaseUrlZelda}}/api/characters/:characterId
 ```
 ##### Script  de teste de Post-response:
-``` Js
+
+- Implementação do codigo para teste de  API:
+```Js
+    pm.test("Status e igual a 200", function(){
+        pm.response.to.have.status(200);
+    });
+    pm.test("Verifica se o nome do personagem é igual ao esperado", function () {
+        pm.expect(response.data.name).to.eql("Anjean");
+    });
+    var ID = pm.environment.get("IdPersonagem");
+    pm.test("Verifica se o ID do personagem é igual ao esperado", function () {
+        pm.expect(response.data.id).to.eql(ID);
+    });
+    pm.test("O sexo do personagem é feminino",()=>{
+        pm.expect(response.data.gender).to.eql("Female");
+    })
+    pm.test("A corrida do personagem é Lokomo",()=>{
+        pm.expect(response.data.race).to.eql("Lokomo");
+    });
+    var app = pm.response.json().data.appearances[0]
+    let resquest = {
+        url: app,
+        method: "GET",
+    }
+    pm.sendRequest(resquest, function (err, response) {
+        if (err) {
+            console.error(err);
+        } else {
+            let data = response.json().data
+            pm.test("O Status do jogo é OK", function () {
+                pm.expect(response.status).to.eql("OK");
+            });
+            pm.test("O ID do jogo é 5f6ce9d805615a85623ec2c5", function () {
+                pm.expect(data.id).to.eql("5f6ce9d805615a85623ec2c5");
+            });
+            pm.test("O nome do jogo é The Legend of Zelda: Spirit Tracks", function () {
+                pm.expect(data.name).to.eql("The Legend of Zelda: Spirit Tracks");
+            });
+            pm.test("O nome do desenvolvedor é Nintendo EAD", function () {
+                pm.expect(data.developer).to.eql("Nintendo EAD");
+            });
+            pm.test("O nome do publicado é Nintendo",()=>{
+                pm.expect(data.publisher).to.eql("Nintendo");
+            });
+            pm.test("A data de publicação do game e December 7, 2009",()=>{
+                pm.expect(data.released_date).to.eql(" December 7, 2009");
+            });
+        }
+    });
+```
+- Payload de visualização personalizado para exibir os dados dos personagens em uma tabela formatada, juntamente com gráficos de distribuição por gênero e raça.
+``` html
     // Parse the JSON response
     const response = pm.response.json();
 

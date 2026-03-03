@@ -57,7 +57,7 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - `Readme.md`: Este arquivo de documentação do projeto.
 - `postman/collections/`: Contém as coleções do Postman utilizadas para testar as APIs.
 
-## Biliografia:
+## Bibliografia:
 
 - [Documentação do Postman](https://learning.postman.com/docs/getting-started/introduction/)
 - [Guia de APIs RESTful](https://restfulapi.net/)
