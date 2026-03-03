@@ -1646,6 +1646,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ![Obter personagem por ID](Personagens/Obterpersonagemporid.gif)
 ---
 #### 3.3 Obter personagens por nome
+
 >[!NOTE]
 > estou utilizando o mesmo recurso de Post-Response do item: [2.1 Obter todos os personagens](#21-obter-todos-os-personagens) para melhor visualização dos dados retornados.
 ##### Url:
