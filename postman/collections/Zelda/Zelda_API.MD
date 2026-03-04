@@ -1647,21 +1647,76 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ---
 #### 3.3 Obter personagens por nome
 
->[!NOTE]
-> estou utilizando o mesmo recurso de Post-Response do item: [2.1 Obter todos os personagens](#21-obter-todos-os-personagens) para melhor visualização dos dados retornados.
-
 ##### Url:
 ``` Postman
-    GET {{BaseUrlZelda}}/api/characters?name={{NomePersonagem}}
+    GET {{BaseUrlZelda}}/api/characters/?name={{NomePersonagem}}
 ```
-```
-    GET {{URLPersonagens}}?name={{nomePersonagem}}
+``` Postman
+    GET {{URLPersonagens}}/?name={{nomePersonagem}}
 ```
 
 ##### Script de teste de Post-response
 - Implementação do codigo para o teste de API:
 
 ``` js
+    pm.test("Status e igual a 200", function(){
+        pm.response.to.have.status(200);
+    });
+
+    var data =pm.response.json().data[0]
+    var nome = pm.environment.get("nomePersonagem")
+    pm.test("Verifica se o nome do personagem é igual ao esperado", function () {
+        pm.expect(data.name).to.eql(nome);
+    });
+
+    pm.test("Verifica se o ID do personagem é igual ao esperado", function () {
+        pm.expect(data.id).to.eql("5f6d186f246bd9a0809d6116");
+    });
+
+    pm.test("O sexo do personagem esta Null",()=>{
+        pm.expect(data.gender).to.not.eql("Female");
+        pm.expect(data.gender).to.not.eql("Male");
+        pm.expect(data.gender).to.eql(null);
+        pm.expect(data.gender).to.null
+    });
+
+    pm.test("A corrida do personagem esta Null",()=>{
+        pm.expect(data.race).to.eql(null);
+        pm.expect(data.race).to.null
+    });
+
+    var app = data.appearances[0]
+
+    let resquest = {
+        url: app,
+        method: "GET",
+    }
+
+    pm.sendRequest(resquest, function (err, response) {
+        if (err) {
+            console.error(err);
+        } else {
+            let data = response.json().data
+            pm.test("O Status do jogo é OK", function () {
+                pm.expect(response.status).to.eql("OK");
+            });
+            pm.test("O ID do jogo é 5f6ce9d805615a85623ec2c0", function () {
+                pm.expect(data.id).to.eql("5f6ce9d805615a85623ec2c0");
+            });
+            pm.test("O nome do jogo é The Legend of Zelda: Oracle of Seasons", function () {
+                pm.expect(data.name).to.eql("The Legend of Zelda: Oracle of Seasons");
+            });
+            pm.test("O nome do desenvolvedor é Capcom", function () {
+                pm.expect(data.developer).to.eql("Capcom");
+            });
+            pm.test("O nome do publicado é Nintendo",()=>{
+                pm.expect(data.publisher).to.eql("Nintendo");
+            });
+            pm.test("A data de publicação do game e May 14, 2001",()=>{
+                pm.expect(data.released_date).to.eql(" May 14, 2001");
+            });
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
