@@ -1189,7 +1189,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 <details open>
 <summary>
 
-### 3. Personagens
+### 3. Personagens ⚙️
 
 </summary>
 
@@ -1951,7 +1951,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 <details>
 <summary>
 
-### 4. Monstros
+### 4. Monstros ⚙️
 
 </summary>
 
@@ -2034,7 +2034,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 <details>
 <summary>
 
-### 5. Chefes
+### 5. Chefes ⚙️
 
 </summary>
 
@@ -2173,6 +2173,56 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    var id = pm.environment.get("IDChefeZelda");
+    var nome = "Agwanda"
+    const Games = pm.response.json().data.appearances;
+    const urlGame = Games[0];
+
+
+    // Verificar o Status  da resposta
+    pm.test("1 - Status iqual a 200",function(){
+        pm.response.to.have.status(200);
+    });
+
+
+    // Verificar o ID
+    pm.test("2 - ID do lugar é o mesmo", function () {
+        pm.expect(pm.response.json().data.id).to.eql(id);
+    });
+
+    pm.test("3 - Nome do lugar é o mesmo", function () {
+        pm.expect(pm.response.json().data.name).to.eql(nome);
+    });
+
+    // Verifica se o lugar aparece no jogo. Se sim, verifica se o nome do jogo é o mesmo e se o desenvolvedor é a Capcom.
+    pm.sendRequest(urlGame,function(err, res){
+        let count = Games.length;
+        if(count > 0){
+            pm.test("4.1 - Lugar aparece no jogo", function () {
+                let nome = res.json().data.name;
+                pm.expect(nome).to.eql("Zelda\'s Adventure");
+                });
+                
+                pm.test("4.2 - O Lugar foi desevolvido pela empresa ",function(){
+                    let developer = res.json().data.developer;
+                    pm.expect(developer).to.eql("Viridis");
+                });
+
+            pm.test("4.3 - O Lugar foi Publicado pela empresa", function(){
+                let publisher = res.json().data.publisher;
+                pm.expect(publisher).to.eql("Philips Media");
+            });
+
+            pm.test("4.4 - O lugar tem Data de Lançamento", function(){
+                let releaseDate = res.json().data.released_date;
+                pm.expect("1995").to.eql(releaseDate);
+            });
+        } else {
+            pm.test("4.0 - Lugar não aparece no jogo", function () {
+                pm.expect(Games.length).to.eql(0);
+            });
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
