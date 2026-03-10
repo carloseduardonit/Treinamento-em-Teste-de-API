@@ -2059,7 +2059,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
         url: urlGame,
         method: 'GET'
     }
-
     var urlMasmorras = data.dungeons[0];
     var masmorra ={
         url: urlMasmorras,
@@ -2075,7 +2074,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
         pm.expect(jsonRespose.count).to.be.above(10,"Não tem  mais  de 10 elementos");
         pm.expect(jsonRespose.data).to.be.an("array");
     });
-
     pm.test("Verificar se a estrutura do Bosses",()=>{
         console.log(data)
         pm.expect(data).to.have.property("id");
@@ -2086,11 +2084,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
             pm.expect(data).to.have.property("dungeons"); 
             pm.expect(data.dungeons).to.be.an("array","Não é um Array");	
         });
-
         pm.test("Verificar ser nome do Chefe é 'Amy'", function () {
             pm.expect(data.name).to.eql("Amy");
         });
-
     pm.sendRequest(game, function (err, response) {
         if (err) {
             console.log(err);
@@ -2128,7 +2124,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             });
         }
     });
-
     pm.sendRequest(masmorra, function (err, response) {
         if(err){
             console.log(err);
@@ -2147,11 +2142,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
             });
             pm.test("Verificar se o ID da masmorra é '5f6d158a3dd55d9ed2d1c1a2'", function () {
                 pm.expect(response.id).to.eql("5f6d158a3dd55d9ed2d1c1a2");    
-                });
+            });
             pm.test("Verificar se a descrição da masmorra contém 'The Forest Temple is a recurring dungeon in The Legend of Zeld'", function () {
                 pm.expect(response.description).to.include("The Forest Temple is a recurring dungeon in The Legend of Zeld");    
-                });
-
+            });
         }
     });
 ```
@@ -2177,23 +2171,17 @@ pm.visualizer.set(template, constructVisualizerPayload());
     var nome = "Agwanda"
     const Games = pm.response.json().data.appearances;
     const urlGame = Games[0];
-
-
     // Verificar o Status  da resposta
     pm.test("1 - Status iqual a 200",function(){
         pm.response.to.have.status(200);
     });
-
-
     // Verificar o ID
     pm.test("2 - ID do lugar é o mesmo", function () {
         pm.expect(pm.response.json().data.id).to.eql(id);
     });
-
     pm.test("3 - Nome do lugar é o mesmo", function () {
         pm.expect(pm.response.json().data.name).to.eql(nome);
     });
-
     // Verifica se o lugar aparece no jogo. Se sim, verifica se o nome do jogo é o mesmo e se o desenvolvedor é a Capcom.
     pm.sendRequest(urlGame,function(err, res){
         let count = Games.length;
@@ -2202,17 +2190,14 @@ pm.visualizer.set(template, constructVisualizerPayload());
                 let nome = res.json().data.name;
                 pm.expect(nome).to.eql("Zelda\'s Adventure");
                 });
-                
                 pm.test("4.2 - O Lugar foi desevolvido pela empresa ",function(){
                     let developer = res.json().data.developer;
                     pm.expect(developer).to.eql("Viridis");
                 });
-
             pm.test("4.3 - O Lugar foi Publicado pela empresa", function(){
                 let publisher = res.json().data.publisher;
                 pm.expect(publisher).to.eql("Philips Media");
             });
-
             pm.test("4.4 - O lugar tem Data de Lançamento", function(){
                 let releaseDate = res.json().data.released_date;
                 pm.expect("1995").to.eql(releaseDate);
@@ -2246,24 +2231,19 @@ pm.visualizer.set(template, constructVisualizerPayload());
     var id = pm.response.json().data[0].id;
     const Games = pm.response.json().data[0].appearances;
     const urlGame = Games[0];
-
-
     // Verificar o Status  da resposta
     pm.test("1 - Status igual a 200",function(){
         pm.response.to.have.status(200);
     });
-
     // Verificar o ID
     pm.test("2 - ID do lugar é o mesmo", function () {
         var Lid = "5f6e93a7cbf4202fbde22501";
         pm.expect(id).to.eql(Lid);
     });
-
     pm.test("3 - Nome do lugar é o mesmo", function () {
         var Lname = pm.environment.get("NomeChefe");
         pm.expect(nome).to.eql(Lname);
     });
-
     pm.sendRequest(urlGame,function(err, res){
         let count = Games.length;
         if(count > 0){
@@ -2271,17 +2251,14 @@ pm.visualizer.set(template, constructVisualizerPayload());
                 let nome = res.json().data.name;
                 pm.expect(nome).to.eql("The Legend of Zelda: A Link Between Worlds");
             });
-        
             pm.test("4.2 - O Lugar foi desevolvido pela empresa ",function(){
                 let developer = res.json().data.developer;
                 pm.expect(developer).to.eql("Nintendo EAD");
             });
-
             pm.test("4.3 - O Lugar foi Publicado pela empresa", function(){
                 let publisher = res.json().data.publisher;
                 pm.expect(publisher).to.eql("Nintendo");
             });
-
             pm.test("4.4 - O lugar tem Data de Lançamento", function(){
                 let releaseDate = res.json().data.released_date;
                 pm.expect(" November 22, 2013").to.eql(releaseDate);
@@ -2328,6 +2305,77 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    var response = pm.response.json();
+    var data = response.data[0];
+    var urlGame = data.appearances[0];
+    var game = {
+        url: urlGame,
+        method: "GET"
+    }
+    pm.test("Verificar a estrutura da Masmorra",()=>{
+        console.clear();
+        console.log(data);
+        pm.expect(response).to.have.property("success");
+        pm.expect(response).to.have.property("count")
+        pm.expect(response).to.have.property("data");
+        pm.expect(data).to.be.an("object");
+        pm.expect(data).to.have.property("id");
+        pm.expect(data).to.have.property("name");
+        pm.expect(data).to.have.property("description");
+        pm.expect(data).to.have.property("appearances");
+        pm.expect(data.appearances).to.be.an("array");
+    });
+    pm.test("Verificar o ID da Masmorra",()=>{
+        pm.expect(data.id).to.equal("5f6d158a3dd55d9ed2d1c083");
+    });
+    pm.test("Verificar o nome da Masmorra",()=>{
+        pm.expect(data.name).to.equal("Abyss of Agony");
+    });
+        pm.test("Verificar a descrição da Masmorra",()=>{
+        pm.expect(data.description).to.include("Abyss of Agony is a Level in Tri Force");
+    });
+    pm.sendRequest(game, function (err, response) {
+        var gameResponse = response.json();
+        var gameData = gameResponse.data;
+        console.log(gameResponse)
+        if(err){
+            console.log(err);
+        } else {
+            pm.test("Verificar a estrutura do jogo",()=>{
+                pm.expect(gameResponse).to.have.property("success");
+                pm.expect(gameResponse).to.have.property("data");
+                pm.expect(gameData).to.be.an("object");
+                pm.expect(gameData).to.have.property("id");
+                pm.expect(gameData).to.have.property("name");
+                pm.expect(gameData).to.have.property("description");
+                pm.expect(gameData).to.have.property("developer");
+                pm.expect(gameData).to.have.property("publisher");
+                pm.expect(gameData).to.have.property("released_date");
+            });	
+            pm.test("Verificar se requisição foi um sucesso",()=>{
+                pm.expect(gameResponse.success).to.equal(true);	
+                pm.expect(gameResponse.success).to.true;
+            });
+            pm.test("Verificar o ID do jogo",()=>{
+                pm.expect(gameData.id).to.equal("5f6ce9d805615a85623ec2ce");	
+            });
+            pm.test("Verificar o nome do jogo",()=>{
+                pm.expect(gameData.name).to.equal("The Legend of Zelda: Tri Force Heroes");	
+            });
+            pm.test("Verificar  na descrição do jogo contem a frase: 'Tri Force Heroes is the eighteenth'",()=>{
+                pm.expect(gameData.description).to.include("Tri Force Heroes is the eighteenth");	
+            });
+            pm.test("Verificar o desenvolvedor do jogo",()=>{
+                pm.expect(gameData.developer).to.equal("Nintendo");	
+            });
+            pm.test("Verificar a editora do jogo",()=>{	
+                pm.expect(gameData.publisher).to.equal("Nintendo");	
+            });
+            pm.test("Verificar a data de lançamento do jogo",()=>{
+                pm.expect(gameData.released_date).to.equal(" October 23, 2015");	
+            });	
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
@@ -2367,6 +2415,51 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    var nome = pm.response.json().data[0].name;
+    var id = pm.response.json().data[0].id;
+    const Games = pm.response.json().data[0].appearances;
+    const urlGame = Games[0];
+    // Verificar o Status  da resposta
+    pm.test("1 - Status igual a 200",function(){
+        pm.response.to.have.status(200);
+    });
+    // Verificar o ID
+    pm.test("2 - ID do lugar é o mesmo", function () {
+        var Lid = "5f6d158a3dd55d9ed2d1c08c";
+        pm.expect(id).to.eql(Lid);
+    });
+    pm.test("3 - Nome do lugar é o mesmo", function () {
+        var Lname = pm.environment.get("NomeMasmorra");
+        pm.expect(nome).to.eql(Lname);
+    });
+    pm.sendRequest(urlGame,function(err, res){
+        let count = Games.length;
+        if(err){
+            console.log(err); 
+        }
+        if(count > 0){
+            pm.test("4.1 - Lugar aparece no jogo", function () {
+                let nome = res.json().data.name;
+                pm.expect(nome).to.eql("The Legend of Zelda: Phantom Hourglass");
+            });
+            pm.test("4.2 - O Lugar foi desevolvido pela empresa ",function(){
+                let developer = res.json().data.developer;
+                pm.expect(developer).to.eql("Nintendo EAD");
+            });
+            pm.test("4.3 - O Lugar foi Publicado pela empresa", function(){
+                let publisher = res.json().data.publisher;
+                pm.expect(publisher).to.eql("Nintendo");
+            });
+            pm.test("4.4 - O lugar tem Data de Lançamento", function(){
+                let releaseDate = res.json().data.released_date;
+                pm.expect(' October 1, 2007').to.eql(releaseDate);
+            });
+        } else {
+            pm.test("4.0 - Lugar não aparece no jogo", function () {
+                pm.expect(Games.length).to.eql(0);
+            });
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
