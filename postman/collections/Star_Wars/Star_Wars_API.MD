@@ -27,7 +27,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 - 5. ⏳ [Veículos](#5-veículos)
 - 6. ⏳ [Espécies](#6-espécies)
 - 7. ⏳ [Planetas](#7-planetas)
-
+- 8. ⏳ [Bibliografia](#bibliografia)
 </details>
 
 ---
@@ -61,6 +61,55 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 ### 1 Raiz
 </summary>
+
+#### 1.1 Obter as URLs dos endpoints da API
+
+###### URL:
+
+``` url
+  GET https://swapi.dev/api/
+```
+###### Script de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+```javascript
+  pm.test("Verifica a estrutura da resposta", () => {
+    pm.expect(pm.response.json()).to.be.an("object");
+    pm.expect(pm.response.json()).to.have.property("people");
+    pm.expect(pm.response.json()).to.have.property("planets");
+    pm.expect(pm.response.json()).to.have.property("films");
+    pm.expect(pm.response.json()).to.have.property("species");
+    pm.expect(pm.response.json()).to.have.property("vehicles");
+    pm.expect(pm.response.json()).to.have.property("starships");
+  });
+
+  pm.test("Verifica se os valores das propriedades são URLs válidas", () => {
+    console.clear();
+    const responseJson = pm.response.json();
+    const properties = ["people", "planets", "films", "species", "vehicles", "starships"];
+    for (let property of properties) {
+      var url = responseJson[property];
+      pm.expect(url).to.match(/^https:\/\/swapi\.dev\/api\/[^\/]+\/$/);
+      console.log(url)
+      pm.environment.set(property, responseJson[property]);
+    }
+  });
+
+  pm.test("Verifica o status code é 200", () => {
+    pm.response.to.have.status(200);
+  });
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com as seguintes propriedades: "people", "planets", "films", "species", "vehicles" e "starships".
+- Cada propriedade deve conter uma URL válida que aponta para o endpoint correspondente da API.
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
 </details>
 
 ---
@@ -69,7 +118,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 <details open>
 <summary>
 
-### 2. Pessoas
+### 2 Pessoas
 </summary>
 </details>
 
