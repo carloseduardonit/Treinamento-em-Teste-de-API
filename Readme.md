@@ -39,17 +39,27 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 - [⏳] [SpaceX API](https://api.spacexdata.com/v4/)
 - [⏳] [Spotify API](https://developer.spotify.com/documentation/web-api/)
 - [⏳] [Star Wars API (SWAPI)](https://swapi.dev/)
-- [⏳] [Trafle](https://www.trafle.com/)
-- [⏳] [unsplash API](https://unsplash.com/developers)
-- [⏳] [youtube API](https://developers.google.com/youtube/v3)
+   - [⏳] [Coleção e testes na Star Wars API.](postman/collections/Star_Wars/Star_Wars_API.MD)
+   - [⏳] ler a documentação da Star Wars API.
+   - [⏳] Coletar evidencias (prints, vídeos, etc) dos testes realizados na Star Wars API.
+   - [⏳] Exportar a coleção de testes da Star Wars API para o formato JSON e disponibilizar no repositório.
+   - [⏳] Criar um script em JavaScript para automatizar a execução dos testes da Star Wars API utilizando o Newman, a ferramenta de linha de comando do Postman.
+- [❌] [Trafle](https://www.trafle.com/)
+- [❌] [unsplash API](https://unsplash.com/developers)
+- [❌] [youtube API](https://developers.google.com/youtube/v3)
 - [⚙️] [Zelda API](https://zelda.fanapis.com/)
-   - [⚙️] [Coleção  e testes na Zelda API.](postman/collections/Zelda/Zelda_API.MD)
+   - [✅] [Coleção  e testes na Zelda API.](postman/collections/Zelda/Zelda_API.MD)
+   - [✅] ler a documentação da Zelda API.
+   - [⏳] Coletar  de evidencias (prints, vídeos, etc) dos testes realizados na Zelda API.
+   - [⚙️] Exportar a coleção de testes da Zelda API para o formato JSON e disponibilizar no repositório.
+   - [⏳] Criar um script em JavaScript para automatizar a execução dos testes da Zelda API utilizando o Newman, a ferramenta de linha de comando do Postman.
 
 
 
 ### Legendas
-- [⏳]  Aguardando teste
-- [⚙️]  Teste em andamento
+- [⏳]  Aguardando teste ou desenvolvimento
+- [❌]  Teste falho ou impedimento para realizar o teste
+- [⚙️]  Teste ou Desenvolvimento em andamento
 - [✅] Teste concluído
 
 ## Estrutura do Projeto
