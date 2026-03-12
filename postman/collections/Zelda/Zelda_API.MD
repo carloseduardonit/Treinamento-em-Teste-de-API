@@ -51,10 +51,13 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
        - ⚙️ [8.2 Obter item por ID](#82-obter-item-por-id)
        - ⚙️ [8.3 Obter itens por nome](#83-obter-itens-por-nome)
        - testes
+  - [Bibliografia](#bibliografia)
+
 ## Legendas
-- ⏳ Aguardando teste
-- ⚙️ Teste em andamento
-- ✅ Teste concluído
+- [⏳]  Aguardando teste
+- [❌]  Teste falho ou impedimento para realizar o teste
+- [⚙️]  Teste ou Desenvolvimento em andamento
+- [✅] Teste concluído
 
 ---
 
@@ -153,41 +156,34 @@ Este coleção Postman foi criada para estudar e testar a [Zelda API](https://ze
 ##### Script  de teste de Post-response:
 - Implementação do codigo para o teste de API:
 ``` js
-
-
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
-
-pm.test("A quantidade de Games e igual a dois",function(){
-    var quantidadeArray = pm.response.json().data.length;
-    var count = pm.response.json().count;
-    pm.expect(quantidadeArray).to.eql(count);
-
-});
-
-pm.test("Conferir os dados  do primeiro game", function(){
-    var primeiroGame = pm.response.json().data[0];
-    pm.expect(primeiroGame.name).to.eql("The Legend of Zelda");
-    pm.expect(primeiroGame.developer).to.eql("Nintendo R&D 4");
-    pm.expect(primeiroGame.publisher).to.eql("Nintendo");
-    pm.expect(primeiroGame.released_date).to.eql(" February 21, 1986");
-    pm.expect(primeiroGame.id).to.eql("5f6ce9d805615a85623ec2b7");
-});
-
-pm.test("Conferir os dados do segundo game", function () {
-    var segundoGame = pm.response.json().data[1];
-    pm.expect(segundoGame).to.include(
-         {
-            "name": "The Legend of Zelda: A Link to the Past",
-            "description": "One day, a band of evil thieves managed to open the gateway to the Sacred Realm, where the mystical Triforce was hidden. Upon finding the sacred golden relic, the leader of the thieves, Ganondorf, slew his followers and claimed it as his own. Before long, dark power began to flow forth from the Sacred Realm. People were drawn into this darkness, and never heard from again. As a result, the King of Hyrule ordered the seven sages to seal the entrance to the Sacred Realm. A great battle ensued—monsters poured into the Light World from the sacred land and attacked the castle. The Knights of Hyrule defended the sages during the great battle against evil, and, though most of them perished in the struggle, the sages were able to cast their seal, stopping the flow of darkness and trapping the evil king Ganon within. This battle became known as the Imprisoning War. ",
-            "developer": "Nintendo",
-            "publisher": "Nintendo",
-            
-            "id": "5f6ce9d805615a85623ec2b8"
-         }
-    )
-});
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+    pm.test("A quantidade de Games e igual a dois",function(){
+        var quantidadeArray = pm.response.json().data.length;
+        var count = pm.response.json().count;
+        pm.expect(quantidadeArray).to.eql(count);
+    });
+    pm.test("Conferir os dados  do primeiro game", function(){
+        var primeiroGame = pm.response.json().data[0];
+        pm.expect(primeiroGame.name).to.eql("The Legend of Zelda");
+        pm.expect(primeiroGame.developer).to.eql("Nintendo R&D 4");
+        pm.expect(primeiroGame.publisher).to.eql("Nintendo");
+        pm.expect(primeiroGame.released_date).to.eql(" February 21, 1986");
+        pm.expect(primeiroGame.id).to.eql("5f6ce9d805615a85623ec2b7");
+    });
+    pm.test("Conferir os dados do segundo game", function () {
+        var segundoGame = pm.response.json().data[1];
+        pm.expect(segundoGame).to.include(
+            {
+                "name": "The Legend of Zelda: A Link to the Past",
+                "description": "One day, a band of evil thieves managed to open the gateway to the Sacred Realm, where the mystical Triforce was hidden. Upon finding the sacred golden relic, the leader of the thieves, Ganondorf, slew his followers and claimed it as his own. Before long, dark power began to flow forth from the Sacred Realm. People were drawn into this darkness, and never heard from again. As a result, the King of Hyrule ordered the seven sages to seal the entrance to the Sacred Realm. A great battle ensued—monsters poured into the Light World from the sacred land and attacked the castle. The Knights of Hyrule defended the sages during the great battle against evil, and, though most of them perished in the struggle, the sages were able to cast their seal, stopping the flow of darkness and trapping the evil king Ganon within. This battle became known as the Imprisoning War. ",
+                "developer": "Nintendo",
+                "publisher": "Nintendo",
+                "id": "5f6ce9d805615a85623ec2b8"
+            }
+        )
+    });
 ```
 - Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
 ``` html
@@ -326,20 +322,19 @@ pm.test("Conferir os dados do segundo game", function () {
 - Implrmentação do codigo para o teste de API:
 
 ``` Js   
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
-
-pm.test("Verificar os dados do jogo", function (){
-    var jsonData = pm.response.json();
-    var nome = pm.environment.get("NomeJogo");
-    pm.expect(jsonData.success).to.be.true;
-    pm.expect(jsonData.count).to.equal(1);
-    pm.expect(jsonData.data[0].name).to.equal(nome);
-    pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
-    pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
-    pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
-});
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+    pm.test("Verificar os dados do jogo", function (){
+        var jsonData = pm.response.json();
+        var nome = pm.environment.get("NomeJogo");
+        pm.expect(jsonData.success).to.be.true;
+        pm.expect(jsonData.count).to.equal(1);
+        pm.expect(jsonData.data[0].name).to.equal(nome);
+        pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
+        pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
+        pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
@@ -481,20 +476,18 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
-
-pm.test("verificar  os dados  do id game", function () {
-   var json = pm.response.json();
-    pm.expect(json).to.have.property('success', true);
-    pm.expect(json.data.id).to.eql(pm.environment.get("IdZelda"));
-    pm.expect(json.data.name).to.eql("The Legend of Zelda: Oracle of Ages");
-    pm.expect(json.data.developer).to.eql("Capcom");
-    pm.expect(json.data.publisher).to.eql("Nintendo");
-    pm.expect(json.data.released_date).to.eql(" May 14, 2001");
-
-});
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+    pm.test("verificar  os dados  do id game", function () {
+    var json = pm.response.json();
+        pm.expect(json).to.have.property('success', true);
+        pm.expect(json.data.id).to.eql(pm.environment.get("IdZelda"));
+        pm.expect(json.data.name).to.eql("The Legend of Zelda: Oracle of Ages");
+        pm.expect(json.data.developer).to.eql("Capcom");
+        pm.expect(json.data.publisher).to.eql("Nintendo");
+        pm.expect(json.data.released_date).to.eql(" May 14, 2001");
+    });
 ``` 
 
 - Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
@@ -601,20 +594,19 @@ pm.test("verificar  os dados  do id game", function () {
 
 - Implementação do codigo para o teste de API:
 ``` js
-pm.test("Status code is 200", function () {
-    pm.response.to.have.status(200);
-});
-
-pm.test("Verificar os dados do jogo", function (){
-    var jsonData = pm.response.json();
-    var nome = pm.environment.get("NomeJogo");
-    pm.expect(jsonData.success).to.be.true;
-    pm.expect(jsonData.count).to.equal(1);
-    pm.expect(jsonData.data[0].name).to.equal(nome);
-    pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
-    pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
-    pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
-});
+    pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+    });
+    pm.test("Verificar os dados do jogo", function (){
+        var jsonData = pm.response.json();
+        var nome = pm.environment.get("NomeJogo");
+        pm.expect(jsonData.success).to.be.true;
+        pm.expect(jsonData.count).to.equal(1);
+        pm.expect(jsonData.data[0].name).to.equal(nome);
+        pm.expect(jsonData.data[0].developer).to.equal("Nintendo EAD");
+        pm.expect(jsonData.data[0].publisher).to.equal("Nintendo");
+        pm.expect(jsonData.data[0].released_date).to.equal(" October 26, 2000");
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos jogos em uma tabela formatada.
@@ -772,14 +764,12 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Status code is 200", function () {
         pm.response.to.have.status(200);
     });
-
     pm.test("Resposta e sucesso",()=>{
         pm.response.json().sucess == true
     });
     pm.test("Verificar se o primeiro funcionario tem o ID '5f6d127156b0219cac2f5221'", function () {
         pm.expect(pm.response.json().data[0].id).to.eql("5f6d127156b0219cac2f5221");
     });
-
     pm.test("Verificar se o primeiro funcionario tem o nome 'Airi Nagano'", function () {
         pm.expect(pm.response.json().data[0].name).to.eql("Airi Nagano");
     });
@@ -793,12 +783,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
         test = test.replace(/"/g, ''); // Remove as aspas da string
         console.log(test + 1);
     });
-
     let resquest = {
         url: work,
         method: 'GET',
     } 
-
     pm.sendRequest(resquest, function (err, response) {
         let data = response.json().data
         if (err) {
@@ -809,7 +797,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             var dev = data.developer;
             var pub = data.publisher;
             var date = data.released_date; 
-
             pm.test("Status de resposta está OK", function () {
                 pm.expect(response.status).to.eql('OK'); // Ensure response is defined
             });
@@ -825,7 +812,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             pm.test("O primeiro funcionario trabalhou em um jogo lançado em 2017", function () {
                 pm.expect(" March 3, 2017").to.eql(date); 
             });
-
         }
     });
 ```
@@ -956,7 +942,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Status code is 200", function () {
         pm.response.to.have.status(200);
     });
-
     pm.test("Resposta e sucesso",()=>{
         pm.expect(responseJSON.success).to.be.true;
     });
@@ -964,9 +949,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Verificar se o primeiro funcionario tem o ID '"+ID+"'", function () {
         pm.expect(responseJSON.data.id).to.eql(ID);
     });
-
-    pm.test("Verificar se o primeiro funcionario tem o nome 'Airi Nagano'", function () {
-        
+    pm.test("Verificar se o primeiro funcionario tem o nome 'Airi Nagano'", function () {  
         pm.expect(responseJSON.data.name).to.eql("Airi Nagano");
     });
     let work = responseJSON.data.worked_on[0]; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
@@ -979,12 +962,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
         test = test.replace(/"/g, ''); // Remove as aspas da string
         console.log(test + 1);
     });
-
     let resquest = {
         url: work,
         method: 'GET',
     } 
-
     pm.sendRequest(resquest, function (err, response) {
         let data = response.json().data
         if (err) {
@@ -995,7 +976,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             var dev = data.developer;
             var pub = data.publisher;
             var date = data.released_date; 
-
             pm.test("Status de resposta está OK", function () {
                 pm.expect(response.status).to.eql('OK'); // Ensure response is defined
             });
@@ -1011,7 +991,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             pm.test("O primeiro funcionario trabalhou em um jogo lançado em 2017", function () {
                 pm.expect(" March 3, 2017").to.eql(date); 
             });
-
         }
     });
 ```
@@ -1112,7 +1091,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Status code is 200", function () {
         pm.response.to.have.status(200);
     });
-
     pm.test("Resposta e sucesso",()=>{
         pm.expect(pm.response.json().success).to.be.true;
     });
@@ -1121,7 +1099,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
     });
     var nomeFuncionario = pm.environment.get("nomeFuncionario");
     pm.test("Verificar se o primeiro funcionario tem o nome '"+nomeFuncionario+"'", function () {
-    
     pm.expect(pm.response.json().data[0].name).to.eql(nomeFuncionario);
     });
     let work = pm.response.json().data[0].worked_on[0]; // Supondo que a URL esteja no campo worked_on do primeiro funcionario
@@ -1134,12 +1111,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
         test = test.replace(/"/g, ''); // Remove as aspas da string
         console.log(test + 1);
     });
-
     let resquest = {
         url: work,
         method: 'GET',
     } 
-
     pm.sendRequest(resquest, function (err, response) {
         let data = response.json().data
         if (err) {
@@ -1150,7 +1125,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             var dev = data.developer;
             var pub = data.publisher;
             var date = data.released_date; 
-
             pm.test("Status de resposta está OK", function () {
                 pm.expect(response.status).to.eql('OK'); // Ensure response is defined
             });
@@ -1166,10 +1140,8 @@ pm.visualizer.set(template, constructVisualizerPayload());
             pm.test("O primeiro funcionario trabalhou em um jogo lançado em 2017", function () {
                 pm.expect(" March 3, 2017").to.eql(date); 
             });
-
         }
     });
-
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
@@ -1210,7 +1182,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Status code is 200", function () {
         pm.response.to.have.status(200);
     });
-
     pm.test("Validar a estrutura json do personagem", function () {
         var json = pm.response.json();
         // O status 200 foi retornado e o campo success é true
@@ -1231,12 +1202,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
         pm.expect(json.data[0].appearances).to.be.an('array');
     });
     var app = pm.response.json().data[0].appearances[0]
-
     let resquest = {
         url: app,
         method: "GET",
     }
-
     pm.sendRequest(resquest, function (err, response) {
         if (err) {
             console.error(err);
@@ -1262,7 +1231,6 @@ pm.visualizer.set(template, constructVisualizerPayload());
             });
         }
     });
-
 ```
 
 - Payload de visualização personalizado para exibir os dados dos personagens em uma tabela formatada, juntamente com gráficos de distribuição por gênero e raça.
@@ -1662,36 +1630,29 @@ pm.visualizer.set(template, constructVisualizerPayload());
     pm.test("Status e igual a 200", function(){
         pm.response.to.have.status(200);
     });
-
     var data =pm.response.json().data[0]
     var nome = pm.environment.get("nomePersonagem")
     pm.test("Verifica se o nome do personagem é igual ao esperado", function () {
         pm.expect(data.name).to.eql(nome);
     });
-
     pm.test("Verifica se o ID do personagem é igual ao esperado", function () {
         pm.expect(data.id).to.eql("5f6d186f246bd9a0809d6116");
     });
-
     pm.test("O sexo do personagem esta Null",()=>{
         pm.expect(data.gender).to.not.eql("Female");
         pm.expect(data.gender).to.not.eql("Male");
         pm.expect(data.gender).to.eql(null);
         pm.expect(data.gender).to.null
     });
-
     pm.test("A corrida do personagem esta Null",()=>{
         pm.expect(data.race).to.eql(null);
         pm.expect(data.race).to.null
     });
-
     var app = data.appearances[0]
-
     let resquest = {
         url: app,
         method: "GET",
     }
-
     pm.sendRequest(resquest, function (err, response) {
         if (err) {
             console.error(err);
@@ -1969,6 +1930,7 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
@@ -2153,7 +2115,12 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
 ``` html
+
 ```
+
+#### Resultado Obtido:
+- Retorna uma lista com todos os chefes da série The Legend of Zelda.
+![Obter todos os chefes](Chefes/Obtertodososchefes.gif)
 
 #### 5.2 Obter chefe por ID
 
@@ -2214,6 +2181,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 ``` html
 ```
+##### Resultado Obtido:
+- Retorna os detalhes do chefe correspondente ao ID fornecido.
+![Obter chefe por ID](Chefes/Obterchefeporid.gif)
 
 #### 5.3 Obter chefes por nome
 
@@ -2275,6 +2245,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 ``` html
 ```
+
+###### Resultado Obtido:
+- Retorna os chefes que correspondem ao nome fornecido.
+![Obter chefes por nome](Chefes/Obterchefespornome.gif)
 
 
 </details>
@@ -2383,6 +2357,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` html
 ```
 
+##### Resultado Obtido:
+- Retorna uma lista com todas as masmorras da série The Legend of Zelda.
+![Obter todas as masmorras](Masmorras/Obtertodosasmasmorras.gif)
 
 #### 6.2 Obter masmorra por ID
 
@@ -2402,6 +2379,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 ``` html
 ```
+##### Resultado Obtido:
+- Retorna os detalhes da masmorra correspondente ao ID fornecido.
+![Obter masmorra por ID](Masmorras/Obtermasmorraporid.gif)
 
 #### 6.3 Obter masmorras por nome
 
@@ -2466,6 +2446,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 ``` html
 ```
+##### Resultado Obtido:
+- Retorna as masmorras que correspondem ao nome fornecido.
+![Obter masmorras por nome](Masmorras/Obtermasmorraspornome.gif)
 
 </details>
 
@@ -2499,6 +2482,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` html
 ```
 
+##### Resultado Obtido:
+- Retorna uma lista com todos os lugares da série The Legend of Zelda.
+![Obter todos os lugares](Lugares/Obtertodososlugares.gif)
 
 #### 7.2 Obter lugar por ID
 
@@ -2519,6 +2505,9 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` html
 ```
 
+##### Resultado Obtido:
+- Retorna os detalhes do lugar correspondente ao ID fornecido.
+![Obter lugar por ID](Lugares/Obterlugarporid.gif)
 
 #### 7.3 Obter lugares por nome
 
@@ -2538,6 +2527,11 @@ pm.visualizer.set(template, constructVisualizerPayload());
 
 ``` html
 ```
+
+##### Resultado Obtido:
+- Retorna os lugares que correspondem ao nome fornecido.
+![Obter lugares por nome](Lugares/Obterlugarespornome.gif)
+
 </details>
 
 ---
@@ -2569,6 +2563,10 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ``` html
 ```
 
+##### Resultado Obtido:
+- Retorna uma lista com todos os itens da série The Legend of Zelda.
+![Obter todos os itens](Itens/Obtertodosositens.gif)
+
 #### 8.2 Obter item por ID
 
 ##### Url:
@@ -2581,12 +2579,59 @@ pm.visualizer.set(template, constructVisualizerPayload());
 - Implementação do codigo para o teste de API:
 
 ``` js
+    var ID = pm.response.json().data.id;
+    var Nome = pm.response.json().data.name; // Nome do item
+    const gameIds = pm.response.json().data.games; // Array de IDs de jogos
+    var URLGame = gameIds[0];
+    pm.test(" 1 - O Status e  igual a 200",function(){
+        pm.expect(pm.response.code).to.eql(200);
+    });
+    pm.test("2 - O nome do item é igual a Ancient Arrow", function(){
+        var Lnome = "Ancient Arrow";
+        pm.expect(Nome).to.eql(Lnome);
+    });
+    pm.test("3 - O ID do item é igual a 5f6e9a9dfee1a5347127c76f", function () {
+        var Lid = pm.environment.get("IDItem");
+        pm.expect(ID).to.eql(Lid);
+    });
+    pm.sendRequest(URLGame,function(err, res){
+        let count = gameIds.length;
+        if(count > 0){
+        pm.test("4.0 - O jogo foi encontrado ", function(){
+            pm.expect(count).to.be.above(0);
+        });
+        pm.test("4.1 - O nome do jogo é igual a The Legend of Zelda: Breath of the Wild", function () {
+                var LnomeJogo = "The Legend of Zelda: Breath of the Wild";
+                pm.expect(res.json().data.name).to.eql(LnomeJogo);
+            });
+            pm.test("4.2 - O nome do desenvolvedor do jogo é igual a Nintendo", function () {
+                var LnomeDesenvolvedor = "Nintendo";
+                pm.expect(res.json().data.developer).to.eql(LnomeDesenvolvedor);
+            });
+            pm.test("4.3 - O nome do Publicado do jogo é igual a Nintendo",function(){
+                var Lpublisher = "Nintendo";
+                pm.expect(res.json().data.publisher).to.eql(Lpublisher);
+            });
+            pm.test("4.4 - A data de Lançamento do jogo é igual a March 3, 2017", function () {
+                var Lreleased_date = " March 3, 2017";
+                pm.expect(res.json().data.released_date).to.eql(Lreleased_date)
+            });
+        } else {
+            pm.test("4.0 - O jogo não foi encontrado", function () {
+                pm.expect(count).to.eql(0);
+            });
+        }
+    });
 ```
 
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
 ``` html
 ```
+
+##### Resultado Obtido:
+- Retorna os detalhes do item correspondente ao ID fornecido.
+![Obter item por ID](Itens/Obteritemporid.gif)
 
 #### 8.3 Obter itens por nome
 
@@ -2598,26 +2643,22 @@ pm.visualizer.set(template, constructVisualizerPayload());
 ##### Script  de teste de Post-response:
 
 - Teste
-```
+```js
     var ID = pm.response.json().data[0].id;
     var Nome = pm.response.json().data[0].name; // Nome do item
     const gameIds = pm.response.json().data[0].games; // Array de IDs de jogos
     var URLGame = gameIds[0];
-
     pm.test(" 1 - O Status e  igual a 200",function(){
         pm.expect(pm.response.code).to.eql(200);
     });
-
     pm.test("2 - O nome do item é igual a Ancient Battle Axe", function(){
     var Lnome = pm.environment.get("NomeItem");
         pm.expect(Nome).to.eql(Lnome);
     });
-
     pm.test("3 - O ID do item é igual a 5f6e9a9dfee1a5347127c76e", function () {
         var Lid = "5f6e9a9dfee1a5347127c76e";
         pm.expect(ID).to.eql(Lid);
     });
-
     pm.sendRequest(URLGame,function(err, res){
         let count = gameIds.length;
         if(count > 0){
@@ -2647,11 +2688,11 @@ pm.visualizer.set(template, constructVisualizerPayload());
             });
         }
     });
-
 ```
 
 ##### Resultado Obtido:
-- 
+-  Retorna os itens que correspondem ao nome fornecido.
+![Obter itens por nome](Itens/Obteritenspornome.gif)
 
 </details>
 
