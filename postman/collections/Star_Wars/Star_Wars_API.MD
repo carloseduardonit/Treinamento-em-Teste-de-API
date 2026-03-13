@@ -120,6 +120,31 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 ### 2 Pessoas
 </summary>
+
+#### 2.1 Obter lista de todas pessoas
+
+###### URL:
+
+``` url
+  GET https://swapi.dev/api/people/
+```
+
+###### Script de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+```javascript
+```
+
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma pessoa.
+- Cada objeto de pessoa deve conter as seguintes propriedades: "name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year", "gender", "homeworld", "films", "species", "vehicles", "starships", "created", "edited", "url".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
 </details>
 
 ---
