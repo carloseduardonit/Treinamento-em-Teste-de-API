@@ -18,16 +18,16 @@ Este projeto tem como objetivo testar a Star Wars API (SWAPI) utilizando o Postm
 </summary>
 A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
-- 0. ⏳ [Configurações Iniciais](#0-configurações-iniciais)
-  - 0.1 [Configurações do Postman](#01-configurações-do-postman)
-- 1. ⏳ [Raiz da API](#1-raiz)
-- 2. ⏳ [Pessoas](#2-pessoas)
-- 3. ⏳ [Filmes](#3-filmes)
-- 4. ⏳ [Naves espaciais](#4-naves-espaciais)
-- 5. ⏳ [Veículos](#5-veículos)
-- 6. ⏳ [Espécies](#6-espécies)
-- 7. ⏳ [Planetas](#7-planetas)
-- 8. ⏳ [Bibliografia](#bibliografia)
+- ⏳ [0. Configurações Iniciais](#0-configurações-iniciais)
+  - ⏳ [0.1 Configurações do Postman](#01-configurações-do-postman)
+- ⏳ [1. Raiz da API](#1-raiz)
+- ⏳ [2. Pessoas](#2-pessoas)
+- ⏳ [3. Filmes](#3-filmes)
+- ⏳ [4. Naves espaciais](#4-naves-espaciais)
+- ⏳ [5. Veículos](#5-veículos)
+- ⏳ [6. Espécies](#6-espécies)
+- ⏳ [7. Planetas](#7-planetas)
+- ⏳ [8. Bibliografia](#bibliografia)
 </details>
 
 ---
