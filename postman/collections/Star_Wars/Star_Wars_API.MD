@@ -62,6 +62,8 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 ### 1 Raiz
 </summary>
 
+- documentação do Raiz: [Root](https://swapi.dev/documentation#root)
+
 #### 1.1 Obter as URLs dos endpoints da API
 
 ###### URL:
@@ -82,7 +84,6 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
     pm.expect(pm.response.json()).to.have.property("vehicles");
     pm.expect(pm.response.json()).to.have.property("starships");
   });
-
   pm.test("Verifica se os valores das propriedades são URLs válidas", () => {
     console.clear();
     const responseJson = pm.response.json();
@@ -94,7 +95,6 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
       pm.environment.set(property, responseJson[property]);
     }
   });
-
   pm.test("Verifica o status code é 200", () => {
     pm.response.to.have.status(200);
   });
@@ -119,6 +119,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 <summary>
 
 ### 2 Pessoas
+
 </summary>
 
 #### 2.1 Obter lista de todas pessoas
