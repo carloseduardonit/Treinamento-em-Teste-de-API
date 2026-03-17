@@ -122,6 +122,8 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 </summary>
 
+- documentação do endpoint de pessoas: [People](https://swapi.dev/documentation#people)
+
 #### 2.1 Obter lista de todas pessoas
 
 ###### URL:
@@ -446,6 +448,8 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 ### 3. Filmes
 </summary>
 
+- documentação do endpoint de filmes: [Films](https://swapi.dev/documentation#films)
+
 ##### URL:
 
 ``` url
@@ -457,8 +461,82 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 - Implementação do codigo para o teste de API:
 ```javascript
+  var response = pm.response.json();
+  var results = response.results;
+  pm.test("Verificar se a estrutura do JSON esta correta",()=>{
+    pm.expect(response).to.have.property("count");
+    pm.expect(response).to.have.property("next");
+    pm.expect(response).to.have.property("previous");
+    pm.expect(response).to.have.property("results");
+    pm.expect(results).to.be.an('array');
+    if(results.length > 0){
+      pm.expect(results[0]).to.have.property("title");
+      pm.expect(results[0]).to.have.property("episode_id");
+      pm.expect(results[0]).to.have.property("opening_crawl");
+      pm.expect(results[0]).to.have.property("director");
+      pm.expect(results[0]).to.have.property("producer");
+      pm.expect(results[0]).to.have.property("release_date");
+      pm.expect(results[0]).to.have.property("characters");
+      pm.expect(results[0].characters).to.be.an('array');
+      pm.expect(results[0]).to.have.property("planets");
+      pm.expect(results[0].planets).to.be.an('array');
+      pm.expect(results[0]).to.have.property("starships");
+      pm.expect(results[0].starships).to.be.an('array');
+      pm.expect(results[0]).to.have.property("vehicles");
+      pm.expect(results[0].vehicles).to.be.an('array');
+      pm.expect(results[0]).to.have.property("species");
+      pm.expect(results[0].species).to.be.an('array');	
+      pm.expect(results[0]).to.have.property("created");
+      pm.expect(results[0]).to.have.property("edited");
+      pm.expect(results[0]).to.have.property("url");	
+    }
+  });
+  pm.test("Verificar a quantidade de filme",()=>{
+    pm.expect(response.count).to.eql(6);
+  });
+  pm.test("Verificar se não tem pagina anterior e posterior",()=>{
+    pm.expect(response.previous).to.eql(null);
+    pm.expect(response.next).to.eql(null);
+    pm.expect(response.previous).to.be.null
+    pm.expect(response.next).to.be.null
+  });
+  if(results.length >0){
+    var filme = results[0];
+    pm.test("Verificar se o primeiro filme é 'A New Hope'",()=>{
+      pm.expect(filme.title).to.eql("A New Hope");
+    });
+    pm.test("Verificar se o primeiro filme é do episódio 4",()=>{
+      pm.expect(filme.episode_id).to.eql(4);
+    });
+    pm.test("Verificar se o primeiro filme foi lançado em 1977",()=>{
+      pm.expect(filme.release_date).to.eql("1977-05-25");
+    });
+    pm.test("Verificar se o primeiro filme tem mais 2 personagens",()=>{
+      pm.expect(filme.characters.length).to.be.least(2);
+    });
+    pm.test("Verificar se o primeiro filme tem mais 2 planetas",()=>{
+      pm.expect(filme.planets.length).to.be.least(2);
+    });
+    pm.test("Verificar se o primeiro filme tem mais 2 naves",()=>{
+      pm.expect(filme.starships.length).to.be.least(2);
+    });
+    pm.test("Verificar se o primeiro filme tem mais 2 veículos",()=>{
+      pm.expect(filme.vehicles.length).to.be.least(2);
+    });
+    pm.test("Verificar se o primeiro filme tem mais 2 espécies",()=>{
+      pm.expect(filme.species.length).to.be.least(2);
+    });
+  }
+```
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
 ```
 
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando um filme.
+- Cada objeto de filme deve conter as seguintes propriedades: "title", "episode_id", "opening_crawl", "director", "producer", "release_date", "characters", "planets", "starships", "vehicles", "species", "created", "edited", "url".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
 
 </details>
 
@@ -470,6 +548,88 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 ### 4. Naves espaciais
 </summary>
+- documentação do endpoint de naves espaciais: [Starships](https://swapi.dev/documentation#starships)
+
+##### URL:
+
+``` url
+  GET https://swapi.dev/api/starships/
+```
+#### 4.1 Obter lista de todas naves espaciais
+
+###### Script de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+```javascript
+  var response = pm.response.json();
+  var results = response.results; // Obtém a lista de naves.
+  var naveJson = results[0]; // Supondo que queremos testar a primeira nave da lista.
+  pm.test("Verificar se a resposta contém dados", () => {
+    pm.expect(response).to.have.property("count");
+    pm.expect(response).to.have.property("next");
+    pm.expect(response).to.have.property("previous");
+    pm.expect(response).to.have.property("results");
+    pm.expect(results).to.be.an('array');
+    pm.expect(naveJson).to.have.property("name");
+    pm.expect(naveJson).to.have.property("model");
+    pm.expect(naveJson).to.have.property("manufacturer");
+    pm.expect(naveJson).to.have.property("cost_in_credits");
+    pm.expect(naveJson).to.have.property("length");
+    pm.expect(naveJson).to.have.property("max_atmosphering_speed");
+    pm.expect(naveJson).to.have.property("crew");
+    pm.expect(naveJson).to.have.property("passengers");
+    pm.expect(naveJson).to.have.property("cargo_capacity");
+    pm.expect(naveJson).to.have.property("consumables"); 
+    pm.expect(naveJson).to.have.property("hyperdrive_rating");
+    pm.expect(naveJson).to.have.property("MGLT");
+    pm.expect(naveJson).to.have.property("starship_class");
+    pm.expect(naveJson).to.have.property("pilots");
+    pm.expect(naveJson).to.have.property("films");
+
+  });
+  pm.test("Verificar se o nome da nave é 'CR90 corvette'", () => {
+    pm.expect(naveJson.name).to.equal("CR90 corvette");
+  });
+  pm.test("Verificar se o modelo da nave é 'CR90 corvette'", () => {
+    pm.expect(naveJson.model).to.equal("CR90 corvette");
+  });
+  pm.test("Verificar se o fabricante da nave é 'Corellian Engineering Corporation'", () => {	
+    pm.expect(naveJson.manufacturer).to.equal("Corellian Engineering Corporation");
+  });
+  pm.test("Verificar se o custo da nave é '3500000'",()=>{
+    pm.expect(naveJson.cost_in_credits).to.equal("3500000");
+  });
+  pm.test("Verificar se o comprimento da nave é '150'", () => {
+    pm.expect(naveJson.length).to.equal("150");
+  });
+  pm.test("Verificar se a velocidade máxima da nave é '950'", () => {
+    pm.expect(naveJson.max_atmosphering_speed).to.equal("950");
+  });
+  pm.test("Verificar se a capacidade de tripulação da nave é '30-165'", () => {
+    pm.expect(naveJson.crew).to.equal("30-165");
+  });
+  pm.test("Verificar se a capacidade de passageiros da nave é '600'", () => {
+    pm.expect(naveJson.passengers).to.equal("600");
+  });
+  pm.test("Verificar se a capacidade de carga da nave é '3000000'", () => {
+    pm.expect(naveJson.cargo_capacity).to.equal("3000000");
+  });
+  pm.test("Verificar se os consumíveis da nave são '1 year'", () => {
+    pm.expect(naveJson.consumables).to.equal("1 year");	
+  });
+  pm.test("Verificar a classificação do hiperdrive da nave é '2.0'",()=>{
+    pm.expect(naveJson.hyperdrive_rating).to.equal("2.0");
+  });
+  pm.test("Verificar o MGLT da nave é '60'",()=>{
+    pm.expect(naveJson.MGLT).to.equal("60");	
+  });
+  pm.test("Verificar se a nave é usada para combate", () => {
+    pm.expect(naveJson.starship_class).to.equal("corvette");
+  });
+
+ 
+```
+
 </details>
 
 ---
