@@ -626,9 +626,16 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
   pm.test("Verificar se a nave é usada para combate", () => {
     pm.expect(naveJson.starship_class).to.equal("corvette");
   });
-
- 
 ```
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma nave espacial.
+- Cada objeto de nave espacial deve conter as seguintes propriedades: "name", "model", "manufacturer", "cost_in_credits", "length", "max_atmosphering_speed", "crew", "passengers", "cargo_capacity", "consumables", "hyperdrive_rating", "MGLT", "starship_class", "pilots", "films".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
 
 </details>
 
@@ -640,7 +647,114 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 ### 5 Veículos
 </summary>
+- documentação do endpoint de veículos: [Vehicles](https://swapi.dev/documentation#vehicles)
+
+##### URL:
+
+``` url
+  GET https://swapi.dev/api/vehicles/
+```
+
+#### 5.1 Obter lista de todas veículos
+
+###### Script de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+```javascript
+var response = pm.response.json();
+var results = response.results;
+var veiculo = results[0];
+pm.test("Verificar a estrutura do JSON do endpoint do Veiculo",()=>{
+	pm.expect(response).to.have.property("count");
+	pm.expect(response).to.have.property("next");
+	pm.expect(response).to.have.property("previous");
+	pm.expect(response).to.have.property("results");
+	pm.expect(results).to.be.an("array")
+	pm.expect(veiculo).to.have.property("name");
+	pm.expect(veiculo).to.have.property("model");
+	pm.expect(veiculo).to.have.property("manufacturer");
+	pm.expect(veiculo).to.have.property("cost_in_credits");
+	pm.expect(veiculo).to.have.property("length");
+	pm.expect(veiculo).to.have.property("max_atmosphering_speed");
+	pm.expect(veiculo).to.have.property("crew");
+	pm.expect(veiculo).to.have.property("passengers");
+	pm.expect(veiculo).to.have.property("cargo_capacity");
+	pm.expect(veiculo).to.have.property("consumables");
+	pm.expect(veiculo).to.have.property("vehicle_class");
+	pm.expect(veiculo).to.have.property("pilots");
+	pm.expect(veiculo.pilots).to.be.an("array")
+	pm.expect(veiculo).to.have.property("films");
+	pm.expect(veiculo.films).to.be.an("array")
+	pm.expect(veiculo).to.have.property("created");
+	pm.expect(veiculo).to.have.property("edited");
+	pm.expect(veiculo).to.have.property("url");
+});
+pm.test("Verificar se o count é igual a 39",()=>{
+	pm.expect(response.count).to.equal(39);
+});
+pm.test("Verificar se o next não é igual a null",()=>{
+	pm.expect(response.next).to.not.equal(null);
+	pm.expect(response.next).to.not.be.null;
+	pm.expect(response.next).to.not.equal(undefined);
+	pm.expect(response.next).to.not.equal("");
+});
+pm.test("Verificar se o previous é igual a null",()=>{
+	pm.expect(response.previous).to.equal(null);
+	pm.expect(response.previous).to.be.null;
+	pm.expect(response.previous).to.not.equal(undefined);
+	pm.expect(response.previous).to.not.equal("");
+});
+pm.test("Verificar se o nome do veiculo é Sand Crawler",()=>{
+	pm.expect(veiculo.name).to.equal("Sand Crawler");
+});
+pm.test("Verificar se o modelo do veiculo é Digger Crawler",()=>{
+	pm.expect(veiculo.model).to.equal("Digger Crawler");
+});
+pm.test("Verificar se a fabrica do veiculo é 'Corellia Mining Corporation'",()=>{
+	pm.expect(veiculo.manufacturer).to.equal("Corellia Mining Corporation");
+});
+pm.test("Verificar se o custo de  credito do veiculo é ''",()=>{
+	pm.expect(veiculo.cost_in_credits).to.equal("150000");
+});
+pm.test("Verificar se o comprimento do veiculo é '36.8 '",()=>{
+	pm.expect(veiculo.length).to.equal("36.8 ");
+});
+pm.test("Verificar se a velocidade maxima do veiculo é '30'",()=>{
+	pm.expect(veiculo.max_atmosphering_speed).to.equal("30");
+});
+pm.test("Verificar se o veiculo tem 46 tripulantes",()=>{
+	pm.expect(veiculo.crew).to.equal("46");
+	});
+pm.test("Verificar se o veiculo tem 30 passageiros",()=>{
+	pm.expect(veiculo.passengers).to.equal("30");
+});
+
+pm.test("Verificar se o veiculo tem 50000 de capacidade de carga",()=>{
+	pm.expect(veiculo.cargo_capacity).to.equal("50000");
+});
+pm.test("Verificar se o veiculo tem 2 meses de consumíveis",()=>{
+	pm.expect(veiculo.consumables).to.equal("2 months");
+});
+pm.test("Verificar se o veiculo esta  na classe 'wheeled'",()=>{
+	pm.expect(veiculo.vehicle_class).to.equal("wheeled");
+});
+pm.test("Verificar se o veiculo não tem piloto",()=>{
+	pm.expect(veiculo.pilots).to.have.lengthOf(0);
+})
+pm.test("Verificar se o veiculo exibido em mais de 1 filme",()=>{
+	pm.expect(veiculo.films).to.have.lengthOf.above(1);
+});
+```
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando um veículo.
+- Cada objeto de veículo deve conter as seguintes propriedades: "name", "model", "manufacturer", "cost_in_credits", "length", "max_atmosphering_speed", "crew", "passengers", "cargo_capacity", "consumables", "vehicle_class", "pilots", "films".
+
 </details>
+
 
 ---
 [Topo](#estudo-no-the-star-wars-api)
