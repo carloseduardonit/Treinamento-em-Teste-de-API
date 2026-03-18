@@ -21,12 +21,19 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 - ⏳ [0. Configurações Iniciais](#0-configurações-iniciais)
   - ⏳ [0.1 Configurações do Postman](#01-configurações-do-postman)
 - ⏳ [1. Raiz da API](#1-raiz)
+  - ⏳ [1.1 Obter URLs dos endpoints da API](#11-obter-as-urls-dos-endpoints-da-api)
 - ⏳ [2. Pessoas](#2-pessoas)
+  - ⏳ [2.1 Obter lista de todas pessoas](#21-obter-lista-de-todas-pessoas)
 - ⏳ [3. Filmes](#3-filmes)
+  - ⏳ [3.1 Obter lista de todos filmes](#31-obter-lista-de-todos-filmes)
 - ⏳ [4. Naves espaciais](#4-naves-espaciais)
+  - ⏳ [4.1 Obter lista de todas naves espaciais](#41-obter-lista-de-todas-naves-espaciais)
 - ⏳ [5. Veículos](#5-veículos)
+  - ⏳ [5.1 Obter lista de todos veículos](#51-obter-lista-de-todos-veículos)
 - ⏳ [6. Espécies](#6-espécies)
+  - ⏳ [6.1 Obter lista de todas espécies](#61-obter-lista-de-todas-espécies)
 - ⏳ [7. Planetas](#7-planetas)
+  - ⏳ [7.1 Obter lista de todos planetas](#71-obter-lista-de-todos-planetas)
 - ⏳ [8. Bibliografia](#bibliografia)
 </details>
 
@@ -51,6 +58,18 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 ### 0. Configurações Iniciais
 </summary>
 
+- Configurações do Postman: [Postman Settings](https://learning.postman.com/docs/getting-started/postman-overview/)
+
+#### 0.1 Configurações do Postman
+
+- Definição de Variável de Ambiente de Base URL:
+  - Nome da variável: `baseUrl`
+  - Valor: `https://swapi.dev/api/`
+- Definição de Variável de Ambiente para Armazenar URLs dos Endpoints:
+  - Nome das variáveis: `people`, `planets`, `films`, `species`, `vehicles`, `starships`
+  - Valor inicial: vazio (será preenchido dinamicamente a partir da resposta do endpoint raiz)
+    - exemplo: `{{baseUrl}}people/`, `{{baseUrl}}planets/`, etc.
+
 </details>
 
 ---
@@ -64,13 +83,14 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 - documentação do Raiz: [Root](https://swapi.dev/documentation#root)
 
-#### 1.1 Obter as URLs dos endpoints da API
-
-###### URL:
+#### URL:
 
 ``` url
   GET https://swapi.dev/api/
 ```
+
+#### 1.1 Obter as URLs dos endpoints da API
+
 ###### Script de teste de Post-response:
 
 - Implementação do codigo para o teste de API:
@@ -100,7 +120,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
   });
 ```
 
-- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+- Payload de visualização personalizado para exibir os dados dos endpoints em uma tabela formatada.
 
 ``` html
 ```
@@ -124,13 +144,13 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 - documentação do endpoint de pessoas: [People](https://swapi.dev/documentation#people)
 
-#### 2.1 Obter lista de todas pessoas
-
-###### URL:
+##### URL:
 
 ``` url
   GET https://swapi.dev/api/people/
 ```
+
+#### 2.1 Obter lista de todas pessoas
 
 ###### Script de teste de Post-response:
 
@@ -427,7 +447,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
   }
 ```
 
-- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+- Payload de visualização personalizado para exibir os dados das pessoas em uma tabela formatada.
 
 ``` html
 ```
@@ -445,12 +465,12 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 <details open>
 <summary>
 
-### 3. Filmes
+### 3 Filmes
 </summary>
 
 - documentação do endpoint de filmes: [Films](https://swapi.dev/documentation#films)
 
-##### URL:
+#### URL:
 
 ``` url
   GET https://swapi.dev/api/films/
@@ -528,7 +548,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
     });
   }
 ```
-- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+- Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
 
 ``` html
 ```
@@ -546,18 +566,18 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 <details open>
 <summary>
 
-### 4. Naves espaciais
+### 4 Naves espaciais
 </summary>
 - documentação do endpoint de naves espaciais: [Starships](https://swapi.dev/documentation#starships)
 
-##### URL:
+#### URL:
 
 ``` url
   GET https://swapi.dev/api/starships/
 ```
 #### 4.1 Obter lista de todas naves espaciais
 
-###### Script de teste de Post-response:
+##### Script de teste de Post-response:
 
 - Implementação do codigo para o teste de API:
 ```javascript
@@ -627,7 +647,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
     pm.expect(naveJson.starship_class).to.equal("corvette");
   });
 ```
-- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+- Payload de visualização personalizado para exibir os dados das naves espaciais em uma tabela formatada.
 
 ``` html
 ```
@@ -649,101 +669,100 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 </summary>
 - documentação do endpoint de veículos: [Vehicles](https://swapi.dev/documentation#vehicles)
 
-##### URL:
+#### URL:
 
 ``` url
   GET https://swapi.dev/api/vehicles/
 ```
 
-#### 5.1 Obter lista de todas veículos
+#### 5.1 Obter lista de todos veículos
 
-###### Script de teste de Post-response:
+##### Script de teste de Post-response:
 
 - Implementação do codigo para o teste de API:
 ```javascript
-var response = pm.response.json();
-var results = response.results;
-var veiculo = results[0];
-pm.test("Verificar a estrutura do JSON do endpoint do Veiculo",()=>{
-	pm.expect(response).to.have.property("count");
-	pm.expect(response).to.have.property("next");
-	pm.expect(response).to.have.property("previous");
-	pm.expect(response).to.have.property("results");
-	pm.expect(results).to.be.an("array")
-	pm.expect(veiculo).to.have.property("name");
-	pm.expect(veiculo).to.have.property("model");
-	pm.expect(veiculo).to.have.property("manufacturer");
-	pm.expect(veiculo).to.have.property("cost_in_credits");
-	pm.expect(veiculo).to.have.property("length");
-	pm.expect(veiculo).to.have.property("max_atmosphering_speed");
-	pm.expect(veiculo).to.have.property("crew");
-	pm.expect(veiculo).to.have.property("passengers");
-	pm.expect(veiculo).to.have.property("cargo_capacity");
-	pm.expect(veiculo).to.have.property("consumables");
-	pm.expect(veiculo).to.have.property("vehicle_class");
-	pm.expect(veiculo).to.have.property("pilots");
-	pm.expect(veiculo.pilots).to.be.an("array")
-	pm.expect(veiculo).to.have.property("films");
-	pm.expect(veiculo.films).to.be.an("array")
-	pm.expect(veiculo).to.have.property("created");
-	pm.expect(veiculo).to.have.property("edited");
-	pm.expect(veiculo).to.have.property("url");
-});
-pm.test("Verificar se o count é igual a 39",()=>{
-	pm.expect(response.count).to.equal(39);
-});
-pm.test("Verificar se o next não é igual a null",()=>{
-	pm.expect(response.next).to.not.equal(null);
-	pm.expect(response.next).to.not.be.null;
-	pm.expect(response.next).to.not.equal(undefined);
-	pm.expect(response.next).to.not.equal("");
-});
-pm.test("Verificar se o previous é igual a null",()=>{
-	pm.expect(response.previous).to.equal(null);
-	pm.expect(response.previous).to.be.null;
-	pm.expect(response.previous).to.not.equal(undefined);
-	pm.expect(response.previous).to.not.equal("");
-});
-pm.test("Verificar se o nome do veiculo é Sand Crawler",()=>{
-	pm.expect(veiculo.name).to.equal("Sand Crawler");
-});
-pm.test("Verificar se o modelo do veiculo é Digger Crawler",()=>{
-	pm.expect(veiculo.model).to.equal("Digger Crawler");
-});
-pm.test("Verificar se a fabrica do veiculo é 'Corellia Mining Corporation'",()=>{
-	pm.expect(veiculo.manufacturer).to.equal("Corellia Mining Corporation");
-});
-pm.test("Verificar se o custo de  credito do veiculo é ''",()=>{
-	pm.expect(veiculo.cost_in_credits).to.equal("150000");
-});
-pm.test("Verificar se o comprimento do veiculo é '36.8 '",()=>{
-	pm.expect(veiculo.length).to.equal("36.8 ");
-});
-pm.test("Verificar se a velocidade maxima do veiculo é '30'",()=>{
-	pm.expect(veiculo.max_atmosphering_speed).to.equal("30");
-});
-pm.test("Verificar se o veiculo tem 46 tripulantes",()=>{
-	pm.expect(veiculo.crew).to.equal("46");
+  var response = pm.response.json();
+  var results = response.results;
+  var veiculo = results[0];
+  pm.test("Verificar a estrutura do JSON do endpoint do Veiculo",()=>{
+    pm.expect(response).to.have.property("count");
+    pm.expect(response).to.have.property("next");
+    pm.expect(response).to.have.property("previous");
+    pm.expect(response).to.have.property("results");
+    pm.expect(results).to.be.an("array")
+    pm.expect(veiculo).to.have.property("name");
+    pm.expect(veiculo).to.have.property("model");
+    pm.expect(veiculo).to.have.property("manufacturer");
+    pm.expect(veiculo).to.have.property("cost_in_credits");
+    pm.expect(veiculo).to.have.property("length");
+    pm.expect(veiculo).to.have.property("max_atmosphering_speed");
+    pm.expect(veiculo).to.have.property("crew");
+    pm.expect(veiculo).to.have.property("passengers");
+    pm.expect(veiculo).to.have.property("cargo_capacity");
+    pm.expect(veiculo).to.have.property("consumables");
+    pm.expect(veiculo).to.have.property("vehicle_class");
+    pm.expect(veiculo).to.have.property("pilots");
+    pm.expect(veiculo.pilots).to.be.an("array")
+    pm.expect(veiculo).to.have.property("films");
+    pm.expect(veiculo.films).to.be.an("array")
+    pm.expect(veiculo).to.have.property("created");
+    pm.expect(veiculo).to.have.property("edited");
+    pm.expect(veiculo).to.have.property("url");
+  });
+  pm.test("Verificar se o count é igual a 39",()=>{
+    pm.expect(response.count).to.equal(39);
+  });
+  pm.test("Verificar se o next não é igual a null",()=>{
+    pm.expect(response.next).to.not.equal(null);
+    pm.expect(response.next).to.not.be.null;
+    pm.expect(response.next).to.not.equal(undefined);
+    pm.expect(response.next).to.not.equal("");
+  });
+  pm.test("Verificar se o previous é igual a null",()=>{
+    pm.expect(response.previous).to.equal(null);
+    pm.expect(response.previous).to.be.null;
+    pm.expect(response.previous).to.not.equal(undefined);
+    pm.expect(response.previous).to.not.equal("");
+  });
+  pm.test("Verificar se o nome do veiculo é Sand Crawler",()=>{
+    pm.expect(veiculo.name).to.equal("Sand Crawler");
+  });
+  pm.test("Verificar se o modelo do veiculo é Digger Crawler",()=>{
+    pm.expect(veiculo.model).to.equal("Digger Crawler");
+  });
+  pm.test("Verificar se a fabrica do veiculo é 'Corellia Mining Corporation'",()=>{
+    pm.expect(veiculo.manufacturer).to.equal("Corellia Mining Corporation");
+  });
+  pm.test("Verificar se o custo de  credito do veiculo é ''",()=>{
+    pm.expect(veiculo.cost_in_credits).to.equal("150000");
+  });
+  pm.test("Verificar se o comprimento do veiculo é '36.8 '",()=>{
+    pm.expect(veiculo.length).to.equal("36.8 ");
+  });
+  pm.test("Verificar se a velocidade maxima do veiculo é '30'",()=>{
+    pm.expect(veiculo.max_atmosphering_speed).to.equal("30");
+  });
+  pm.test("Verificar se o veiculo tem 46 tripulantes",()=>{
+    pm.expect(veiculo.crew).to.equal("46");
 	});
-pm.test("Verificar se o veiculo tem 30 passageiros",()=>{
-	pm.expect(veiculo.passengers).to.equal("30");
-});
-
-pm.test("Verificar se o veiculo tem 50000 de capacidade de carga",()=>{
-	pm.expect(veiculo.cargo_capacity).to.equal("50000");
-});
-pm.test("Verificar se o veiculo tem 2 meses de consumíveis",()=>{
-	pm.expect(veiculo.consumables).to.equal("2 months");
-});
-pm.test("Verificar se o veiculo esta  na classe 'wheeled'",()=>{
-	pm.expect(veiculo.vehicle_class).to.equal("wheeled");
-});
-pm.test("Verificar se o veiculo não tem piloto",()=>{
-	pm.expect(veiculo.pilots).to.have.lengthOf(0);
-})
-pm.test("Verificar se o veiculo exibido em mais de 1 filme",()=>{
-	pm.expect(veiculo.films).to.have.lengthOf.above(1);
-});
+  pm.test("Verificar se o veiculo tem 30 passageiros",()=>{
+    pm.expect(veiculo.passengers).to.equal("30");
+  });
+  pm.test("Verificar se o veiculo tem 50000 de capacidade de carga",()=>{
+    pm.expect(veiculo.cargo_capacity).to.equal("50000");
+  });
+  pm.test("Verificar se o veiculo tem 2 meses de consumíveis",()=>{
+    pm.expect(veiculo.consumables).to.equal("2 months");
+  });
+  pm.test("Verificar se o veiculo esta  na classe 'wheeled'",()=>{
+    pm.expect(veiculo.vehicle_class).to.equal("wheeled");
+  });
+  pm.test("Verificar se o veiculo não tem piloto",()=>{
+    pm.expect(veiculo.pilots).to.have.lengthOf(0);
+  })
+  pm.test("Verificar se o veiculo exibido em mais de 1 filme",()=>{
+    pm.expect(veiculo.films).to.have.lengthOf.above(1);
+  });
 ```
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
@@ -764,6 +783,29 @@ pm.test("Verificar se o veiculo exibido em mais de 1 filme",()=>{
 
 ### 6 Espécies
 </summary>
+- documentação do endpoint de espécies: [Species](https://swapi.dev/documentation#species)
+
+#### URL:
+
+``` url
+  GET https://swapi.dev/api/species/
+```
+
+#### 6.1 Obter lista de todas espécies
+
+###### Script de teste de Post-response:
+- Implementação do codigo para o teste de API:
+```javascript
+```
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma espécie.
+- Cada objeto de espécie deve conter as seguintes propriedades: "name", "classification", "designation", "average_height", "skin_colors", "hair_colors", "eye_colors", "average_lifespan", "homeworld", "language", "people", "films", "created", "edited", "url".
+
+
 </details>
 
 ---
@@ -774,6 +816,30 @@ pm.test("Verificar se o veiculo exibido em mais de 1 filme",()=>{
 
 ### 7 Planetas
 </summary>
+
+- documentação do endpoint de planetas: [Planets](https://swapi.dev/documentation#planets)
+
+#### URL:
+
+``` url
+  GET https://swapi.dev/api/planets/
+```
+#### 7.1 Obter lista de todas planetas
+
+##### Script de teste de Post-response:
+
+- Implementação do codigo para o teste de API:
+```javascript
+```
+- Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
+
+``` html
+```
+##### resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando um planeta.
+- Cada objeto de planeta deve conter as seguintes propriedades: "name", "rotation_period", "orbital_period", "diameter", "climate", "gravity", "terrain", "surface_water", "population", "residents", "films", "created", "edited", "url".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
 </details>
 
 ---
