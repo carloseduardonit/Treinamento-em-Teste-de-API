@@ -18,23 +18,23 @@ Este projeto tem como objetivo testar a Star Wars API (SWAPI) utilizando o Postm
 </summary>
 A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
-- ⏳ [0. Configurações Iniciais](#0-configurações-iniciais)
-  - ⏳ [0.1 Configurações do Postman](#01-configurações-do-postman)
-- ⏳ [1. Raiz da API](#1-raiz)
-  - ⏳ [1.1 Obter URLs dos endpoints da API](#11-obter-as-urls-dos-endpoints-da-api)
-- ⏳ [2. Pessoas](#2-pessoas)
-  - ⏳ [2.1 Obter lista de todas pessoas](#21-obter-lista-de-todas-pessoas)
-- ⏳ [3. Filmes](#3-filmes)
-  - ⏳ [3.1 Obter lista de todos filmes](#31-obter-lista-de-todos-filmes)
-- ⏳ [4. Naves espaciais](#4-naves-espaciais)
-  - ⏳ [4.1 Obter lista de todas naves espaciais](#41-obter-lista-de-todas-naves-espaciais)
-- ⏳ [5. Veículos](#5-veículos)
-  - ⏳ [5.1 Obter lista de todos veículos](#51-obter-lista-de-todos-veículos)
-- ⏳ [6. Espécies](#6-espécies)
-  - ⏳ [6.1 Obter lista de todas espécies](#61-obter-lista-de-todas-espécies)
-- ⏳ [7. Planetas](#7-planetas)
-  - ⏳ [7.1 Obter lista de todos planetas](#71-obter-lista-de-todos-planetas)
-- ⏳ [8. Bibliografia](#bibliografia)
+- ⚙️ [0. Configurações Iniciais](#0-configurações-iniciais)
+  - ⚙️ [0.1 Configurações do Postman](#01-configurações-do-postman)
+- ⚙️ [1. Raiz da API](#1-raiz)
+  - ⚙️ [1.1 Obter URLs dos endpoints da API](#11-obter-as-urls-dos-endpoints-da-api)
+- ⚙️ [2. Pessoas](#2-pessoas)
+  - ⚙️ [2.1 Obter lista de todas pessoas](#21-obter-lista-de-todas-pessoas)
+- ⚙️ [3. Filmes](#3-filmes)
+  - ⚙️ [3.1 Obter lista de todos filmes](#31-obter-lista-de-todos-filmes)
+- ⚙️ [4. Naves espaciais](#4-naves-espaciais)
+  - ⚙️ [4.1 Obter lista de todas naves espaciais](#41-obter-lista-de-todas-naves-espaciais)
+- ⚙️ [5. Veículos](#5-veículos)
+  - ⚙️ [5.1 Obter lista de todos veículos](#51-obter-lista-de-todos-veículos)
+- ⚙️ [6. Espécies](#6-espécies)
+  - ⚙️ [6.1 Obter lista de todas espécies](#61-obter-lista-de-todas-espécies)
+- ⚙️ [7. Planetas](#7-planetas)
+  - ⚙️ [7.1 Obter lista de todos planetas](#71-obter-lista-de-todos-planetas)
+- ⚙️ [8. Bibliografia](#bibliografia)
 </details>
 
 ---
@@ -63,10 +63,10 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 #### 0.1 Configurações do Postman
 
 - Definição de Variável de Ambiente de Base URL:
-  - Nome da variável: `baseUrl`
+  - Nome da variável: `{{baseUrl}}`
   - Valor: `https://swapi.dev/api/`
 - Definição de Variável de Ambiente para Armazenar URLs dos Endpoints:
-  - Nome das variáveis: `people`, `planets`, `films`, `species`, `vehicles`, `starships`
+  - Nome das variáveis: `{{people}}`, `{{planets}}`, `{{films}}`, `{{species}}`, `{{vehicles}}`, `{{starships}}`
   - Valor inicial: vazio (será preenchido dinamicamente a partir da resposta do endpoint raiz)
     - exemplo: `{{baseUrl}}people/`, `{{baseUrl}}planets/`, etc.
 
@@ -796,6 +796,68 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 ###### Script de teste de Post-response:
 - Implementação do codigo para o teste de API:
 ```javascript
+  var resposta = pm.response.json();
+  var resultado =resposta.results;
+  var espécie =  resposta.results[0];
+
+  pm.test("Verifica se a resposta contém pelo menos 2 espécies", function () {	pm.expect(resultado.length).to.be.at.least(2);	
+  });	
+  pm.test("Verifica se a primeira espécie é 'Human'", function () {	
+    pm.expect(espécie.name).to.equal("Human");	});
+  pm.test("Verifica se a classificação da primeira espécie é 'mammal'", function () {	
+    pm.expect(espécie.classification).to.equal("mammal");	});
+  pm.test("Verifica se a designação da primeira espécie é 'sentient'",()=>{
+    pm.expect(espécie.designation).to.equal("sentient");	});
+  pm.test("Verifica se a altura média da primeira espécie é '180'",()=>{
+    pm.expect(espécie.average_height).to.equal("180");	});
+  pm.test("Verifica se as cores de pele da primeira espécie são 'caucasian, black, asian, hispanic'",()=>{
+    var  cores = espécie.skin_colors.split(", ");	// Separa as cores de pele em um array
+    pm.expect(espécie.skin_colors).to.equal("caucasian, black, asian, hispanic");	
+    pm.expect(cores[0]).to.include("caucasian");
+    pm.expect(cores[1]).to.include("black");
+    pm.expect(cores[2]).to.include("asian");
+    pm.expect(cores[3]).to.include("hispanic");
+  })
+  pm.test("Verificar se  as cores de cabelo da primeira espécie são 'blonde, brown, black, red'",()=>{
+    var  cores = espécie.hair_colors.split(", ");	// Separa as cores de cabelo em um array
+    console.log(cores)
+    pm.expect(espécie.hair_colors).to.equal("blonde, brown, black, red");	
+    pm.expect(cores[0]).to.include("blonde");
+    pm.expect(cores[1]).to.include("brown");
+    pm.expect(cores[2]).to.include("black");
+    pm.expect(cores[3]).to.include("red");
+  });
+  pm.test("Verificar se os olhos da primeira espécie são 'brown, blue, green, hazel, grey, amber'",()=>{
+    var olhos = espécie.eye_colors.split(", ");	// Separa as cores de cabelo em um array
+    pm.expect(espécie.eye_colors).to.equal("brown, blue, green, hazel, grey, amber");	
+    pm.expect(olhos[0]).to.include("brown");
+    pm.expect(olhos[1]).to.include("blue");
+    pm.expect(olhos[2]).to.include("green");
+    pm.expect(olhos[3]).to.include("hazel");
+    pm.expect(olhos[4]).to.include("grey");
+    pm.expect(olhos[5]).to.include("amber")
+  });	
+  pm.test("Verificar se o tempo medio de vida da primeira espécie é '120'",()=>{
+    pm.expect(espécie.average_lifespan).to.equal("120");	
+  });	
+  pm.test("Verificar se a primeira espécie vive no planeta e 'Coruscant'",()=>{
+    var urlPlaneta = espécie.homeworld;	
+    var planeta ={
+      url: urlPlaneta,
+      method: "GET",
+    };
+    pm.sendRequest(planeta, function (err, response) {
+      if (err) {
+        console.log(err);
+      } else {
+        var respostaPlaneta = response.json().nas;
+            pm.expect(respostaPlaneta).to.equal("Coruscant");	
+      }
+    });
+  });
+  pm.test("Verificar se a linguagem da primeira espécie é 'Galactic Basic'",()=>{
+    pm.expect(espécie.language).to.equal("Galactic Basic");	
+  });
 ```
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
@@ -830,6 +892,43 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 - Implementação do codigo para o teste de API:
 ```javascript
+  var response = pm.response.json();
+  var resultado = response.results;
+  var planeta = resultado[0];
+  pm.test("Verificar o nome do planeta é 'Tatooine'", () => {
+    pm.expect(planeta.name).to.equal("Tatooine");
+  });
+  pm.test("Verificar o periodo da rotação e 23",()=>{
+    pm.expect(parseInt(planeta.rotation_period)).to.equal(23);
+  });
+  pm.test("Verificar o periodo orbital do planeta é 304",()=>{
+    pm.expect(parseInt(planeta.orbital_period)).to.equal(304);
+  });
+  pm.test("Verificar o diametro do planeta é 10465",()=>{
+    pm.expect(parseInt(planeta.diameter)).to.equal(10465);
+  });
+  pm.test("Verificar o Clima do planeta é 'arid'",()=>{
+    pm.expect(planeta.climate).to.equal("arid");	
+  });
+  pm.test("Verificar a gravidade do planeta é '1 standard'",()=>{
+    pm.expect(planeta.gravity).to.equal("1 standard");	
+  });
+  pm.test("Verificar o terreno do planeta é 'desert'",()=>{
+    pm.expect(planeta.terrain).to.equal("desert");	
+  });
+  pm.test("Verificar a superficie da agua do planeta é 1",()=>{
+    pm.expect(parseInt(planeta.surface_water)).to.equal(1);	
+  });
+  pm.test("Verificar a população do planeta é 200000",()=>{
+    var populacao = parseInt(planeta.population)
+    pm.expect(populacao).to.equal(200000);	
+    pm.expect(populacao).to.be.at.least(100000);	
+    pm.expect(populacao).to.be.at.most(300000);	
+  });
+  pm.test("Verificar a url do planeta",()=>{
+    var urlPlaneta = pm.environment.get("planets") + "1/";	
+    pm.expect(planeta.url).to.equal(urlPlaneta);	
+  });
 ```
 - Payload de visualização personalizado para exibir os dados dos funcionários em uma tabela formatada.
 
