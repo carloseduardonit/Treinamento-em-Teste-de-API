@@ -799,7 +799,30 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
   var resposta = pm.response.json();
   var resultado =resposta.results;
   var espécie =  resposta.results[0];
-
+  pm.test("Verifica se a resposta é válida", function () {	
+    pm.expect(resposta).to.have.property("count");	
+    pm.expect(resposta).to.have.property("next");	
+    pm.expect(resposta).to.have.property("previous");	
+    pm.expect(resposta).to.have.property("results");	
+    pm.expect(resultado).to.be.an("array")
+    pm.expect(espécie).to.have.property("name");
+    pm.expect(espécie).to.have.property("classification");	
+    pm.expect(espécie).to.have.property("designation");	
+    pm.expect(espécie).to.have.property("average_height");	
+    pm.expect(espécie).to.have.property("skin_colors");	
+    pm.expect(espécie).to.have.property("hair_colors");	
+    pm.expect(espécie).to.have.property("eye_colors");	
+    pm.expect(espécie).to.have.property("average_lifespan");	
+    pm.expect(espécie).to.have.property("homeworld");	
+    pm.expect(espécie).to.have.property("language");
+    pm.expect(espécie.people).to.be.an("array")
+    pm.expect(espécie).to.have.property("people");
+    pm.expect(espécie.films).to.be.an("array")	
+    pm.expect(espécie).to.have.property("films");	
+    pm.expect(espécie).to.have.property("created");	
+    pm.expect(espécie).to.have.property("edited");	
+    pm.expect(espécie).to.have.property("url");
+	});	
   pm.test("Verifica se a resposta contém pelo menos 2 espécies", function () {	pm.expect(resultado.length).to.be.at.least(2);	
   });	
   pm.test("Verifica se a primeira espécie é 'Human'", function () {	
@@ -895,6 +918,29 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
   var response = pm.response.json();
   var resultado = response.results;
   var planeta = resultado[0];
+  pm.test("Verificar a estrutura do JSON do planeta",()=>{
+    pm.expect(response).to.have.property("count");
+    pm.expect(response).to.have.property("next");
+    pm.expect(response).to.have.property("previous");
+    pm.expect(response).to.have.property("results");
+    pm.expect(resultado).to.be.an("array");
+    pm.expect(planeta).to.have.property("name");
+    pm.expect(planeta).to.have.property("rotation_period");
+    pm.expect(planeta).to.have.property("orbital_period");
+    pm.expect(planeta).to.have.property("diameter");
+    pm.expect(planeta).to.have.property("climate");
+    pm.expect(planeta).to.have.property("gravity");
+    pm.expect(planeta).to.have.property("terrain");
+    pm.expect(planeta).to.have.property("surface_water");
+    pm.expect(planeta).to.have.property("population");
+    pm.expect(planeta).to.have.property("residents");
+    pm.expect(planeta.residents).to.be.an("array");
+    pm.expect(planeta).to.have.property("films");
+    pm.expect(planeta.films).to.be.an("array");
+    pm.expect(planeta).to.have.property("created");
+    pm.expect(planeta).to.have.property("edited");
+    pm.expect(planeta).to.have.property("url");
+  });
   pm.test("Verificar o nome do planeta é 'Tatooine'", () => {
     pm.expect(planeta.name).to.equal("Tatooine");
   });
