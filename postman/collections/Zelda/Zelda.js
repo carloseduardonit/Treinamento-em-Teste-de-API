@@ -142,6 +142,10 @@ class Jogos {
 
     static async paragrafosJogoZelda(Jogo) {
         const jogosList = await Jogo;
+        if (!jogosList || Object.keys(jogosList).length === 0) {
+            resultsContainer.innerHTML = '<h2>Zelda</h2><p>Jogo não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
         resultsContainer.innerHTML = '<h2>Zelda</h2><p>Bem-vindo ao universo de Zelda!</p>'
         resultsContainer.innerHTML += `<p class="resposta"><strong>ID:</strong> ${jogosList.id}</p>`;
         resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${jogosList.name}</p>`;
