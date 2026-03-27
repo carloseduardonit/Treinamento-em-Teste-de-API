@@ -13,7 +13,7 @@ class Zelda {
             <label><input type="radio" name="Pesquisa" value="id">Por ID</label>
             <label><input type="radio" name="Pesquisa" value="name">Por Nome</label>
             <button id="buscar" type="button" class="menu-toggle" onclick="Zelda.buscarJogo()">Buscar</button>
-            <button id="limpar" type="button" class="menu-toggle" onclick="Zelda.limpar()">Limpar</button>
+            <button id="limpar" type="button" class="menu-toggle" onclick="Zelda.limpar()">Limpar os Campos</button>
         `;
         if (!document.getElementById('zelda-form')) {
             mainContent.innerHTML = '<h2>Zelda</h2><p>Bem-vindo ao universo de Zelda!</p>';
@@ -146,8 +146,7 @@ class Jogos {
             resultsContainer.innerHTML = '<p>Jogo não encontrado. Por favor, tente novamente.</p>';
             return;
         }
-        resultsContainer.innerHTML = '<h2>Zelda</h2><p>Bem-vindo ao universo de Zelda!</p>'
-        resultsContainer.innerHTML += `<p class="resposta"><strong>ID:</strong> ${jogosList.id}</p>`;
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${jogosList.id}</p>`;
         resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${jogosList.name}</p>`;
         if (jogosList.description !== "" && jogosList.description.length > 0) {
             resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição:</strong> ${jogosList.description}</p>`;
