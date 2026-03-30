@@ -30,37 +30,22 @@ btn_zelda.addEventListener('click', async (event) => {
     event.preventDefault();
     clearMainContent();
     title.innerText = 'Zelda';
-    var JogoID = "5f6ce9d805615a85623ec2b9";
-    const name = "The Legend of Zelda: Majora's Mask";
-    // paragrafosJogoZelda(jogos.getJogoByName(name));
     Zelda.loadFormulario();
     if(document.getElementsByClassName('star-wars-gif')[0]){
         const starWarsGif = document.getElementsByClassName('star-wars-gif')[0];
         starWarsGif.remove();
     }
-
 });
+
 btn_clear.addEventListener('click', (event) => {
     event.preventDefault();
     title.innerText = 'Treinamento em Teste de API';
     clearMainContent();
 });
 
-
-
-
 function clearMainContent() {
     mainContent.innerHTML = '';
     resultsContainer.innerHTML = '';
 }
 
-async function teste() {
-    try {
 
-        const response = await jogos.getJogoByName(name);
-        console.log("Dados recebidos:", response);
-    } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-        return [];
-    }
-}
