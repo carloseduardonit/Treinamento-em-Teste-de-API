@@ -109,16 +109,22 @@ class Zelda {
                 Funcionarios.gerarPanel();
                 break;
             case 'Personagens':
+                Personagens.gerarPanel();
                 break;
             case 'Monstros':
+                Monstros.gerarPanel();
                 break;
             case 'Chefes':
+                Chefes.gerarPanel();
                 break;
             case 'Masmorras':
+                Masmorras.gerarPanel();
                 break;
             case 'Lugares':
+                Lugares.gerarPanel();
                 break;
             case 'Itens':
+                Itens.gerarPanel();
                 break;
         }
     }
@@ -148,7 +154,7 @@ class Jogos {
             //mainContent.innerHTML = '';
             mainContent.appendChild(formulario);
         }
-        Jogos.tabelaJogoZelda();
+        this.tabelaJogoZelda();
     }
     static async getJogoByName(name) {
         return fetch(`https://zelda.fanapis.com/api/games?name=${encodeURIComponent(name)}`)
@@ -220,6 +226,7 @@ class Jogos {
             <td class="coluna">${jogo.released_date}</td>
             </tr>`;
         });
+        resultsContainer.innerHTML = '';
         resultsContainer.appendChild(table);
     }
 
@@ -260,7 +267,7 @@ class Funcionarios {
     static url_Funcionario = 'https://zelda.fanapis.com/api/staff';
     static games = {};
     constructor(parameters) {
-        
+
     }
     static gerarPanel() {
         this.tabelaFuncionarios();
@@ -283,7 +290,7 @@ class Funcionarios {
                 //let trabalhos = data.data.worked_on.map(async trabalho=>
                 //await this.getFuncionariosonWord(trabalho)
                 // )
-                
+
                 const dados = data.data;
                 console.log('Dados recebidos:', data.data);
                 return dados;
@@ -318,7 +325,7 @@ class Personagens {
 
     }
     static gerarPanel() {
-
+        this.tabelaPersonagens();
     }
     static async getPersonagens() {
         const url = this.url_Personagens;
@@ -339,6 +346,25 @@ class Personagens {
         const personagens = await this.getPersonagens();
         const table = document.createElement('table');
         table.classList.add('tabela');
+        table.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Personagem</th>
+        <th class="coluna">Nome</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Genero(M/F)</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        </tr>`;
+        personagens.forEach((personagem) => {
+            table.innerHTML += `<tr class="linha">
+            <td class="coluna">${personagem.id}</td>
+            <td class="coluna">${personagem.name}</td>
+            <td class="coluna">${personagem.description && personagem.description.length > 100 ? personagem.description.substring(0, 100) + '...' : personagem.description || ''}</td>
+            <td class="coluna">${personagem.gender === null ? '' : personagem.gender === 'Male' ? 'Masculino' : 'Feminino'}</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(table);
+
     }
 
 
@@ -346,31 +372,235 @@ class Personagens {
 }
 
 class Monstros {
+    static url_Monstros = 'https://zelda.fanapis.com/api/monsters';
     constructor(parameters) {
 
     }
+    static gerarPanel() {
+        this.tabelaMonstros();
+    }
+    static async getMonstros() {
+        const url = this.url_Monstros;
+        console.log("URL:", url);
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos:', data.data);
+                return data.data;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar monstros:', error);
+                return [];
+            });
+    }
+
+    static async tabelaMonstros() {
+        const monstros = await this.getMonstros();
+        const tabela = document.createElement('table');
+        tabela.classList.add('tabela');
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Monstro</th>
+        <th class="coluna">Nome</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        </tr>`;
+        monstros.forEach((monstro) => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${monstro.id}</td>
+            <td class="coluna">${monstro.name}</td>
+            <td class="coluna">${monstro.description && monstro.description.length > 100 ? monstro.description.substring(0, 100) + '...' : monstro.description || ''}</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(tabela);
+    }
+
+
 }
 
 class Chefes {
+    static url_Chefes = 'https://zelda.fanapis.com/api/bosses';
     constructor(parameters) {
 
     }
+    static gerarPanel() {
+        this.tabelaChefes();
+    }
+    static async getChefes() {
+        const url = this.url_Chefes;
+        console.log("URL:", url);
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos:', data.data);
+                return data.data;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar chefes:', error);
+                return [];
+            });
+    }
+    static async tabelaChefes() {
+        const chefes = await this.getChefes();
+        const tabela = document.createElement('table');
+        tabela.classList.add('tabela');
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Chefe</th>
+        <th class="coluna">Nome do Chefe</th>
+        <th class="coluna">Nome do Mostro</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        </tr>`;
+        chefes.forEach((chefe) => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${chefe.id}</td>
+            <td class="coluna">${chefe.name}</td>
+            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${chefe.description && chefe.description.length > 100 ? chefe.description.substring(0, 100)+"..." : chefe.description || ''}</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(tabela);
+    }
+
 }
 
 class Masmorras {
+    static url_Masmorras = 'https://zelda.fanapis.com/api/dungeons';
     constructor(parameters) {
 
+    }
+    static gerarPanel() {
+        this.tabelaMasmorras();
+    }
+    static async getMasmorras() {
+        const url = this.url_Masmorras;
+        console.log("URL:", url);
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos:', data.data);
+                return data.data;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar masmorras:', error);
+                return [];
+            });
+    }
+    static async tabelaMasmorras() {
+        const masmorras = await this.getMasmorras();
+        const tabela = document.createElement('table');
+        tabela.classList.add('tabela');
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Masmorra</th>
+        <th class="coluna">Nome da Masmorra</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        </tr>`;
+        masmorras.forEach((masmorra) => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${masmorra.id}</td>
+            <td class="coluna">${masmorra.name}</td>
+            <td class="coluna">${masmorra.description && masmorra.description.length > 100 ? masmorra.description.substring(0,100)+" ...":masmorra.description}</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(tabela);
     }
 }
 
 class Lugares {
+    static url_Lugares = 'https://zelda.fanapis.com/api/places';
     constructor(parameters) {
 
+    }
+    static gerarPanel() {
+        this.tabelaLugares();
+    }
+    static async getLugares() {
+        const url = this.url_Lugares;
+        console.log("URL:", url);
+        return fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos:', data.data);
+                return data.data;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar lugares:', error);
+                return [];
+            });
+    }
+    static async tabelaLugares() {
+        const lugares = await this.getLugares();
+        const tabela = document.createElement('table');
+        tabela.classList.add('tabela');
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Lugar</th>
+        <th class="coluna">Nome do Lugar</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        <th class="coluna">Quem são os habitantes</th>
+        </tr>`;
+        lugares.forEach((lugar) => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${lugar.id}</td>
+            <td class="coluna">${lugar.name}</td>
+            <td class="coluna">${lugar.description && lugar.description.length > 100 ? lugar.description.substring(0,100) +" ...": lugar.description}</td>
+            <td class="coluna">Em manutenção</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(tabela);
     }
 }
 
 class Itens {
+    static url_Itens = 'https://zelda.fanapis.com/api/items';
     constructor(parameters) {
 
     }
+    static gerarPanel() {
+        this.tabelaItens();
+    }
+    static async getItens() {
+        console.log("URL:", this.url_Itens);
+        return fetch(this.url_Itens)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Dados recebidos:', data.data);
+                return data.data;
+            })
+            .catch(error => {
+                console.error('Erro ao buscar itens:', error);
+                return [];
+            });
+    }
+    static async tabelaItens() {
+        const itens = await this.getItens();
+        const tabela= document.createElement('table');
+        tabela.classList.add('tabela');
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID Item</th>
+        <th class="coluna">Nome do Item</th>
+        <th class="coluna">Descrição</th>
+        <th class="coluna">Apareceu no(s) Jogo(s)</th>
+        </tr>`;
+        itens.forEach((item) => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${item.id}</td>
+            <td class="coluna">${item.name}</td>
+            <td class="coluna">${item.description && item.description.length > 100 ? item.description.substring(0,100): item.description}</td>
+            <td class="coluna">Em manutenção</td>
+            </tr>`;
+        });
+        resultsContainer.innerHTML = '';
+        resultsContainer.appendChild(tabela);
+
+    }
+        
 }

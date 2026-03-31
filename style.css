@@ -87,27 +87,32 @@ button.menu-toggle:hover {
     background: #4CAF50;
     transform: translateY(-2px);
 }
-
+div#tabs{
+    
+width: 95%;
+background-color: #4CAF50;
+padding-left: 5%;
+padding-right: 5%;
+margin: auto;
+    margin-top: -25px;
+    margin-bottom: 12px;
+    
+}
 button.menu-toggle:active {
     transform: scale(0.95);
 }
 
-div.tab-panel {
-  display: none; /* Oculta todas as abas */
-  padding: 20px;
-  border: 1px solid #ccc;
-}
-
-div.tab-panel.active {
-  display: block; /* Mostra a aba ativa */
-}
 
 button.tab-button {
-  padding: 0px;
+  margin-top: -10px;
+  border: none;
+  width: 10%;
+  outline: blueviolet;
   cursor: pointer;
 }
 
 button.tab-button.active {
+ align-content: center;
   background-color: #24cc78;
   font-weight: bold;
 }
