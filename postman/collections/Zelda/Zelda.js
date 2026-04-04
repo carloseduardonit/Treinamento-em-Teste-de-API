@@ -36,11 +36,20 @@ class Zelda {
         const nameInput = document.getElementById('pesquisaTxt');
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
+        const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
+        const listaEmManutenção= ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares', 'Itens'];
         let searchType = null;
+
         for (var i = 0; i < radio_buttons.length; i++) {
             if (radio_buttons[i].checked) {
                 searchType = radio_buttons[i].value;
                 break;
+            }
+        }
+        for (let i = 0; i < listaEmManutenção.length; i++) {
+            if (buttonAbatida === listaEmManutenção[i]) {
+                alert(`A funcionalidade de busca por "${buttonAbatida}" está em manutenção. Por favor, selecione a aba "Jogos" para realizar a busca.`);
+                return;
             }
         }
         if (!searchType && name.length === 0) {
@@ -53,7 +62,7 @@ class Zelda {
             alert('Por favor, selecione o tipo de pesquisa (ID ou Nome).');
             return;
         }
-        await Jogos.exibeMelhorPesquisa(searchType, name);
+        await this.exibeMelhorPesquisa(buttonAbatida, searchType, name);
     }
     static limpar() {
         const nameInput = document.getElementById('pesquisaTxt');
@@ -71,7 +80,6 @@ class Zelda {
     }
     static exibeTab(tipo) {
         const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanels = document.querySelectorAll('.tab-panel');
         const ativo = document.querySelector('.tab-button.active');
         let nome = ativo.dataset.tab;
 
@@ -83,7 +91,6 @@ class Zelda {
                 Zelda.removaAtivos();
                 this.exibeFormulario(tipo);
                 tabButtons[i].classList.add('active');
-                //tabPanels[i].classList.add('active');
                 break
             }
         }
@@ -98,6 +105,34 @@ class Zelda {
                 //tabPanels[i].classList.remove('active');
                 break;
             }
+        }
+    }
+    static exibeMelhorPesquisa(item, tipo, valor) {
+        switch (item) {
+            case 'Jogos':
+                Jogos.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Funcionários':
+                Funcionarios.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Personagens':
+                Personagens.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Monstros':
+                Monstros.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Chefes':
+                Chefes.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Masmorras':
+                Masmorras.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Lugares':
+                Lugares.exibeMelhorPesquisa(tipo, valor);
+                break;
+            case 'Itens':
+                Itens.exibeMelhorPesquisa(tipo, valor);
+                break;
         }
     }
     static exibeFormulario(tipo) {
@@ -128,6 +163,7 @@ class Zelda {
                 break;
         }
     }
+
 
 }
 
@@ -272,34 +308,112 @@ class Funcionarios {
     static gerarPanel() {
         this.tabelaFuncionarios();
     }
-    static async getFuncionariosonWord(words) {
-        const response = await fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                return data.data.name;
-            })
-        return response;
+
+    static async getFuncionarioByName(id, name) {
+        const url = `${this.url_Funcionario}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            const responseJson = await response.json();
+            console.log("Dados recebidos:", responseJson);
+            const data = responseJson.data[0];
+            if (!data) {
+                return [];
+            }
+
+            const jogos = await Promise.all(
+                data.worked_on.map(async (gameUrl) => {
+                    if (this.games[gameUrl]) {
+                        return this.games[gameUrl];
+                    }
+
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        if (!gameResponse.ok) {
+                            throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                        }
+                        const gameData = await gameResponse.json();
+                        this.games[gameUrl] = gameData.data.name;
+                        return this.games[gameUrl];
+                    } catch (error) {
+                        const trabalho = {
+                            id: data.id,
+                            name: data.name,
+                            games: jogos.join(', ')
+                        };
+
+                        return trabalho;
+
+                    }
+                })
+            );
+            return {
+                id: data.id,
+                name: data.name,
+                games: jogos.join(', ')
+            };
+        } catch (error) {
+            console.error("Erro ao buscar funcionários:", error);
+            return [];
+        }
     }
     static async getFuncionarios() {
         const url = this.url_Funcionario;
         console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json()
-            )
-            .then(data => {
-                //let trabalhos = data.data.worked_on.map(async trabalho=>
-                //await this.getFuncionariosonWord(trabalho)
-                // )
 
-                const dados = data.data;
-                console.log('Dados recebidos:', data.data);
-                return dados;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar funcionários:', error);
-                return [];
-            });
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log('Dados recebidos:', dados);
 
+            const trabalhos = await Promise.all(
+                // Resolve todos os funcionários em paralelo
+                dados.map(async (funcionario) => {
+
+                    const jogos = await Promise.all(
+                        // Resolve todos os jogos de cada funcionário em paralelo
+                        funcionario.worked_on.map(async (gameUrl) => {
+                            // Cache pelo gameUrl completo
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+
+                            try {
+                                // Busca o jogo usando a URL completa (que já inclui o ID)
+                                const gameResponse = await fetch(gameUrl); // URL já vem pronta!
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name; // "Breath of the Wild", etc.
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl; // fallback com a URL
+                            }
+                        })
+                    );
+
+                    return {
+                        id: funcionario.id,
+                        name: funcionario.name,
+                        games: jogos.join(', ')
+                    };
+                })
+            );
+
+            console.log('Funcionários e seus jogos:', trabalhos);
+            return trabalhos;
+
+        } catch (error) {
+            console.error('Erro ao buscar funcionários:', error);
+            return [];
+        }
     }
     static async tabelaFuncionarios() {
         const funcionarios = await this.getFuncionarios();
@@ -311,7 +425,7 @@ class Funcionarios {
             table.innerHTML += `<tr class="linha">
             <td class="coluna">${funcionario.id}</td>
             <td class="coluna">${funcionario.name}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${funcionario.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
@@ -457,7 +571,7 @@ class Chefes {
             <td class="coluna">${chefe.id}</td>
             <td class="coluna">${chefe.name}</td>
             <td class="coluna">Em manutenção</td>
-            <td class="coluna">${chefe.description && chefe.description.length > 100 ? chefe.description.substring(0, 100)+"..." : chefe.description || ''}</td>
+            <td class="coluna">${chefe.description && chefe.description.length > 100 ? chefe.description.substring(0, 100) + "..." : chefe.description || ''}</td>
             <td class="coluna">Em manutenção</td>
             </tr>`;
         });
@@ -503,7 +617,7 @@ class Masmorras {
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${masmorra.id}</td>
             <td class="coluna">${masmorra.name}</td>
-            <td class="coluna">${masmorra.description && masmorra.description.length > 100 ? masmorra.description.substring(0,100)+" ...":masmorra.description}</td>
+            <td class="coluna">${masmorra.description && masmorra.description.length > 100 ? masmorra.description.substring(0, 100) + " ..." : masmorra.description}</td>
             <td class="coluna">Em manutenção</td>
             </tr>`;
         });
@@ -549,7 +663,7 @@ class Lugares {
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${lugar.id}</td>
             <td class="coluna">${lugar.name}</td>
-            <td class="coluna">${lugar.description && lugar.description.length > 100 ? lugar.description.substring(0,100) +" ...": lugar.description}</td>
+            <td class="coluna">${lugar.description && lugar.description.length > 100 ? lugar.description.substring(0, 100) + " ..." : lugar.description}</td>
             <td class="coluna">Em manutenção</td>
             <td class="coluna">Em manutenção</td>
             </tr>`;
@@ -582,7 +696,7 @@ class Itens {
     }
     static async tabelaItens() {
         const itens = await this.getItens();
-        const tabela= document.createElement('table');
+        const tabela = document.createElement('table');
         tabela.classList.add('tabela');
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID Item</th>
@@ -594,7 +708,7 @@ class Itens {
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${item.id}</td>
             <td class="coluna">${item.name}</td>
-            <td class="coluna">${item.description && item.description.length > 100 ? item.description.substring(0,100): item.description}</td>
+            <td class="coluna">${item.description && item.description.length > 100 ? item.description.substring(0, 100) : item.description}</td>
             <td class="coluna">Em manutenção</td>
             </tr>`;
         });
@@ -602,5 +716,5 @@ class Itens {
         resultsContainer.appendChild(tabela);
 
     }
-        
+
 }

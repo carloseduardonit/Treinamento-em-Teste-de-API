@@ -88,14 +88,16 @@ button.menu-toggle:hover {
   transform: translateY(-2px);
 }
 div#tabs {
-  width: 95%;
+  min-width: 95%;
+  max-width: 100%;
   background-color: #24cc78;
   padding-left: 2%;
   padding-right: 2%;
   border-top-left-radius: 12px;
-  margin: auto;
+  border-top-right-radius: 12px;
   margin-top: -25px;
-  margin-left: auto;
+  margin-left: -5px;
+  margin-right: -5px;
   margin-bottom: 12px;
 }
 button.menu-toggle:active {
@@ -104,15 +106,21 @@ button.menu-toggle:active {
 
 button.tab-button {
   margin-top: -10px;
+  font-weight: bolder;
   border: none;
-  width: 10%;
-  outline: blueviolet;
+  min-width: 10%;
+  max-width: 20%;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
   cursor: pointer;
 }
 
 button.tab-button.active {
   align-content: center;
   background-color: #24cc78;
+  border: white solid;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
   color: white;
   font-weight: bold;
 }
@@ -141,18 +149,16 @@ th {
 td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  text-align: justify;
 }
 
-th:first{
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
 
 tr:hover td {
   background: #24cc78;
   color: white;
   border: white solid 1px;
   font-weight: bolder;
+  te
 }
 
 /* FOOTER */
