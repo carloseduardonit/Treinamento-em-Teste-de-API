@@ -37,7 +37,7 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção= ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares', 'Itens'];
+        const listaEmManutenção = ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares', 'Itens'];
         let searchType = null;
 
         for (var i = 0; i < radio_buttons.length; i++) {
@@ -49,6 +49,7 @@ class Zelda {
         for (let i = 0; i < listaEmManutenção.length; i++) {
             if (buttonAbatida === listaEmManutenção[i]) {
                 alert(`A funcionalidade de busca por "${buttonAbatida}" está em manutenção. Por favor, selecione a aba "Jogos" para realizar a busca.`);
+
                 return;
             }
         }
@@ -435,6 +436,7 @@ class Funcionarios {
 
 class Personagens {
     static url_Personagens = 'https://zelda.fanapis.com/api/characters';
+    static games = {};
     constructor(parameters) {
 
     }
@@ -443,17 +445,53 @@ class Personagens {
     }
     static async getPersonagens() {
         const url = this.url_Personagens;
-        console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
+        console.log("URL:",url)
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log("Dados Recebidos: ", dados);
 
-            }).catch(error => {
-                console.error('Erro ao buscar personagens:', error);
-                return [];
-            });
+            const personagens = await Promise.all(
+                dados.map(async (personagem) => {
+                    const jogos = await Promise.all(
+                        personagem.appearances.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name;
+                                return this.games[gameUrl];
+
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
+                            }
+                        })
+                    );
+                    return {
+                        id: personagem.id,
+                        name: personagem.name,
+                        description: personagem.description,
+                        gender:personagem.gender,
+                        race : personagem.race,
+                        games: jogos.join(', ')
+                    }
+                })
+            );
+            console.log('Personagens e seus jogos:', Personagens);
+            return personagens;
+
+        } catch (error){
+            console.error('Erro ao buscar personagens:', error);
+            return [];
+        }
+
     }
 
     static async tabelaPersonagens() {
@@ -465,6 +503,7 @@ class Personagens {
         <th class="coluna">Nome</th>
         <th class="coluna">Descrição</th>
         <th class="coluna">Genero(M/F)</th>
+        <th class="coluna">Corrida</th>
         <th class="coluna">Apareceu no(s) Jogo(s)</th>
         </tr>`;
         personagens.forEach((personagem) => {
@@ -473,7 +512,8 @@ class Personagens {
             <td class="coluna">${personagem.name}</td>
             <td class="coluna">${personagem.description && personagem.description.length > 100 ? personagem.description.substring(0, 100) + '...' : personagem.description || ''}</td>
             <td class="coluna">${personagem.gender === null ? '' : personagem.gender === 'Male' ? 'Masculino' : 'Feminino'}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${personagem.race === null? '':personagem.race}</td>
+            <td class="coluna">${personagem.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
