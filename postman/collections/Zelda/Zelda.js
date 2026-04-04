@@ -609,6 +609,8 @@ class Monstros {
 
 class Chefes {
     static url_Chefes = 'https://zelda.fanapis.com/api/bosses';
+    static games = {};
+    static monsters = {};
     constructor(parameters) {
 
     }
@@ -618,16 +620,68 @@ class Chefes {
     static async getChefes() {
         const url = this.url_Chefes;
         console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar chefes:', error);
-                return [];
-            });
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log("Dados Recebidos: ", dados);
+            const chefes = await Promise.all(
+                dados.map(async (chefe) => {
+                    const jogos = await Promise.all(
+                        chefe.appearances.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name;
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
+                            }
+                        })
+                    );
+                    const dungeons = await Promise.all(
+                        chefe.dungeons.map(async (dungeonUrl) => {
+                            if (this.monsters[dungeonUrl]) {
+                                return this.monsters[dungeonUrl];
+                            }
+                            try {
+                                const dungeonResponse = await fetch(dungeonUrl);
+                                if (!dungeonResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${dungeonResponse.status}`);
+                                }
+                                const dungeonData = await dungeonResponse.json();
+                                this.monsters[dungeonUrl] = dungeonData.data.name;
+                                return this.monsters[dungeonUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar masmorra ${dungeonUrl}:`, error);
+                                return dungeonUrl;
+                            }
+                        })
+                    );
+                    return {
+                        id: chefe.id,
+                        name: chefe.name,
+                        description: chefe.description,
+                        games: jogos.join(', '),
+                        dungeons: dungeons.join(', ')
+                    }
+                })
+            );
+            console.log('Chefes, seus jogos e masmorras associadas:', chefes);
+            return chefes;
+        } catch (error) {
+            console.error('Erro ao buscar chefes:', error);
+            return [];
+        }
+
+                    
     }
     static async tabelaChefes() {
         const chefes = await this.getChefes();
@@ -644,9 +698,9 @@ class Chefes {
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${chefe.id}</td>
             <td class="coluna">${chefe.name}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${chefe.dungeons}</td>
             <td class="coluna">${chefe.description && chefe.description.length > 100 ? chefe.description.substring(0, 100) + "..." : chefe.description || ''}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${chefe.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
