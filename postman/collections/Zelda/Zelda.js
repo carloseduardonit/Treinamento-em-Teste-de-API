@@ -445,7 +445,7 @@ class Personagens {
     }
     static async getPersonagens() {
         const url = this.url_Personagens;
-        console.log("URL:",url)
+        console.log("URL:", url)
         try {
             const response = await fetch(url);
             const data = await response.json();
@@ -478,8 +478,8 @@ class Personagens {
                         id: personagem.id,
                         name: personagem.name,
                         description: personagem.description,
-                        gender:personagem.gender,
-                        race : personagem.race,
+                        gender: personagem.gender,
+                        race: personagem.race,
                         games: jogos.join(', ')
                     }
                 })
@@ -487,7 +487,7 @@ class Personagens {
             console.log('Personagens e seus jogos:', Personagens);
             return personagens;
 
-        } catch (error){
+        } catch (error) {
             console.error('Erro ao buscar personagens:', error);
             return [];
         }
@@ -512,7 +512,7 @@ class Personagens {
             <td class="coluna">${personagem.name}</td>
             <td class="coluna">${personagem.description && personagem.description.length > 100 ? personagem.description.substring(0, 100) + '...' : personagem.description || ''}</td>
             <td class="coluna">${personagem.gender === null ? '' : personagem.gender === 'Male' ? 'Masculino' : 'Feminino'}</td>
-            <td class="coluna">${personagem.race === null? '':personagem.race}</td>
+            <td class="coluna">${personagem.race === null ? '' : personagem.race}</td>
             <td class="coluna">${personagem.games}</td>
             </tr>`;
         });
@@ -527,6 +527,7 @@ class Personagens {
 
 class Monstros {
     static url_Monstros = 'https://zelda.fanapis.com/api/monsters';
+    static games = {};
     constructor(parameters) {
 
     }
@@ -536,16 +537,49 @@ class Monstros {
     static async getMonstros() {
         const url = this.url_Monstros;
         console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
+        try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const dados = data.data;
+        console.log("Dados Recebidos: ", dados);
+        const monstros = await  Promise.all(
+            dados.map(async(monstro) =>{
+                const jogos = await Promise.all(
+                    monstro.appearances.map(async(gameUrl)=>{
+                        if (this.games[gameUrl]) {
+                            return this.games[gameUrl];
+                        }
+                        try{
+                            const gameResponse = await fetch(gameUrl);
+                            if(!gameResponse.ok){
+                                throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                            }
+                            const gameData = await gameResponse.json();
+                            this.games[gameUrl] =gameData.data.name;
+                            return this.games[gameUrl];
+                        }catch(error){
+                            console.error(`Erro ao buscar jogo ${gameUrl}:`,error);
+                            return gameUrl;
+
+                        }
+                    })
+                );
+                return{
+                    id: monstro.id,
+                    name: monstro.name,
+                    description: monstro.description,
+                    games: jogos.join(', ')
+
+                }
             })
-            .catch(error => {
-                console.error('Erro ao buscar monstros:', error);
-                return [];
-            });
+        )
+        console.log('Monstros e seus jogos:', monstros);
+        return monstros;
+
+        }catch (error) {
+            console.error('Erro ao buscar monstros:', error);
+            return [];
+        };
     }
 
     static async tabelaMonstros() {
@@ -563,7 +597,7 @@ class Monstros {
             <td class="coluna">${monstro.id}</td>
             <td class="coluna">${monstro.name}</td>
             <td class="coluna">${monstro.description && monstro.description.length > 100 ? monstro.description.substring(0, 100) + '...' : monstro.description || ''}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${monstro.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
