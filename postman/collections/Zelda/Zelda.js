@@ -1,13 +1,17 @@
 
 
 class Zelda {
+
     constructor() {
 
     }
 
     static async loadFormulario() {
+       
         this.loadBotao();
-        this.gerarPanel();
+        this.gerarPanel(); 
+        const spanTipoItem = document.getElementsByClassName('tipo-item')[0];
+        spanTipoItem.innerText = 'Jogo';
     }
     static loadBotao() {
         mainContent.innerHTML = '1';
@@ -135,31 +139,42 @@ class Zelda {
         }
     }
     static exibeFormulario(tipo) {
-        switch (tipo) {
-            case 'Jogos':
-                Jogos.gerarPanel();
-                break;
-            case 'Funcionários':
-                Funcionarios.gerarPanel();
-                break;
-            case 'Personagens':
-                Personagens.gerarPanel();
-                break;
-            case 'Monstros':
-                Monstros.gerarPanel();
-                break;
-            case 'Chefes':
-                Chefes.gerarPanel();
-                break;
-            case 'Masmorras':
-                Masmorras.gerarPanel();
-                break;
-            case 'Lugares':
-                Lugares.gerarPanel();
-                break;
-            case 'Itens':
-                Itens.gerarPanel();
-                break;
+        const tipoItem = document.getElementsByClassName('tipo-item');
+        const itemFormando = tipo.endsWith("es") && tipo!== "Chefes" ? tipo.slice(0, -2):
+            tipo.endsWith("ns") ? tipo.slice(0, -2)+"m": 
+            tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
+        tipoItem[0].innerText = itemFormando;
+        try {
+            switch (tipo) {
+                case 'Jogos':
+                    Jogos.gerarPanel();
+                    break;
+                case 'Funcionários':
+                    Funcionarios.gerarPanel();
+                    break;
+                case 'Personagens':
+                    Personagens.gerarPanel();
+                    break;
+                case 'Monstros':
+                    Monstros.gerarPanel();
+                    break;
+                case 'Chefes':
+                    Chefes.gerarPanel();
+                    break;
+                case 'Masmorras':
+                    Masmorras.gerarPanel();
+                    break;
+                case 'Lugares':
+                    Lugares.gerarPanel();
+                    break;
+                case 'Itens':
+                    Itens.gerarPanel();
+                    this.tab = tipo;
+                    break;
+
+            }
+        } finally {
+            this.tab = tipo;
         }
     }
 
@@ -167,8 +182,8 @@ class Zelda {
 }
 
 
-class Jogos {
-
+class Jogos extends Zelda {
+    tab = 'Jogo';
     constructor(parameters) {
 
     }
@@ -178,8 +193,8 @@ class Jogos {
         const formulario = document.createElement('form');
         formulario.setAttribute('id', 'zelda-form');
         formulario.innerHTML = `
-            <label for="pesquisaTxt">Pesquise o Nome ou ID do <strong id="tipo-item">Jogo</strong>:</label>
-            <input type="text" id="pesquisaTxt" name="PesquisaTXT" placeholder="Digite o nome ou ID do jogo">
+            <label for="pesquisaTxt">Pesquise o Nome ou ID do(a) <span class="tipo-item"></span>:</label>
+            <input type="text" id="pesquisaTxt" name="PesquisaTXT" placeholder="Digite o nome ou ID">
             <label><input type="radio" name="Pesquisa" value="id">Por ID</label>
             <label><input type="radio" name="Pesquisa" value="name">Por Nome</label>
             <button id="buscar" type="button" class="menu-toggle" onclick="Zelda.buscarJogo()">Buscar</button>
@@ -189,6 +204,7 @@ class Jogos {
             //mainContent.innerHTML = '';
             mainContent.appendChild(formulario);
         }
+    
         this.tabelaJogoZelda();
     }
     static async getJogoByName(name) {
@@ -305,7 +321,6 @@ class Funcionarios {
 
     }
     static gerarPanel() {
-
         this.tabelaFuncionarios();
     }
 
@@ -440,6 +455,7 @@ class Personagens {
 
     }
     static gerarPanel() {
+
         this.tabelaPersonagens();
     }
     static async getPersonagens() {
