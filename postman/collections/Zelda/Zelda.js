@@ -538,45 +538,45 @@ class Monstros {
         const url = this.url_Monstros;
         console.log("URL:", url);
         try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const dados = data.data;
-        console.log("Dados Recebidos: ", dados);
-        const monstros = await  Promise.all(
-            dados.map(async(monstro) =>{
-                const jogos = await Promise.all(
-                    monstro.appearances.map(async(gameUrl)=>{
-                        if (this.games[gameUrl]) {
-                            return this.games[gameUrl];
-                        }
-                        try{
-                            const gameResponse = await fetch(gameUrl);
-                            if(!gameResponse.ok){
-                                throw new Error(`Erro HTTP: ${gameResponse.status}`);
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log("Dados Recebidos: ", dados);
+            const monstros = await Promise.all(
+                dados.map(async (monstro) => {
+                    const jogos = await Promise.all(
+                        monstro.appearances.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
                             }
-                            const gameData = await gameResponse.json();
-                            this.games[gameUrl] =gameData.data.name;
-                            return this.games[gameUrl];
-                        }catch(error){
-                            console.error(`Erro ao buscar jogo ${gameUrl}:`,error);
-                            return gameUrl;
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name;
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
 
-                        }
-                    })
-                );
-                return{
-                    id: monstro.id,
-                    name: monstro.name,
-                    description: monstro.description,
-                    games: jogos.join(', ')
+                            }
+                        })
+                    );
+                    return {
+                        id: monstro.id,
+                        name: monstro.name,
+                        description: monstro.description,
+                        games: jogos.join(', ')
 
-                }
-            })
-        )
-        console.log('Monstros e seus jogos:', monstros);
-        return monstros;
+                    }
+                })
+            )
+            console.log('Monstros e seus jogos:', monstros);
+            return monstros;
 
-        }catch (error) {
+        } catch (error) {
             console.error('Erro ao buscar monstros:', error);
             return [];
         };
@@ -681,7 +681,7 @@ class Chefes {
             return [];
         }
 
-                    
+
     }
     static async tabelaChefes() {
         const chefes = await this.getChefes();
@@ -711,6 +711,7 @@ class Chefes {
 
 class Masmorras {
     static url_Masmorras = 'https://zelda.fanapis.com/api/dungeons';
+    static games = {};
     constructor(parameters) {
 
     }
@@ -720,16 +721,45 @@ class Masmorras {
     static async getMasmorras() {
         const url = this.url_Masmorras;
         console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar masmorras:', error);
-                return [];
-            });
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log("Dados Recebidos: ", dados);
+            const masmorras = await Promise.all(
+                dados.map(async (masmorra) => {
+                    const jogos = await Promise.all(
+                        masmorra.appearances.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name;
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
+                            }
+                        })
+                    );
+                    return {
+                        id: masmorra.id,
+                        name: masmorra.name,
+                        description: masmorra.description,
+                        games: jogos.join(', ')
+                    }
+                })
+
+            );
+            console.log('Masmorras e seus jogos:', masmorras);
+            return masmorras;
+
+        } catch (error) {
+            console.error('Erro ao buscar masmorras:', error);
+            return [];
+        }
     }
     static async tabelaMasmorras() {
         const masmorras = await this.getMasmorras();
@@ -746,7 +776,7 @@ class Masmorras {
             <td class="coluna">${masmorra.id}</td>
             <td class="coluna">${masmorra.name}</td>
             <td class="coluna">${masmorra.description && masmorra.description.length > 100 ? masmorra.description.substring(0, 100) + " ..." : masmorra.description}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${masmorra.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
@@ -756,6 +786,8 @@ class Masmorras {
 
 class Lugares {
     static url_Lugares = 'https://zelda.fanapis.com/api/places';
+    static games = {};
+    static inhabitants = {};
     constructor(parameters) {
 
     }
@@ -765,16 +797,63 @@ class Lugares {
     static async getLugares() {
         const url = this.url_Lugares;
         console.log("URL:", url);
-        return fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar lugares:', error);
-                return [];
-            });
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log("Dados Recebidos: ", dados);
+            const lugares = await Promise.all(
+                dados.map(async (lugar) => {
+                    const jogos = await Promise.all(
+                        lugar.appearances.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            } else {
+                                try {
+                                    const gameResponse = await fetch(gameUrl);
+                                    const gameData = await gameResponse.json();
+                                    this.games[gameUrl] = gameData.data.name;
+                                    return gameData.data.name;
+                                } catch (error) {
+                                    console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                    return gameUrl;
+                                }
+                            }
+                        })
+                    );
+                    const inhabitants = await Promise.all(
+                        lugar.inhabitants.map(async (inhabitantUrl) => {
+                            if (this.inhabitants[inhabitantUrl]) {
+                                return this.inhabitants[inhabitantUrl];
+                            } else {
+                                try {
+                                    const inhabitantResponse = await fetch(inhabitantUrl);
+                                    const inhabitantData = await inhabitantResponse.json();
+                                    this.inhabitants[inhabitantUrl] = inhabitantData.data.name;
+                                    return this.inhabitants[inhabitantUrl];
+                                } catch (error) {
+                                    console.error(`Erro ao buscar habitante ${inhabitantUrl}:`, error);
+                                    return inhabitantUrl;
+                                }
+                            }
+                        })
+                    );
+                    return {
+                        id: lugar.id,
+                        name: lugar.name,
+                        description: lugar.description,
+                        games: jogos.join(', '),
+                        inhabitants: inhabitants.join(', ')
+                    }
+                })
+            );
+            console.log('Lugares e seus jogos:', lugares);
+            return lugares;
+
+        } catch (error) {
+            console.error('Erro ao buscar lugares:', error);
+            return [];
+        }
     }
     static async tabelaLugares() {
         const lugares = await this.getLugares();
@@ -792,8 +871,8 @@ class Lugares {
             <td class="coluna">${lugar.id}</td>
             <td class="coluna">${lugar.name}</td>
             <td class="coluna">${lugar.description && lugar.description.length > 100 ? lugar.description.substring(0, 100) + " ..." : lugar.description}</td>
-            <td class="coluna">Em manutenção</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${lugar.games}</td>
+            <td class="coluna">${lugar.inhabitants}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
@@ -803,6 +882,7 @@ class Lugares {
 
 class Itens {
     static url_Itens = 'https://zelda.fanapis.com/api/items';
+    static games = {};
     constructor(parameters) {
 
     }
@@ -810,17 +890,49 @@ class Itens {
         this.tabelaItens();
     }
     static async getItens() {
-        console.log("URL:", this.url_Itens);
-        return fetch(this.url_Itens)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Dados recebidos:', data.data);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Erro ao buscar itens:', error);
-                return [];
-            });
+        const url = this.url_Itens;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            console.log('Dados recebidos:', dados);
+            const itens = await Promise.all(
+                dados.map(async (item) => {
+                    const jogos = await Promise.all(
+                        item.games.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data.name;
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
+                            }
+                        })
+                    );
+                    return {
+                        id: item.id,
+                        name: item.name,
+                        description: item.description,
+                        games: jogos.join(', ')
+                    }
+                })
+            );
+            console.log('Itens e seus jogos:', itens);
+            return itens;
+
+        } catch (error) {
+            console.error('Erro ao buscar itens:', error);
+            return [];
+        }
     }
     static async tabelaItens() {
         const itens = await this.getItens();
@@ -837,7 +949,7 @@ class Itens {
             <td class="coluna">${item.id}</td>
             <td class="coluna">${item.name}</td>
             <td class="coluna">${item.description && item.description.length > 100 ? item.description.substring(0, 100) : item.description}</td>
-            <td class="coluna">Em manutenção</td>
+            <td class="coluna">${item.games}</td>
             </tr>`;
         });
         resultsContainer.innerHTML = '';
