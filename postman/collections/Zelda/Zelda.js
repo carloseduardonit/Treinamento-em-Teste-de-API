@@ -99,11 +99,9 @@ class Zelda {
     }
     static removaAtivos() {
         const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanels = document.querySelectorAll('.tab-panel');
         for (let i = 0; i < tabButtons.length; i++) {
             if (tabButtons[i].classList.contains('active')) {
                 tabButtons[i].classList.remove('active');
-                //tabPanels[i].classList.remove('active');
                 break;
             }
         }
@@ -180,7 +178,7 @@ class Jogos {
         const formulario = document.createElement('form');
         formulario.setAttribute('id', 'zelda-form');
         formulario.innerHTML = `
-            <label for="pesquisaTxt">Pesquise o Nome ou ID do Jogo:</label>
+            <label for="pesquisaTxt">Pesquise o Nome ou ID do <strong id="tipo-item">Jogo</strong>:</label>
             <input type="text" id="pesquisaTxt" name="PesquisaTXT" placeholder="Digite o nome ou ID do jogo">
             <label><input type="radio" name="Pesquisa" value="id">Por ID</label>
             <label><input type="radio" name="Pesquisa" value="name">Por Nome</label>
@@ -307,6 +305,7 @@ class Funcionarios {
 
     }
     static gerarPanel() {
+
         this.tabelaFuncionarios();
     }
 
