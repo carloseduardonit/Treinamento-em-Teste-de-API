@@ -7,9 +7,9 @@ class Zelda {
     }
 
     static async loadFormulario() {
-       
+
         this.loadBotao();
-        this.gerarPanel(); 
+        this.gerarPanel();
         const spanTipoItem = document.getElementsByClassName('tipo-item')[0];
         spanTipoItem.innerText = 'Jogo';
     }
@@ -41,7 +41,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares', 'Itens'];
+        const listaEmManutenção = ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares'];
+        const listaFinalizado =['Jogos','Itens']
         let searchType = null;
 
         for (var i = 0; i < radio_buttons.length; i++) {
@@ -52,7 +53,7 @@ class Zelda {
         }
         for (let i = 0; i < listaEmManutenção.length; i++) {
             if (buttonAbatida === listaEmManutenção[i]) {
-                alert(`A funcionalidade de busca por "${buttonAbatida}" está em manutenção. Por favor, selecione a aba "Jogos" para realizar a busca.`);
+                alert(`A funcionalidade de busca por "${buttonAbatida}" está em manutenção. Por favor, selecione a aba "${listaFinalizado.join(`", "`)}" para realizar a busca.`);
 
                 return;
             }
@@ -140,42 +141,39 @@ class Zelda {
     }
     static exibeFormulario(tipo) {
         const tipoItem = document.getElementsByClassName('tipo-item');
-        const itemFormando = tipo.endsWith("es") && tipo!== "Chefes" ? tipo.slice(0, -2):
-            tipo.endsWith("ns") ? tipo.slice(0, -2)+"m": 
-            tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
+        const itemFormando = tipo.endsWith("es") && tipo !== "Chefes" ? tipo.slice(0, -2) :
+            tipo.endsWith("ns") ? tipo.slice(0, -2) + "m" :
+                tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
         tipoItem[0].innerText = itemFormando;
-        try {
-            switch (tipo) {
-                case 'Jogos':
-                    Jogos.gerarPanel();
-                    break;
-                case 'Funcionários':
-                    Funcionarios.gerarPanel();
-                    break;
-                case 'Personagens':
-                    Personagens.gerarPanel();
-                    break;
-                case 'Monstros':
-                    Monstros.gerarPanel();
-                    break;
-                case 'Chefes':
-                    Chefes.gerarPanel();
-                    break;
-                case 'Masmorras':
-                    Masmorras.gerarPanel();
-                    break;
-                case 'Lugares':
-                    Lugares.gerarPanel();
-                    break;
-                case 'Itens':
-                    Itens.gerarPanel();
-                    this.tab = tipo;
-                    break;
 
-            }
-        } finally {
-            this.tab = tipo;
+        switch (tipo) {
+            case 'Jogos':
+                Jogos.gerarPanel();
+                break;
+            case 'Funcionários':
+                Funcionarios.gerarPanel();
+                break;
+            case 'Personagens':
+                Personagens.gerarPanel();
+                break;
+            case 'Monstros':
+                Monstros.gerarPanel();
+                break;
+            case 'Chefes':
+                Chefes.gerarPanel();
+                break;
+            case 'Masmorras':
+                Masmorras.gerarPanel();
+                break;
+            case 'Lugares':
+                Lugares.gerarPanel();
+                break;
+            case 'Itens':
+                Itens.gerarPanel();
+                break;
+
         }
+
     }
 
 
@@ -204,7 +202,7 @@ class Jogos extends Zelda {
             //mainContent.innerHTML = '';
             mainContent.appendChild(formulario);
         }
-    
+
         this.tabelaJogoZelda();
     }
     static async getJogoByName(name) {
@@ -903,6 +901,47 @@ class Itens {
     }
     static gerarPanel() {
         this.tabelaItens();
+    }
+    static async getItemByName(name) {
+        const url = `${this.url_Itens}?name=${encodeURIComponent(name)}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data[0];
+            const itens = await Promise.all(
+                dados.map(async (item) => {
+                    const jogos = await Promise.all(
+                        item.games.map(async (gameUrl) => {
+                            if (this.games[gameUrl]) {
+                                return this.games[gameUrl];
+                            }
+                            try {
+                                const gameResponse = await fetch(gameUrl);
+                                if (!gameResponse.ok) {
+                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                                }
+                                const gameData = await gameResponse.json();
+                                this.games[gameUrl] = gameData.data;
+                                return this.games[gameUrl];
+                            } catch (error) {
+                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                                return gameUrl;
+                            }
+                        })
+                    );
+                    return {
+                        id: item.id,
+                        name: item.name,
+                        description: item.description,
+                        games: jogos.join(', ')
+                    }
+                })
+            );
+
+        } catch (error) {
+            console.error(`Erro ao buscar item ${name}:`, error);
+            return null;
+        }
     }
     static async getItens() {
         const url = this.url_Itens;
