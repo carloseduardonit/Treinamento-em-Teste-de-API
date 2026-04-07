@@ -82,7 +82,36 @@ class Zelda {
         }
         if (!document.getElementsByClassName('tabela')[0]) {
             resultsContainer.innerHTML = '';
-            Jogos.tabelaJogoZelda();
+            this.tabela();
+        }
+    }
+    static tabela(){
+        const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
+        switch (buttonAbatida) {
+            case 'Jogos':
+                Jogos.tabelaJogoZelda();
+                break;
+            case 'Funcionários':
+                Funcionarios.tabelaFuncionarios();
+                break;
+            case 'Personagens':
+                Personagens.tabelaPersonagens();
+                break;
+            case 'Monstros':
+                Monstros.tabelaMonstros();
+                break;
+            case 'Chefes':
+                Chefes.tabelaChefes();
+                break;
+            case 'Masmorras':
+                Masmorras.tabelaMasmorras();
+                break;
+            case 'Lugares': 
+                Lugares.tabelaLugares();
+                break;
+            case 'Itens':
+                Itens.tabelaItens();
+                break;
         }
     }
     static exibeTab(tipo) {
@@ -964,7 +993,7 @@ class Itens extends Zelda {
                         this.gms.push(gameData.data);
                     } catch (error) {
                         console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
-                        return gameUrl;
+                        return [];
                     }
                 })
             );
@@ -977,7 +1006,7 @@ class Itens extends Zelda {
             }
         } catch (error) {
             console.error(`Erro ao buscar item ${name}:`, error);
-            return null;
+            return [];
         }
     }
     static async paragrafosItemZelda(Item) {
