@@ -311,7 +311,7 @@ class Jogos extends Zelda {
 
     static async paragrafosJogoZelda(Jogo) {
         const jogosList = await Jogo;
-        if (!jogosList || Object.keys(jogosList).length === 0) {
+        if (!jogosList || jogosList.length === 0) {
             resultsContainer.innerHTML = '<p>Jogo não encontrado. Por favor, tente novamente.</p>';
             return;
         }
@@ -978,7 +978,10 @@ class Itens extends Zelda {
             const response = await fetch(url);
             const data = await response.json();
             const item = data.data[0];
-            console.log("GetItemByName obteve: ", item)
+            if(item === undefined) {
+                return [];
+            }
+            console.log("GetItemByName obteve: ", item,  data)
             const games = await Promise.all(
                 item.games.map(async (gameUrl) => {
                     try {
@@ -1009,10 +1012,11 @@ class Itens extends Zelda {
             return [];
         }
     }
+    
     static async paragrafosItemZelda(Item) {
         const itemList = await Item;
-        if (!itemList || Object.keys(itemList).length === 0) {
-            resultsContainer = `<p> Item não encontrado. Por favor, tente novamente.</p>`
+        if (!itemList || itemList.length === 0) {
+            resultsContainer.innerHTML = `<p> Item não encontrado. Por favor, tente novamente.</p>`;
             return;
         }
         resultsContainer.innerHTML = `<p class="resposta"><strong>ID do Item: </strong>${itemList.id}</p>`;
