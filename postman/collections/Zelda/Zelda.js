@@ -42,7 +42,7 @@ class Zelda {
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
         const listaEmManutenção = ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares'];
-        const listaFinalizado =['Jogos','Itens']
+        const listaFinalizado = ['Jogos', 'Itens']
         let searchType = null;
 
         for (var i = 0; i < radio_buttons.length; i++) {
@@ -68,6 +68,7 @@ class Zelda {
             alert('Por favor, selecione o tipo de pesquisa (ID ou Nome).');
             return;
         }
+        console.log(`Botão: ${buttonAbatida}, Tipo de Pesquisa: ${searchType}, Valor: ${name}`);
         await this.exibeMelhorPesquisa(buttonAbatida, searchType, name);
     }
     static limpar() {
@@ -893,55 +894,132 @@ class Lugares {
     }
 }
 
-class Itens {
+class Itens extends Zelda {
     static url_Itens = 'https://zelda.fanapis.com/api/items';
     static games = {};
+    static gms = [];
     constructor(parameters) {
 
     }
     static gerarPanel() {
         this.tabelaItens();
     }
-    static async getItemByName(name) {
-        const url = `${this.url_Itens}?name=${encodeURIComponent(name)}`;
+    static async getItemByID(id) {
+        const url = `${this.url_Itens}/${encodeURIComponent(id)}`;
+        console.log("URL:", url);
         try {
             const response = await fetch(url);
             const data = await response.json();
-            const dados = data.data[0];
-            const itens = await Promise.all(
-                dados.map(async (item) => {
-                    const jogos = await Promise.all(
-                        item.games.map(async (gameUrl) => {
-                            if (this.games[gameUrl]) {
-                                return this.games[gameUrl];
-                            }
-                            try {
-                                const gameResponse = await fetch(gameUrl);
-                                if (!gameResponse.ok) {
-                                    throw new Error(`Erro HTTP: ${gameResponse.status}`);
-                                }
-                                const gameData = await gameResponse.json();
-                                this.games[gameUrl] = gameData.data;
-                                return this.games[gameUrl];
-                            } catch (error) {
-                                console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
-                                return gameUrl;
-                            }
-                        })
-                    );
-                    return {
-                        id: item.id,
-                        name: item.name,
-                        description: item.description,
-                        games: jogos.join(', ')
+            const item = data.data;
+            console.log("GetItemByID obteve: ", item)
+                await Promise.all(
+                item.games.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        console.log("Resposta do jogo:", gameResponse);
+                        if (!gameResponse.ok) {
+                            throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                        }
+                        const gameData = await gameResponse.json();
+                        console.log(`Jogo encontrado para ${gameUrl}:`, this.games[gameUrl]);
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                        return gameUrl;
                     }
                 })
             );
+            console.log("Itens e seus jogos:", item, this.gms);
 
+            return {
+                id: item.id,
+                name: item.name,
+                description: item.description,
+                games: this.gms
+            };
+        } catch (error) {
+            console.error(`Erro ao buscar item com ID ${id}:`, error);
+            return null;
+        }
+    }
+    static async getItemByName(name) {
+        const url = `${this.url_Itens}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const item = data.data[0];
+            console.log("GetItemByName obteve: ", item)
+            const games = await Promise.all(
+                item.games.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        console.log("Resposta do jogo:", gameResponse);
+                        if (!gameResponse.ok) {
+                            throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                        }
+                        const gameData = await gameResponse.json();
+
+                        console.log(`Jogo encontrado para ${gameUrl}:`, this.games[gameUrl]);
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                        return gameUrl;
+                    }
+                })
+            );
+            console.log("Itens e seus jogos:", item, this.gms);
+            return {
+                id: item.id,
+                name: item.name,
+                description: item.description,
+                games: this.gms
+            }
         } catch (error) {
             console.error(`Erro ao buscar item ${name}:`, error);
             return null;
         }
+    }
+    static async paragrafosItemZelda(Item) {
+        const itemList = await Item;
+        if (!itemList || Object.keys(itemList).length === 0) {
+            resultsContainer = `<p> Item não encontrado. Por favor, tente novamente.</p>`
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID do Item: </strong>${itemList.id}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome do Item: </strong>${itemList.name}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${itemList.description === null ? "" : itemList.description}</p>`;
+        if (itemList.games && itemList.games.length > 0) {
+            resultsContainer.innerHTML += `<p class="resposta"><strong>O item apareceu em ${itemList.games.length===1?itemList.games.length+" jogo":itemList.games.length+" jogos"}: </strong></p>`;
+            const table = document.createElement('table');
+            table.classList.add('tabela');
+            table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome do Jogo</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
+            Item.games.forEach((jogo) => {
+                table.innerHTML += `<tr class="linha">
+            <td class="coluna">${jogo.id}</td>
+            <td class="coluna">${jogo.name}</td>
+            <td class="coluna">${jogo.description && jogo.description.length > 100 ? jogo.description.substring(0, 100) + '...' : jogo.description || ''}</td>
+            <td class="coluna">${jogo.developer}</td>
+            <td class="coluna">${jogo.publisher || ''}</td>
+            <td class="coluna">${jogo.released_date}</td>
+            </tr>`;
+                this.gms = [];
+            });
+            resultsContainer.appendChild(table);
+        } else {
+            resultsContainer.innerHTML += `<p class="resposta"><strong>Apareceu no(s) Jogo(s): </strong>Não há jogos associados a este item.</p>`;
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de itens';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+
+    }
+    static async voltarTabela() {
+        this.tabelaItens();
     }
     static async getItens() {
         const url = this.url_Itens;
@@ -1008,6 +1086,21 @@ class Itens {
         });
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(tabela);
+
+
+    }
+
+    static async exibeMelhorPesquisa(tipo, valor) {
+
+        switch (tipo) {
+            case 'id':
+                this.paragrafosItemZelda(await this.getItemByID(valor))
+                break;
+
+            case 'name':
+                this.paragrafosItemZelda(await this.getItemByName(valor))
+                break;
+        }
 
     }
 
