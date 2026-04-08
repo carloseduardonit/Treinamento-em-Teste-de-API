@@ -35,7 +35,24 @@ class Zelda {
     static gerarPanel() {
         Jogos.gerarPanel();
     }
-
+    static async apareceunoJogos(jogos) {
+        resultsContainer.innerHTML += `<p class="resposta"><strong>O item apareceu em ${jogos.length === 1 ? jogos.length + " jogo" : jogos.length + " jogos"}: </strong></p>`;
+        const table = document.createElement('table');
+        table.classList.add('tabela');
+        table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome do Jogo</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
+        jogos.forEach((jogo) => {
+            table.innerHTML += `<tr class="linha">
+            <td class="coluna">${jogo.id}</td>
+            <td class="coluna">${jogo.name}</td>
+            <td class="coluna">${jogo.description && jogo.description.length > 100 ? jogo.description.substring(0, 100) + '...' : jogo.description || ''}</td>
+            <td class="coluna">${jogo.developer}</td>
+            <td class="coluna">${jogo.publisher || ''}</td>
+            <td class="coluna">${jogo.released_date}</td>
+            </tr>`;
+            this.gms = [];
+        });
+        resultsContainer.appendChild(table);
+    }
     static async buscarJogo() {
         const nameInput = document.getElementById('pesquisaTxt');
         const name = nameInput.value.trim();
@@ -85,7 +102,7 @@ class Zelda {
             this.tabela();
         }
     }
-    static tabela(){
+    static tabela() {
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
         switch (buttonAbatida) {
             case 'Jogos':
@@ -106,7 +123,7 @@ class Zelda {
             case 'Masmorras':
                 Masmorras.tabelaMasmorras();
                 break;
-            case 'Lugares': 
+            case 'Lugares':
                 Lugares.tabelaLugares();
                 break;
             case 'Itens':
@@ -941,7 +958,7 @@ class Itens extends Zelda {
             const data = await response.json();
             const item = data.data;
             console.log("GetItemByID obteve: ", item)
-                await Promise.all(
+            await Promise.all(
                 item.games.map(async (gameUrl) => {
                     try {
                         const gameResponse = await fetch(gameUrl);
@@ -978,10 +995,10 @@ class Itens extends Zelda {
             const response = await fetch(url);
             const data = await response.json();
             const item = data.data[0];
-            if(item === undefined) {
+            if (item === undefined) {
                 return [];
             }
-            console.log("GetItemByName obteve: ", item,  data)
+            console.log("GetItemByName obteve: ", item, data)
             const games = await Promise.all(
                 item.games.map(async (gameUrl) => {
                     try {
@@ -1012,7 +1029,7 @@ class Itens extends Zelda {
             return [];
         }
     }
-    
+
     static async paragrafosItemZelda(Item) {
         const itemList = await Item;
         if (!itemList || itemList.length === 0) {
@@ -1023,22 +1040,7 @@ class Itens extends Zelda {
         resultsContainer.innerHTML += `<p class="resposta"><strong>Nome do Item: </strong>${itemList.name}</p>`;
         resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${itemList.description === null ? "" : itemList.description}</p>`;
         if (itemList.games && itemList.games.length > 0) {
-            resultsContainer.innerHTML += `<p class="resposta"><strong>O item apareceu em ${itemList.games.length===1?itemList.games.length+" jogo":itemList.games.length+" jogos"}: </strong></p>`;
-            const table = document.createElement('table');
-            table.classList.add('tabela');
-            table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome do Jogo</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
-            Item.games.forEach((jogo) => {
-                table.innerHTML += `<tr class="linha">
-            <td class="coluna">${jogo.id}</td>
-            <td class="coluna">${jogo.name}</td>
-            <td class="coluna">${jogo.description && jogo.description.length > 100 ? jogo.description.substring(0, 100) + '...' : jogo.description || ''}</td>
-            <td class="coluna">${jogo.developer}</td>
-            <td class="coluna">${jogo.publisher || ''}</td>
-            <td class="coluna">${jogo.released_date}</td>
-            </tr>`;
-                this.gms = [];
-            });
-            resultsContainer.appendChild(table);
+            Zelda.apareceunoJogos(await Item.games);
         } else {
             resultsContainer.innerHTML += `<p class="resposta"><strong>Apareceu no(s) Jogo(s): </strong>Não há jogos associados a este item.</p>`;
         }
