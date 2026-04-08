@@ -62,16 +62,15 @@ class Zelda {
         const listaFinalizado = ['Jogos', 'Itens']
         let searchType = null;
 
-        for (var i = 0; i < radio_buttons.length; i++) {
-            if (radio_buttons[i].checked) {
-                searchType = radio_buttons[i].value;
+        for (var index = 0; index < radio_buttons.length; index++) {
+            if (radio_buttons[index].checked) {
+                searchType = radio_buttons[index].value;
                 break;
             }
         }
-        for (let i = 0; i < listaEmManutenção.length; i++) {
-            if (buttonAbatida === listaEmManutenção[i]) {
+        for (let index = 0; index < listaEmManutenção.length; index++) {
+            if (buttonAbatida === listaEmManutenção[index]) {
                 alert(`A funcionalidade de busca por "${buttonAbatida}" está em manutenção. Por favor, selecione a aba "${listaFinalizado.join(`", "`)}" para realizar a busca.`);
-
                 return;
             }
         }
