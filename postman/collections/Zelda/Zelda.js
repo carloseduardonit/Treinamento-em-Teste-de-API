@@ -58,8 +58,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares'];
-        const listaFinalizado = ['Jogos', 'Itens']
+        const listaEmManutenção = ['Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares'];
+        const listaFinalizado = ['Jogos', 'Funcionários', 'Itens']
         let searchType = null;
 
         for (var index = 0; index < radio_buttons.length; index++) {
@@ -358,17 +358,59 @@ class Jogos extends Zelda {
 
 }
 
-class Funcionarios {
+class Funcionarios extends Zelda {
     static url_Funcionario = 'https://zelda.fanapis.com/api/staff';
     static games = {};
+    static gms = [];
     constructor(parameters) {
 
     }
     static gerarPanel() {
         this.tabelaFuncionarios();
     }
+    static async getFuncionarioByID(id) {
+        const url = `${this.url_Funcionario}/${encodeURIComponent(id)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            const responseJson = await response.json();
+            console.log("Dados recebidos:", responseJson);
+            const data = responseJson.data;
+            if (!data) {
+                return [];
+            }
+            await Promise.all(
+                data.worked_on.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        if (!gameResponse.ok) {
+                            throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                        }
+                        const gameData = await gameResponse.json();
+                        console.log(`Dados do jogo ${gameUrl}:`, gameData);
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
 
-    static async getFuncionarioByName(id, name) {
+            );
+
+            return {
+                id: data.id,
+                name: data.name,
+                games: this.gms
+            };
+        } catch (error) {
+            console.error("Erro ao buscar funcionários:", error);
+            return [];
+        }
+
+    }
+    static async getFuncionarioByName(name) {
         const url = `${this.url_Funcionario}?name=${encodeURIComponent(name)}`;
         console.log("URL:", url);
         try {
@@ -382,37 +424,27 @@ class Funcionarios {
             if (!data) {
                 return [];
             }
-
-            const jogos = await Promise.all(
+            await Promise.all(
                 data.worked_on.map(async (gameUrl) => {
-                    if (this.games[gameUrl]) {
-                        return this.games[gameUrl];
-                    }
-
                     try {
                         const gameResponse = await fetch(gameUrl);
                         if (!gameResponse.ok) {
                             throw new Error(`Erro HTTP: ${gameResponse.status}`);
                         }
                         const gameData = await gameResponse.json();
-                        this.games[gameUrl] = gameData.data.name;
-                        return this.games[gameUrl];
+                        console.log(`Dados do jogo ${gameUrl}:`, gameData);
+                        this.gms.push(gameData.data);
                     } catch (error) {
-                        const trabalho = {
-                            id: data.id,
-                            name: data.name,
-                            games: jogos.join(', ')
-                        };
-
-                        return trabalho;
-
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
                     }
                 })
+
             );
+
             return {
                 id: data.id,
                 name: data.name,
-                games: jogos.join(', ')
+                games: this.gms
             };
         } catch (error) {
             console.error("Erro ao buscar funcionários:", error);
@@ -473,6 +505,42 @@ class Funcionarios {
             console.error('Erro ao buscar funcionários:', error);
             return [];
         }
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosFuncionario(await this.getFuncionarioByID(valor));
+                break;
+            case 'name':
+                this.paragrafosFuncionario(await this.getFuncionarioByName(valor));
+                break;
+            default:
+                console.error('Tipo de pesquisa não suportado');
+        }
+    }
+    static async paragrafosFuncionario(funcionario) {
+        if (!funcionario || Object.keys(funcionario).length === 0) {
+            resultsContainer.innerHTML = '<p>Funcionário não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${funcionario.id}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${funcionario.name}</p>`;
+        if (funcionario.games && funcionario.games.length > 0) {
+            Zelda.apareceunoJogos(await funcionario.games);
+            this.gms = [];
+        } else {
+            resultsContainer.innerHTML += '<p class="resposta">Este funcionário não trabalhou em nenhum jogo.</p>';
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Funcionários';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaFuncionarios();
     }
     static async tabelaFuncionarios() {
         const funcionarios = await this.getFuncionarios();
@@ -543,7 +611,7 @@ class Personagens {
                     }
                 })
             );
-            console.log('Personagens e seus jogos:', Personagens);
+            console.log('Personagens e seus jogos:', personagens);
             return personagens;
 
         } catch (error) {
