@@ -2,12 +2,8 @@
 
 class Zelda {
 
-    constructor() {
-
-    }
-
+    constructor() {}
     static async loadFormulario() {
-
         this.loadBotao();
         this.gerarPanel();
         const spanTipoItem = document.getElementsByClassName('tipo-item')[0];
@@ -35,8 +31,8 @@ class Zelda {
     static gerarPanel() {
         Jogos.gerarPanel();
     }
-    static async apareceunoJogos(jogos) {
-        resultsContainer.innerHTML += `<p class="resposta"><strong>O item apareceu em ${jogos.length === 1 ? jogos.length + " jogo" : jogos.length + " jogos"}: </strong></p>`;
+    static async apareceunoJogos(jogos,tipoAparição = 'Apareceu') {
+        resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em ${jogos.length === 1 ? jogos.length + " jogo" : jogos.length + " jogos"}: </strong></p>`;
         const table = document.createElement('table');
         table.classList.add('tabela');
         table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome do Jogo</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
@@ -91,9 +87,9 @@ class Zelda {
         const nameInput = document.getElementById('pesquisaTxt');
         nameInput.value = '';
         const radio_buttons = document.getElementsByName('Pesquisa');
-        for (var i = 0; i < radio_buttons.length; i++) {
-            if (radio_buttons[i].checked) {
-                radio_buttons[i].checked = false;
+        for (var index = 0; index < radio_buttons.length; index++) {
+            if (radio_buttons[index].checked) {
+                radio_buttons[index].checked = false;
             }
         }
         if (!document.getElementsByClassName('tabela')[0]) {
@@ -135,24 +131,23 @@ class Zelda {
         const ativo = document.querySelector('.tab-button.active');
         let nome = ativo.dataset.tab;
 
-        for (let i = 0; i < tabButtons.length; i++) {
+        for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
             }
-            if (tabButtons[i].dataset.tab === tipo) {
+            if (tabButtons[index].dataset.tab === tipo) {
                 Zelda.removaAtivos();
                 this.exibeFormulario(tipo);
-                tabButtons[i].classList.add('active');
+                tabButtons[index].classList.add('active');
                 break
             }
         }
-
     }
     static removaAtivos() {
         const tabButtons = document.querySelectorAll('.tab-button');
-        for (let i = 0; i < tabButtons.length; i++) {
-            if (tabButtons[i].classList.contains('active')) {
-                tabButtons[i].classList.remove('active');
+        for (let index = 0; index < tabButtons.length; index++) {
+            if (tabButtons[index].classList.contains('active')) {
+                tabButtons[index].classList.remove('active');
                 break;
             }
         }
@@ -221,19 +216,13 @@ class Zelda {
         }
 
     }
-
-
 }
 
 
 class Jogos extends Zelda {
     tab = 'Jogo';
-    constructor(parameters) {
-
-    }
-
+    constructor() {}
     static gerarPanel() {
-
         const formulario = document.createElement('form');
         formulario.setAttribute('id', 'zelda-form');
         formulario.innerHTML = `
@@ -245,10 +234,8 @@ class Jogos extends Zelda {
             <button id="limpar" type="button" class="menu-toggle" onclick="Zelda.limpar()">Limpar os Campos</button>
         `;
         if (!document.getElementById('zelda-form')) {
-            //mainContent.innerHTML = '';
             mainContent.appendChild(formulario);
         }
-
         this.tabelaJogoZelda();
     }
     static async getJogoByName(name) {
@@ -260,8 +247,7 @@ class Jogos extends Zelda {
                 return response.json();
             })
             .then(data => {
-                console.log("Dados recebidos:", data.data[0]);
-
+                console.log("Dados recebidos em getJogoByName:",  data);
                 return data.data[0];
             })
             .catch(error => {
@@ -269,7 +255,6 @@ class Jogos extends Zelda {
                 return [];
             });
     }
-
     static async getJogoByID(id) {
         const url = `https://zelda.fanapis.com/api/games/${encodeURIComponent(id)}`;
         console.log("URL:", url);
@@ -279,7 +264,7 @@ class Jogos extends Zelda {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
             const responseJson = await response.json();
-            console.log("Dados recebidos:", responseJson);
+            console.log("Dados recebidos em getJogoByID: ", responseJson);
             const data = responseJson.data;
             return data;
         } catch (error) {
@@ -287,7 +272,6 @@ class Jogos extends Zelda {
             return [];
         }
     }
-
     static async getJogos() {
         const url = 'https://zelda.fanapis.com/api/games';
         console.log("URL:", url);
@@ -297,7 +281,7 @@ class Jogos extends Zelda {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
             const responseJson = await response.json();
-            console.log("Dados recebidos:", responseJson);
+            console.log("Dados recebidos em GetJogos:", responseJson);
             const data = responseJson.data;
             return data;
         } catch (error) {
@@ -305,7 +289,6 @@ class Jogos extends Zelda {
             return [];
         }
     }
-
     static async tabelaJogoZelda() {
         const jogosList = await this.getJogos();
         const table = document.createElement('table');
@@ -324,7 +307,6 @@ class Jogos extends Zelda {
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(table);
     }
-
     static async paragrafosJogoZelda(Jogo) {
         const jogosList = await Jogo;
         if (!jogosList || jogosList.length === 0) {
@@ -342,7 +324,6 @@ class Jogos extends Zelda {
         }
         resultsContainer.innerHTML += `<p class="resposta"><strong>Data de Lançamento:</strong> ${jogosList.released_date}</p>`;
     }
-
     static async exibeMelhorPesquisa(tipo, valor) {
         switch (tipo) {
             case 'id':
@@ -362,9 +343,7 @@ class Funcionarios extends Zelda {
     static url_Funcionario = 'https://zelda.fanapis.com/api/staff';
     static games = {};
     static gms = [];
-    constructor(parameters) {
-
-    }
+    constructor() {}
     static gerarPanel() {
         this.tabelaFuncionarios();
     }
@@ -377,7 +356,7 @@ class Funcionarios extends Zelda {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
             const responseJson = await response.json();
-            console.log("Dados recebidos:", responseJson);
+            console.log("Dados recebidos em getFuncionarioByID:", responseJson);
             const data = responseJson.data;
             if (!data) {
                 return [];
@@ -398,7 +377,6 @@ class Funcionarios extends Zelda {
                 })
 
             );
-
             return {
                 id: data.id,
                 name: data.name,
@@ -408,7 +386,6 @@ class Funcionarios extends Zelda {
             console.error("Erro ao buscar funcionários:", error);
             return [];
         }
-
     }
     static async getFuncionarioByName(name) {
         const url = `${this.url_Funcionario}?name=${encodeURIComponent(name)}`;
@@ -438,14 +415,14 @@ class Funcionarios extends Zelda {
                         console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
                     }
                 })
-
             );
-
-            return {
+            const FuncionarioEncontrado =  {
                 id: data.id,
                 name: data.name,
                 games: this.gms
-            };
+            };               
+            console.log("Dados encontrado em getFuncionarioByName:", FuncionarioEncontrado);
+            return FuncionarioEncontrado;
         } catch (error) {
             console.error("Erro ao buscar funcionários:", error);
             return [];
@@ -454,17 +431,14 @@ class Funcionarios extends Zelda {
     static async getFuncionarios() {
         const url = this.url_Funcionario;
         console.log("URL:", url);
-
         try {
             const response = await fetch(url);
             const data = await response.json();
             const dados = data.data;
             console.log('Dados recebidos:', dados);
-
             const trabalhos = await Promise.all(
                 // Resolve todos os funcionários em paralelo
                 dados.map(async (funcionario) => {
-
                     const jogos = await Promise.all(
                         // Resolve todos os jogos de cada funcionário em paralelo
                         funcionario.worked_on.map(async (gameUrl) => {
@@ -472,14 +446,12 @@ class Funcionarios extends Zelda {
                             if (this.games[gameUrl]) {
                                 return this.games[gameUrl];
                             }
-
                             try {
                                 // Busca o jogo usando a URL completa (que já inclui o ID)
                                 const gameResponse = await fetch(gameUrl); // URL já vem pronta!
                                 if (!gameResponse.ok) {
                                     throw new Error(`Erro HTTP: ${gameResponse.status}`);
                                 }
-
                                 const gameData = await gameResponse.json();
                                 this.games[gameUrl] = gameData.data.name; // "Breath of the Wild", etc.
                                 return this.games[gameUrl];
@@ -489,7 +461,6 @@ class Funcionarios extends Zelda {
                             }
                         })
                     );
-
                     return {
                         id: funcionario.id,
                         name: funcionario.name,
@@ -497,10 +468,8 @@ class Funcionarios extends Zelda {
                     };
                 })
             );
-
-            console.log('Funcionários e seus jogos:', trabalhos);
+            console.log('Dados Encontados em GetFuncionarios:', trabalhos);
             return trabalhos;
-
         } catch (error) {
             console.error('Erro ao buscar funcionários:', error);
             return [];
@@ -526,7 +495,7 @@ class Funcionarios extends Zelda {
         resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${funcionario.id}</p>`;
         resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${funcionario.name}</p>`;
         if (funcionario.games && funcionario.games.length > 0) {
-            Zelda.apareceunoJogos(await funcionario.games);
+            Zelda.apareceunoJogos(await funcionario.games,"Trabalhou");
             this.gms = [];
         } else {
             resultsContainer.innerHTML += '<p class="resposta">Este funcionário não trabalhou em nenhum jogo.</p>';
@@ -547,7 +516,6 @@ class Funcionarios extends Zelda {
         const table = document.createElement('table');
         table.classList.add('tabela');
         table.innerHTML = '<tr class="linha"><th class="coluna">ID Funcionario</th><th class="coluna">Nome</th><th class="coluna">trabalhou no(s) Jogo(s)</th></tr>';
-
         funcionarios.forEach((funcionario) => {
             table.innerHTML += `<tr class="linha">
             <td class="coluna">${funcionario.id}</td>
@@ -563,11 +531,8 @@ class Funcionarios extends Zelda {
 class Personagens {
     static url_Personagens = 'https://zelda.fanapis.com/api/characters';
     static games = {};
-    constructor(parameters) {
-
-    }
+    constructor() {}
     static gerarPanel() {
-
         this.tabelaPersonagens();
     }
     static async getPersonagens() {
@@ -578,7 +543,6 @@ class Personagens {
             const data = await response.json();
             const dados = data.data;
             console.log("Dados Recebidos: ", dados);
-
             const personagens = await Promise.all(
                 dados.map(async (personagem) => {
                     const jogos = await Promise.all(
@@ -613,14 +577,11 @@ class Personagens {
             );
             console.log('Personagens e seus jogos:', personagens);
             return personagens;
-
         } catch (error) {
             console.error('Erro ao buscar personagens:', error);
             return [];
         }
-
     }
-
     static async tabelaPersonagens() {
         const personagens = await this.getPersonagens();
         const table = document.createElement('table');
@@ -645,19 +606,13 @@ class Personagens {
         });
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(table);
-
     }
-
-
-
 }
 
 class Monstros {
     static url_Monstros = 'https://zelda.fanapis.com/api/monsters';
     static games = {};
-    constructor(parameters) {
-
-    }
+    constructor() {}
     static gerarPanel() {
         this.tabelaMonstros();
     }
@@ -702,7 +657,6 @@ class Monstros {
             )
             console.log('Monstros e seus jogos:', monstros);
             return monstros;
-
         } catch (error) {
             console.error('Erro ao buscar monstros:', error);
             return [];
