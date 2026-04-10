@@ -54,8 +54,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares'];
-        const listaFinalizado = ['Jogos', 'Funcionários', 'Itens']
+        const listaEmManutenção = ['Personagens', 'Monstros',  'Masmorras', 'Lugares'];
+        const listaFinalizado = ['Jogos', 'Funcionários', 'Chefes', 'Itens']
         let searchType = null;
 
         for (var index = 0; index < radio_buttons.length; index++) {
@@ -186,7 +186,6 @@ class Zelda {
             tipo.endsWith("ns") ? tipo.slice(0, -2) + "m" :
                 tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
         tipoItem[0].innerText = itemFormando;
-
         switch (tipo) {
             case 'Jogos':
                 Jogos.gerarPanel();
@@ -212,9 +211,7 @@ class Zelda {
             case 'Itens':
                 Itens.gerarPanel();
                 break;
-
         }
-
     }
 }
 
@@ -243,8 +240,7 @@ class Jogos extends Zelda {
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Erro HTTP: ${response.status}`);
-                }
-                return response.json();
+                } return response.json();
             })
             .then(data => {
                 console.log("Dados recebidos em getJogoByName:",  data);
@@ -771,16 +767,16 @@ class Chefes {
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID Chefe</th>
         <th class="coluna">Nome do Chefe</th>
-        <th class="coluna">Nome do Mostro</th>
         <th class="coluna">Descrição</th>
+        <th class="coluna">Nome da Masmorra</th>
         <th class="coluna">Apareceu no(s) Jogo(s)</th>
         </tr>`;
         chefes.forEach((chefe) => {
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${chefe.id}</td>
             <td class="coluna">${chefe.name}</td>
-            <td class="coluna">${chefe.dungeons}</td>
             <td class="coluna">${chefe.description && chefe.description.length > 100 ? chefe.description.substring(0, 100) + "..." : chefe.description || ''}</td>
+            <td class="coluna">${chefe.dungeons}</td>
             <td class="coluna">${chefe.games}</td>
             </tr>`;
         });
@@ -836,7 +832,6 @@ class Masmorras {
             );
             console.log('Masmorras e seus jogos:', masmorras);
             return masmorras;
-
         } catch (error) {
             console.error('Erro ao buscar masmorras:', error);
             return [];
@@ -965,9 +960,7 @@ class Itens extends Zelda {
     static url_Itens = 'https://zelda.fanapis.com/api/items';
     static games = {};
     static gms = [];
-    constructor(parameters) {
-
-    }
+    constructor() { }
     static gerarPanel() {
         this.tabelaItens();
     }
@@ -997,7 +990,6 @@ class Itens extends Zelda {
                 })
             );
             console.log("Itens e seus jogos:", item, this.gms);
-
             return {
                 id: item.id,
                 name: item.name,
@@ -1072,7 +1064,6 @@ class Itens extends Zelda {
             this.voltarTabela();
         });
         resultsContainer.appendChild(voltarButton);
-
     }
     static async voltarTabela() {
         this.tabelaItens();
@@ -1116,7 +1107,6 @@ class Itens extends Zelda {
             );
             console.log('Itens e seus jogos:', itens);
             return itens;
-
         } catch (error) {
             console.error('Erro ao buscar itens:', error);
             return [];
@@ -1142,12 +1132,9 @@ class Itens extends Zelda {
         });
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(tabela);
-
-
     }
 
     static async exibeMelhorPesquisa(tipo, valor) {
-
         switch (tipo) {
             case 'id':
                 this.paragrafosItemZelda(await this.getItemByID(valor))
