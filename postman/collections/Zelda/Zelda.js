@@ -67,7 +67,7 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Personagens', 'Monstros',  'Masmorras', 'Lugares'];
+        const listaEmManutenção = ['Personagens', 'Monstros', 'Masmorras', 'Lugares'];
         const listaFinalizado = ['Jogos', 'Funcionários', 'Chefes', 'Itens']
         let searchType = null;
 
@@ -391,8 +391,8 @@ class Funcionarios extends Zelda {
                 name: data.name,
                 games: this.gms
             };
-            this.gms= [];
-             console.log("Dados encontrado em getFuncionarioByID:", funcionarioEncontrado);
+            this.gms = [];
+            console.log("Dados encontrado em getFuncionarioByID:", funcionarioEncontrado);
             return funcionarioEncontrado;
         } catch (error) {
             console.error("Erro ao buscar funcionários:", error);
@@ -722,10 +722,10 @@ class Chefes {
             const dados = data.data[0];
             await Promise.all(
                 dados.appearances.map(async (gameUrl) => {
-                    
+
                     try {
                         const gameResponse = await fetch(gameUrl);
-                        if(!gameResponse.ok){
+                        if (!gameResponse.ok) {
                             throw new Error(`Erro HTTP: ${gameResponse.status}`);
                         }
                         const gameData = await gameResponse.json();
@@ -739,7 +739,7 @@ class Chefes {
                 dados.dungeons.map(async (dungeonUrl) => {
                     try {
                         const dungeonResponse = await fetch(dungeonUrl);
-                        if(!dungeonResponse.ok){
+                        if (!dungeonResponse.ok) {
                             throw new Error(`Erro HTTP: ${dungeonResponse.status}`);
                         }
                         const dungeonData = await dungeonResponse.json();
@@ -902,8 +902,16 @@ class Chefes {
         } else {
             resultsContainer.innerHTML += '<p class="resposta"><strong>Este chefe não possui masmorras.</strong></p>';
         }
-
-
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Chefes';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaChefes();
     }
     static async tabelaChefes() {
         const chefes = await this.getChefes();
