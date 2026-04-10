@@ -2,7 +2,7 @@
 
 class Zelda {
 
-    constructor() {}
+    constructor() { }
     static async loadFormulario() {
         this.loadBotao();
         this.gerarPanel();
@@ -31,7 +31,21 @@ class Zelda {
     static gerarPanel() {
         Jogos.gerarPanel();
     }
-    static async apareceunoJogos(jogos,tipoAparição = 'Apareceu') {
+    static async apareceunaMasmorras(masmorras, tipoAparição = 'Apareceu') {
+        resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em  ${masmorras.length === 1 ? masmorras.length + " masmorra" : masmorras.length + " masmorras"}: </strong></p>`;
+        const table = document.createElement('table');
+        table.classList.add('tabela');
+        table.innerHTML = '<tr class="linha"><th class="coluna">ID Masmorra</th><th class="coluna">Nome do Masmorra</th><th class="coluna">Descrição</th></tr>';
+        masmorras.forEach((masmorra) => {
+            table.innerHTML += `<tr class="linha">
+            <td class="coluna">${masmorra.id}</td>
+            <td class="coluna">${masmorra.name}</td>
+            <td class="coluna">${masmorra.description && masmorra.description.length > 150 ? masmorra.description.substring(0, 150) + '...' : masmorra.description || ''}</td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(table);
+    }
+    static async apareceunoJogos(jogos, tipoAparição = 'Apareceu') {
         resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em ${jogos.length === 1 ? jogos.length + " jogo" : jogos.length + " jogos"}: </strong></p>`;
         const table = document.createElement('table');
         table.classList.add('tabela');
@@ -45,7 +59,6 @@ class Zelda {
             <td class="coluna">${jogo.publisher || ''}</td>
             <td class="coluna">${jogo.released_date}</td>
             </tr>`;
-            this.gms = [];
         });
         resultsContainer.appendChild(table);
     }
@@ -218,7 +231,7 @@ class Zelda {
 
 class Jogos extends Zelda {
     tab = 'Jogo';
-    constructor() {}
+    constructor() { }
     static gerarPanel() {
         const formulario = document.createElement('form');
         formulario.setAttribute('id', 'zelda-form');
@@ -243,7 +256,7 @@ class Jogos extends Zelda {
                 } return response.json();
             })
             .then(data => {
-                console.log("Dados recebidos em getJogoByName:",  data);
+                console.log("Dados recebidos em getJogoByName:", data);
                 return data.data[0];
             })
             .catch(error => {
@@ -339,7 +352,7 @@ class Funcionarios extends Zelda {
     static url_Funcionario = 'https://zelda.fanapis.com/api/staff';
     static games = {};
     static gms = [];
-    constructor() {}
+    constructor() { }
     static gerarPanel() {
         this.tabelaFuncionarios();
     }
@@ -373,11 +386,14 @@ class Funcionarios extends Zelda {
                 })
 
             );
-            return {
+            const funcionarioEncontrado = {
                 id: data.id,
                 name: data.name,
                 games: this.gms
             };
+            this.gms= [];
+             console.log("Dados encontrado em getFuncionarioByID:", funcionarioEncontrado);
+            return funcionarioEncontrado;
         } catch (error) {
             console.error("Erro ao buscar funcionários:", error);
             return [];
@@ -412,13 +428,13 @@ class Funcionarios extends Zelda {
                     }
                 })
             );
-            const FuncionarioEncontrado =  {
+            const funcionarioEncontrado = {
                 id: data.id,
                 name: data.name,
                 games: this.gms
-            };               
-            console.log("Dados encontrado em getFuncionarioByName:", FuncionarioEncontrado);
-            return FuncionarioEncontrado;
+            };
+            console.log("Dados encontrado em getFuncionarioByName:", funcionarioEncontrado);
+            return funcionarioEncontrado;
         } catch (error) {
             console.error("Erro ao buscar funcionários:", error);
             return [];
@@ -491,7 +507,7 @@ class Funcionarios extends Zelda {
         resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${funcionario.id}</p>`;
         resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${funcionario.name}</p>`;
         if (funcionario.games && funcionario.games.length > 0) {
-            Zelda.apareceunoJogos(await funcionario.games,"Trabalhou");
+            Zelda.apareceunoJogos(await funcionario.games, "Trabalhou");
             this.gms = [];
         } else {
             resultsContainer.innerHTML += '<p class="resposta">Este funcionário não trabalhou em nenhum jogo.</p>';
@@ -527,7 +543,7 @@ class Funcionarios extends Zelda {
 class Personagens {
     static url_Personagens = 'https://zelda.fanapis.com/api/characters';
     static games = {};
-    constructor() {}
+    constructor() { }
     static gerarPanel() {
         this.tabelaPersonagens();
     }
@@ -608,9 +624,18 @@ class Personagens {
 class Monstros {
     static url_Monstros = 'https://zelda.fanapis.com/api/monsters';
     static games = {};
-    constructor() {}
+    constructor() { }
     static gerarPanel() {
         this.tabelaMonstros();
+    }
+    static async getMonstroByID(id) {
+        const url = `${this.url_Monstros}/${id}`;
+        console.log("URL:", url);
+        try {
+
+        } catch (error) {
+            console.log(``, error)
+        }
     }
     static async getMonstros() {
         const url = this.url_Monstros;
@@ -638,7 +663,6 @@ class Monstros {
                             } catch (error) {
                                 console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
                                 return gameUrl;
-
                             }
                         })
                     );
@@ -647,7 +671,6 @@ class Monstros {
                         name: monstro.name,
                         description: monstro.description,
                         games: jogos.join(', ')
-
                     }
                 })
             )
@@ -658,7 +681,6 @@ class Monstros {
             return [];
         };
     }
-
     static async tabelaMonstros() {
         const monstros = await this.getMonstros();
         const tabela = document.createElement('table');
@@ -680,19 +702,109 @@ class Monstros {
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(tabela);
     }
-
-
 }
 
 class Chefes {
     static url_Chefes = 'https://zelda.fanapis.com/api/bosses';
     static games = {};
-    static monsters = {};
-    constructor(parameters) {
-
-    }
+    static gms = [];
+    static masmorras = []
+    constructor() { }
     static gerarPanel() {
         this.tabelaChefes();
+    }
+    static async getChefebyName(nome) {
+        const url = `${this.url_Chefes}?name=${encodeURIComponent(nome)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data[0];
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        if(!gameResponse.ok){
+                            throw new Error(`Erro HTTP: ${gameResponse.status}`);
+                        }
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            await Promise.all(
+                dados.dungeons.map(async (dungeonUrl) => {
+                    try {
+                        const dungeonResponse = await fetch(dungeonUrl);
+                        if(!dungeonResponse.ok){
+                            throw new Error(`Erro HTTP: ${dungeonResponse.status}`);
+                        }
+                        const dungeonData = await dungeonResponse.json();
+                        this.masmorras.push(dungeonData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar masmorra ${dungeonUrl}:`, error);
+                    }
+                })
+            );
+            const chefesEscolhido = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms,
+                dungeons: this.masmorras
+            };
+            console.log("Dados encontrado em getChefebyName:", chefesEscolhido);
+            return chefesEscolhido;
+        } catch (error) {
+            console.log(``, error);
+        }
+    }
+    static async getChefeByID(id) {
+        const url = `${this.url_Chefes}/${id}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const responseGame = await fetch(gameUrl);
+                        const gameData = await responseGame.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            await Promise.all(
+                dados.dungeons.map(async (dungeonUrl) => {
+                    try {
+                        const responseDungeon = await fetch(dungeonUrl);
+                        const dungeonData = await responseDungeon.json();
+                        this.masmorras.push(dungeonData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar masmorra ${dungeonUrl}:`, error);
+                    }
+                })
+            );
+            const chefe = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms,
+                dungeons: this.masmorras
+            }
+            this.gms = [];
+            this.masmorras = [];
+            console.log("Dados obtido em getChefeByID:", chefe);
+            return chefe;
+        } catch (error) {
+            console.log(``, error);
+        }
     }
     static async getChefes() {
         const url = this.url_Chefes;
@@ -725,8 +837,8 @@ class Chefes {
                     );
                     const dungeons = await Promise.all(
                         chefe.dungeons.map(async (dungeonUrl) => {
-                            if (this.monsters[dungeonUrl]) {
-                                return this.monsters[dungeonUrl];
+                            if (this.masmorras[dungeonUrl]) {
+                                return this.masmorras[dungeonUrl];
                             }
                             try {
                                 const dungeonResponse = await fetch(dungeonUrl);
@@ -734,8 +846,8 @@ class Chefes {
                                     throw new Error(`Erro HTTP: ${dungeonResponse.status}`);
                                 }
                                 const dungeonData = await dungeonResponse.json();
-                                this.monsters[dungeonUrl] = dungeonData.data.name;
-                                return this.monsters[dungeonUrl];
+                                this.masmorras[dungeonUrl] = dungeonData.data.name;
+                                return this.masmorras[dungeonUrl];
                             } catch (error) {
                                 console.error(`Erro ao buscar masmorra ${dungeonUrl}:`, error);
                                 return dungeonUrl;
@@ -756,6 +868,39 @@ class Chefes {
         } catch (error) {
             console.error('Erro ao buscar chefes:', error);
             return [];
+        }
+
+
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosChefe(await this.getChefeByID(valor));
+                break;
+            case 'name':
+                this.paragrafosChefe(await this.getChefebyName(valor));
+                break;
+        }
+    }
+    static async paragrafosChefe(chefe) {
+        if (!chefe || Object.keys(chefe).length === 0) {
+            resultsContainer.innerHTML = '<p>Chefe não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${chefe.id}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${chefe.name}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição:</strong> ${chefe.description}</p>`;
+        if (chefe.games && chefe.games.length > 0) {
+            Zelda.apareceunoJogos(await chefe.games, "Apareceu");
+            this.gms = [];
+        } else {
+            resultsContainer.innerHTML += '<p class="resposta"><strong>Este chefe não apareceu em nenhum jogo.</strong></p>';
+        }
+        if (chefe.dungeons && chefe.dungeons.length > 0) {
+            Zelda.apareceunaMasmorras(await chefe.dungeons);
+            this.masmorras = [];
+        } else {
+            resultsContainer.innerHTML += '<p class="resposta"><strong>Este chefe não possui masmorras.</strong></p>';
         }
 
 
