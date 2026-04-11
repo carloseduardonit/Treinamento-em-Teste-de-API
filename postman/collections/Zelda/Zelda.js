@@ -67,8 +67,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Monstros', 'Masmorras', 'Lugares'];
-        const listaFinalizado = ['Jogos', 'Personagens', 'Funcionários', 'Chefes', 'Itens']
+        const listaEmManutenção = [ 'Masmorras', 'Lugares'];
+        const listaFinalizado = ['Jogos', 'Personagens', 'Monstros', 'Funcionários', 'Chefes', 'Itens']
         let searchType = null;
 
         for (var index = 0; index < radio_buttons.length; index++) {
