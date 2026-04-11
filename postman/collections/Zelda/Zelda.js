@@ -67,8 +67,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = [ 'Lugares'];
-        const listaFinalizado = ['Jogos', 'Funcionários', 'Personagens', 'Monstros', 'Chefes','Masmorras', 'Itens']
+        const listaEmManutenção = ['Lugares'];
+        const listaFinalizado = ['Jogos', 'Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Itens']
         let searchType = null;
 
         for (var index = 0; index < radio_buttons.length; index++) {
@@ -1142,12 +1142,74 @@ class Chefes {
 class Masmorras {
     static url_Masmorras = 'https://zelda.fanapis.com/api/dungeons';
     static games = {};
-    constructor(parameters) {
-
-    }
+    static gms = [];
+    constructor() { }
     static gerarPanel() {
         this.tabelaMasmorras();
     }
+    static async getMasmorraByName(name) {
+        const url = `${this.url_Masmorras}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data[0];
+            console.log("Dados Recebidos: ", dados);
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            const masmorraEscolhida = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms
+            }
+            return masmorraEscolhida;
+        } catch (error) {
+            console.log(``, error);
+        }
+
+    }
+    static async getMasmorraByID(Id) {
+        const url = `${this.url_Masmorras}/${encodeURIComponent(Id)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.log(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            )
+            const masmorraEscolhida ={
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms
+            }
+            this.gms = [];
+            console.log("Dados Recebidos em getMasmorraByID:", masmorraEscolhida);
+            return masmorraEscolhida;
+        } catch (error) {
+            console.log(``, error);
+        }
+    }
+
     static async getMasmorras() {
         const url = this.url_Masmorras;
         console.log("URL:", url);
@@ -1189,6 +1251,38 @@ class Masmorras {
             console.error('Erro ao buscar masmorras:', error);
             return [];
         }
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosMasmorra(await this.getMasmorraByID(valor));
+                break;
+            case 'name':
+                this.paragrafosMasmorra(await this.getMasmorraByName(valor));
+                break;
+        }
+    }
+    static async paragrafosMasmorra(masmorra) {
+        if (!masmorra || Object.keys(masmorra).length === 0) {
+            resultsContainer.innerHTML = '<p>Masmorra não encontrada. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID Masmorra: </strong>${masmorra.id}</p>`
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome: </strong>${masmorra.name}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${masmorra.description}</p>`;
+        if (masmorra.games && masmorra.games.length > 0) {
+            Zelda.apareceunoJogos(await masmorra.games);
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Masmorras';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaMasmorras();
     }
     static async tabelaMasmorras() {
         const masmorras = await this.getMasmorras();
