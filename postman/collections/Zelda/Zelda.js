@@ -67,8 +67,8 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = ['Personagens', 'Monstros', 'Masmorras', 'Lugares'];
-        const listaFinalizado = ['Jogos', 'Funcionários', 'Chefes', 'Itens']
+        const listaEmManutenção = ['Monstros', 'Masmorras', 'Lugares'];
+        const listaFinalizado = ['Jogos', 'Personagens', 'Funcionários', 'Chefes', 'Itens']
         let searchType = null;
 
         for (var index = 0; index < radio_buttons.length; index++) {
@@ -541,11 +541,79 @@ class Funcionarios extends Zelda {
 }
 
 class Personagens {
-    static url_Personagens = 'https://zelda.fanapis.com/api/characters';
+    static url_Personagens = "https://zelda.fanapis.com/api/characters";
     static games = {};
+    static gms = [];
     constructor() { }
     static gerarPanel() {
         this.tabelaPersonagens();
+    }
+    static async getPersonagemByID(id) {
+        const url = `${this.url_Personagens}/${id}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    const gameResponse = await fetch (gameUrl);
+                    const gameData = await gameResponse.json();
+                    this.gms.push(gameData.data);
+                    console.log(`Dados do jogo ${gameUrl}:`, gameData);
+                })
+            );
+            const personagemEscolhido = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                race: dados.race || "",
+                gender: dados.gender || "",
+                games: this.gms
+            }
+            console.log("Dados recebidos em getPersonagemByID:", personagemEscolhido);
+            this.gms = [];
+            return personagemEscolhido;
+        } catch (error) {
+            console.log(``, error)
+            return [];
+        }
+    }
+    static async getPersonagemByName(name) {
+        const url = `${this.url_Personagens}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data[0];
+            console.log("Dados recebidos:", dados);
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                        console.log(`Dados do jogo ${gameUrl}:`, gameData);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            const personagemEscolhido = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                race: dados.race || "",
+                gender: dados.gender || "",
+                games: this.gms
+            }
+            console.log("Dados recebidos em getPersonagemByName:", personagemEscolhido);
+            this.gms = [];
+            return personagemEscolhido;
+        } catch (error) {
+            console.log(``, error)
+            return [];
+        }
     }
     static async getPersonagens() {
         const url = this.url_Personagens;
@@ -593,6 +661,44 @@ class Personagens {
             console.error('Erro ao buscar personagens:', error);
             return [];
         }
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosPersonagens(await this.getPersonagemByID(valor));
+                break;
+            case 'name':
+                this.paragrafosPersonagens(await this.getPersonagemByName(valor));
+                break;
+        }
+    }
+    static async paragrafosPersonagens(personagem) {
+        if (!personagem || Object.keys(personagem).length === 0) {
+            resultsContainer.innerHTML = '<p>Personagem não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID Personagem: </strong>${personagem.id}</p>`
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome: </strong>${personagem.name}</p>`
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${personagem.description}</p>`
+        if (personagem.gender.length > 0) {
+            resultsContainer.innerHTML += `<p class="resposta"><strong>Genero: </strong>${personagem.gender === 'Male' ? 'Masculino' : 'Feminino'}</p>`
+        }
+        if (personagem.race.length > 0) {
+            resultsContainer.innerHTML += `<p class="resposta"><strong>Corrida: </strong>${personagem.race}</p>`
+        }
+        if (personagem.games && personagem.games.length > 0) {
+            Zelda.apareceunoJogos(await personagem.games);
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Personagens';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaPersonagens();
     }
     static async tabelaPersonagens() {
         const personagens = await this.getPersonagens();
