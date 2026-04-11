@@ -67,7 +67,7 @@ class Zelda {
         const name = nameInput.value.trim();
         const radio_buttons = document.getElementsByName('Pesquisa');
         const buttonAbatida = document.querySelector('.tab-button.active').dataset.tab;
-        const listaEmManutenção = [ 'Masmorras', 'Lugares'];
+        const listaEmManutenção = ['Masmorras', 'Lugares'];
         const listaFinalizado = ['Jogos', 'Personagens', 'Monstros', 'Funcionários', 'Chefes', 'Itens']
         let searchType = null;
 
@@ -557,7 +557,7 @@ class Personagens {
             const dados = data.data;
             await Promise.all(
                 dados.appearances.map(async (gameUrl) => {
-                    const gameResponse = await fetch (gameUrl);
+                    const gameResponse = await fetch(gameUrl);
                     const gameData = await gameResponse.json();
                     this.gms.push(gameData.data);
                     console.log(`Dados do jogo ${gameUrl}:`, gameData);
@@ -730,15 +730,77 @@ class Personagens {
 class Monstros {
     static url_Monstros = 'https://zelda.fanapis.com/api/monsters';
     static games = {};
+    static gms = [];
     constructor() { }
     static gerarPanel() {
         this.tabelaMonstros();
+    }
+    static async getMonstroByName(name) {
+        const url = `${this.url_Monstros}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data[0];
+            if (!dados) {
+                return [];
+            }
+            console.log("Dados Recebidos: ", dados);
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            )
+            const monstroEscolhido = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms
+            }
+            console.log("Dados encontrado em getMonstroByName:", monstroEscolhido);
+            this.gms = [];
+            return monstroEscolhido;
+        } catch (error) {
+            console.log(``, error)
+        }
     }
     static async getMonstroByID(id) {
         const url = `${this.url_Monstros}/${id}`;
         console.log("URL:", url);
         try {
-
+            const response = await fetch(url);
+            const data = await response.json();
+            const dados = data.data;
+            if (!dados) {
+                return [];
+            }
+            console.log("Dados Recebidos: ", dados);
+            await Promise.all(
+                dados.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();
+                        this.gms.push(gameData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            )
+            const monstroEscolhido = {
+                id: dados.id,
+                name: dados.name,
+                description: dados.description,
+                games: this.gms
+            }
+            console.log("Dados encontrado em getMonstroByID:", monstroEscolhido);
+            this.gms = [];
+            return monstroEscolhido;
         } catch (error) {
             console.log(``, error)
         }
@@ -786,6 +848,38 @@ class Monstros {
             console.error('Erro ao buscar monstros:', error);
             return [];
         };
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosMonstros(await this.getMonstroByID(valor));
+                break;
+            case 'name':
+                this.paragrafosMonstros(await this.getMonstroByName(valor));
+                break;
+        }
+    }
+    static async paragrafosMonstros(monstro) {
+        if (!monstro || Object.keys(monstro).length === 0) {
+            resultsContainer.innerHTML = '<p>Monstro não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID Monstro: </strong>${monstro.id}</p>`
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome: </strong>${monstro.name}</p>`
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${monstro.description}</p>`
+        if (monstro.games && monstro.games.length > 0) {
+            Zelda.apareceunoJogos(await monstro.games);
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Monstros';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaMonstros();
     }
     static async tabelaMonstros() {
         const monstros = await this.getMonstros();
