@@ -353,6 +353,13 @@ class Jogos extends Zelda {
             resultsContainer.innerHTML += `<p class="resposta"><strong>Editora:</strong> ${jogosList.publisher}</p>`;
         }
         resultsContainer.innerHTML += `<p class="resposta"><strong>Data de Lançamento:</strong> ${jogosList.released_date}</p>`;
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Jogos';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.tabelaJogoZelda();
+        });
+        resultsContainer.appendChild(voltarButton);
     }
     static async exibeMelhorPesquisa(tipo, valor) {
         switch (tipo) {
@@ -525,8 +532,8 @@ class Funcionarios extends Zelda {
             resultsContainer.innerHTML = '<p>Funcionário não encontrado. Por favor, tente novamente.</p>';
             return;
         }
-        resultsContainer.innerHTML = `<p class="resposta"><strong>ID:</strong> ${funcionario.id}</p>`;
-        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome:</strong> ${funcionario.name}</p>`;
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID: </strong> ${funcionario.id}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome: </strong> ${funcionario.name}</p>`;
         if (funcionario.games && funcionario.games.length > 0) {
             Zelda.apareceunoJogos(await funcionario.games, "Trabalhou");
             this.gms = [];
