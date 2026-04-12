@@ -30,7 +30,19 @@ header {
   align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
-
+p.ZeldaLink{
+  text-shadow:2px 2px #24cc78;
+  color: black;
+}
+a.ZeldaLink:hover {
+  text-decoration: none;
+  text-shadow: 2px 2px  #24cc78;
+  color: red;
+}
+a.ZeldaLink {
+text-decoration: none;
+  text-shadow: 2px 2px  #24cc78;
+  color: black;}
 /* CONTAINER */
 .container {
   display: flex;
@@ -109,7 +121,7 @@ button.tab-button {
   font-weight: bolder;
   border: none;
   min-width: 10%;
-  max-width: 20%;
+  max-width: 25%;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   cursor: pointer;
@@ -152,13 +164,11 @@ td {
   text-align: justify;
 }
 
-
 tr:hover td {
   background: #24cc78;
   color: white;
   border: white solid 1px;
   font-weight: bolder;
-  te
 }
 
 /* FOOTER */

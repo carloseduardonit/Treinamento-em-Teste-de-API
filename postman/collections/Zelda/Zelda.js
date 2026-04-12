@@ -1,7 +1,4 @@
-
-
 class Zelda {
-
     constructor() { }
     static async loadFormulario() {
         this.loadBotao();
@@ -22,12 +19,12 @@ class Zelda {
         <button class="tab-button" data-tab="Masmorras" onclick="Zelda.exibeTab('Masmorras')">Masmorras</button>
         <button class="tab-button" data-tab="Lugares" onclick="Zelda.exibeTab('Lugares')">Lugares</button>
         <button class="tab-button" data-tab="Itens" onclick="Zelda.exibeTab('Itens')">Itens</button>
-        `
-        //if (!document.getElementById('tabs')) {
+        <button class="tab-button" data-tab="Documentacao" onclick="Zelda.exibeTab('Documentacao')">Documentação</button>`
         mainContent.innerHTML = ``;
         mainContent.appendChild(divisao);
-        //}
+
     }
+
     static gerarPanel() {
         Jogos.gerarPanel();
     }
@@ -51,7 +48,6 @@ class Zelda {
         resultsContainer.appendChild(table);
 
     }
-
     static async apareceunaMasmorras(masmorras, tipoAparição = 'Apareceu') {
         resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em  ${masmorras.length === 1 ? masmorras.length + " masmorra" : masmorras.length + " masmorras"}: </strong></p>`;
         const table = document.createElement('table');
@@ -91,7 +87,6 @@ class Zelda {
         const listaEmManutenção = [];
         const listaFinalizado = ['Jogos', 'Funcionários', 'Personagens', 'Monstros', 'Chefes', 'Masmorras', 'Lugares', 'Itens']
         let searchType = null;
-
         for (var index = 0; index < radio_buttons.length; index++) {
             if (radio_buttons[index].checked) {
                 searchType = radio_buttons[index].value;
@@ -164,7 +159,6 @@ class Zelda {
         const tabButtons = document.querySelectorAll('.tab-button');
         const ativo = document.querySelector('.tab-button.active');
         let nome = ativo.dataset.tab;
-
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
@@ -220,6 +214,7 @@ class Zelda {
             tipo.endsWith("ns") ? tipo.slice(0, -2) + "m" :
                 tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
         tipoItem[0].innerText = itemFormando;
+       
         switch (tipo) {
             case 'Jogos':
                 Jogos.gerarPanel();
@@ -245,13 +240,25 @@ class Zelda {
             case 'Itens':
                 Itens.gerarPanel();
                 break;
+            case 'Documentacao':
+                this.exibeDocumentacao();
+                break
         }
+    }
+    static exibeDocumentacao() {
+        resultsContainer.innerHTML =`
+        <p class="ZeldaLink">Documentação</p>
+        <ul>
+        <li><a class="ZeldaLink" href= "https://github.com/carloseduardonit/Treinamento-em-Teste-de-API" target="_blank">Documentação do principal do repositorio</a></li>
+        <li><a class="ZeldaLink" href="https://github.com/carloseduardonit/Treinamento-em-Teste-de-API/blob/master/postman/collections/Zelda/Zelda_API.MD" target="_blank">Documentação do Zelda.MD</a></li>
+        <li><a class="ZeldaLink" href="https://docs.zelda.fanapis.com/docs" target="_blank">Documentação Oficial da Zelda API</a></li>
+        </ul>
+        `
+        titulo2Resultado.innerText= "";
     }
 }
 
-
 class Jogos extends Zelda {
-    tab = 'Jogo';
     constructor() { }
     static gerarPanel() {
         const formulario = document.createElement('form');

@@ -4,6 +4,7 @@ const btn_clear = document.getElementById('clear');
 const title = document.querySelector('title');
 const mainContent = document.querySelector('main');
 const resultsContainer = document.getElementById('results-container');
+const titulo2Resultado = document.getElementById('Resultados');
 
 
 btn_starWars.addEventListener('click', (event) => {
