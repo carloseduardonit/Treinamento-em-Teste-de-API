@@ -31,6 +31,27 @@ class Zelda {
     static gerarPanel() {
         Jogos.gerarPanel();
     }
+    static async apareceuosHabitantes(habitantes) {
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Apareceu ${habitantes.length === 1 ? habitantes.length + " habitante" : habitantes.length + " habitantes"}: </strong></p>`;
+        const table = document.createElement('table');
+        table.classList.add('tabela');
+        table.innerHTML = `<tr class="linha"><th class="coluna">ID Habitante</th>
+        <th class="coluna">Nome do Habitante</th><th class="coluna">Descrição</th>
+        <th class="coluna">Genero(M/F)</th><th class="coluna">Corrida</th></tr>
+        `;
+        habitantes.forEach((habitante) => {
+            table.innerHTML += `<tr class="linha">
+            <td class="coluna">${habitante.id}</td>
+            <td class="coluna">${habitante.name}</td>
+            <td class="coluna">${habitante.description && habitante.description.length > 150 ? habitante.description.substring(0, 150) + '...' : habitante.description || ''}</td>
+            <td class="coluna">${habitante.gender === null ? '' : habitante.gender === 'Male' ? 'Masculino' : 'Feminino'}</td>
+            <td class="coluna">${habitante.race === null ? '' : habitante.race}</td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(table);
+
+    }
+
     static async apareceunaMasmorras(masmorras, tipoAparição = 'Apareceu') {
         resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em  ${masmorras.length === 1 ? masmorras.length + " masmorra" : masmorras.length + " masmorras"}: </strong></p>`;
         const table = document.createElement('table');
@@ -1196,7 +1217,7 @@ class Masmorras {
                     }
                 })
             )
-            const masmorraEscolhida ={
+            const masmorraEscolhida = {
                 id: dados.id,
                 name: dados.name,
                 description: dados.description,
@@ -1310,12 +1331,102 @@ class Masmorras {
 class Lugares {
     static url_Lugares = 'https://zelda.fanapis.com/api/places';
     static games = {};
+    static gms = [];
     static inhabitants = {};
-    constructor(parameters) {
-
-    }
+    static hbtnts = [];
+    constructor() { }
     static gerarPanel() {
         this.tabelaLugares();
+    }
+    static async getLugarByName(name) {
+        const url = `${this.url_Lugares}?name=${encodeURIComponent(name)}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const responseJson = await response.json();
+            const data = responseJson.data[0];
+            console.log("Dados Recebidos: ", data);
+            await Promise.all(
+                data.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();       
+                        this.gms.push(gameData.data);
+                    }catch(error){
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            await Promise.all(
+                data.inhabitants.map(async (inhabitantUrl) => {
+                    try {
+                        const habitanteResponse = await fetch(inhabitantUrl);
+                        const habitanteData = await habitanteResponse.json();
+                        this.hbtnts.push(habitanteData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar habitante ${inhabitantUrl}:`, error);
+                    }
+                })
+            );
+            const lugarEscolhido ={
+                id: data.id,
+                name: data.name,
+                description: data.description,
+                games:this.gms,
+                habitantes: this.hbtnts
+            }
+            console.log("Dados encontrado em getLugarByName:", lugarEscolhido);
+            this.gms = [];
+            this.hbtnts = [];
+            return lugarEscolhido;
+        } catch (error) {
+            console.log(``, error);
+        }
+    }
+    static async getLugarByID(id) {
+        const url = `${this.url_Lugares}/${id}`;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            const responseJson = await response.json();
+            const data = responseJson.data;  
+            await Promise.all(
+                data.appearances.map(async (gameUrl) => {
+                    try {
+                        const gameResponse = await fetch(gameUrl);
+                        const gameData = await gameResponse.json();       
+                        this.gms.push(gameData.data);
+                    }catch(error){
+                        console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
+                    }
+                })
+            );
+            await Promise.all(
+                data.inhabitants.map(async (inhabitantUrl) => {
+                    try {
+                        const habitanteResponse = await fetch(inhabitantUrl);
+                        const habitanteData = await habitanteResponse.json();
+                        this.hbtnts.push(habitanteData.data);
+                    } catch (error) {
+                        console.error(`Erro ao buscar habitante ${inhabitantUrl}:`, error);
+                    }
+                })
+            );
+            const lugarEscolhido ={
+                id: data.id,
+                name: data.name,
+                description: data.description,
+                games:this.gms,
+                habitantes: this.hbtnts
+            }
+            console.log("Dados encontrado em getLugarByID:", lugarEscolhido);
+            this.gms = [];
+            this.hbtnts = [];
+            return lugarEscolhido;
+        } catch (error) {
+            console.log(``, error);
+
+        }
     }
     static async getLugares() {
         const url = this.url_Lugares;
@@ -1377,6 +1488,41 @@ class Lugares {
             console.error('Erro ao buscar lugares:', error);
             return [];
         }
+    }
+    static async exibeMelhorPesquisa(tipo, valor) {
+        switch (tipo) {
+            case 'id':
+                this.paragrafosLugar(await this.getLugarByID(valor));
+                break;
+            case 'name':
+                this.paragrafosLugar(await this.getLugarByName(valor));
+                break;
+        }
+    }       
+    static async paragrafosLugar(lugar) {
+        if (!lugar || Object.keys(lugar).length === 0) {
+            resultsContainer.innerHTML = '<p>Lugar não encontrado. Por favor, tente novamente.</p>';
+            return;
+        }
+        resultsContainer.innerHTML = `<p class="resposta"><strong>ID Lugar: </strong>${lugar.id}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Nome do Lugar: </strong>${lugar.name}</p>`;
+        resultsContainer.innerHTML += `<p class="resposta"><strong>Descrição: </strong>${lugar.description}</p>`;
+        if (lugar.games && lugar.games.length > 0) {
+            Zelda.apareceunoJogos(await lugar.games);
+        }
+        if (lugar.habitantes && lugar.habitantes.length > 0) {
+            Zelda.apareceuosHabitantes(await lugar.habitantes);
+        }
+        const voltarButton = document.createElement('button');
+        voltarButton.textContent = 'Voltar para a tabela de Lugares';
+        voltarButton.classList.add('menu-toggle');
+        voltarButton.addEventListener('click', () => {
+            this.voltarTabela();
+        });
+        resultsContainer.appendChild(voltarButton);
+    }
+    static voltarTabela() {
+        this.tabelaLugares();
     }
     static async tabelaLugares() {
         const lugares = await this.getLugares();
