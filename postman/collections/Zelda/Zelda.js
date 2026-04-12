@@ -323,7 +323,7 @@ class Jogos extends Zelda {
         const jogosList = await this.getJogos();
         const table = document.createElement('table');
         table.classList.add('tabela');
-        table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
+        table.innerHTML = '<tr class="linha"><th class="coluna">ID Jogo</th><th class="coluna">Nome do Jogo</th><th class="coluna">Descrição</th><th class="coluna">Desenvolvedora</th><th class="coluna">Editora</th><th class="coluna">Data de Lançamento</th></tr>';
         jogosList.forEach((jogo) => {
             table.innerHTML += `<tr class="linha">
             <td class="coluna">${jogo.id}</td>
@@ -555,7 +555,7 @@ class Funcionarios extends Zelda {
         const funcionarios = await this.getFuncionarios();
         const table = document.createElement('table');
         table.classList.add('tabela');
-        table.innerHTML = '<tr class="linha"><th class="coluna">ID Funcionario</th><th class="coluna">Nome</th><th class="coluna">trabalhou no(s) Jogo(s)</th></tr>';
+        table.innerHTML = '<tr class="linha"><th class="coluna">ID Funcionario</th><th class="coluna">Nome do Funcionario</th><th class="coluna">trabalhou no(s) Jogo(s)</th></tr>';
         funcionarios.forEach((funcionario) => {
             table.innerHTML += `<tr class="linha">
             <td class="coluna">${funcionario.id}</td>
@@ -734,7 +734,7 @@ class Personagens {
         table.classList.add('tabela');
         table.innerHTML = `<tr class="linha">
         <th class="coluna">ID Personagem</th>
-        <th class="coluna">Nome</th>
+        <th class="coluna">Nome do Personagem</th>
         <th class="coluna">Descrição</th>
         <th class="coluna">Genero(M/F)</th>
         <th class="coluna">Corrida</th>
@@ -915,7 +915,7 @@ class Monstros {
         tabela.classList.add('tabela');
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID Monstro</th>
-        <th class="coluna">Nome</th>
+        <th class="coluna">Nome do Monstro</th>
         <th class="coluna">Descrição</th>
         <th class="coluna">Apareceu no(s) Jogo(s)</th>
         </tr>`;
@@ -1642,7 +1642,6 @@ class Itens extends Zelda {
             return [];
         }
     }
-
     static async paragrafosItemZelda(Item) {
         const itemList = await Item;
         if (!itemList || itemList.length === 0) {
@@ -1733,18 +1732,14 @@ class Itens extends Zelda {
         resultsContainer.innerHTML = '';
         resultsContainer.appendChild(tabela);
     }
-
     static async exibeMelhorPesquisa(tipo, valor) {
         switch (tipo) {
             case 'id':
                 this.paragrafosItemZelda(await this.getItemByID(valor))
                 break;
-
             case 'name':
                 this.paragrafosItemZelda(await this.getItemByName(valor))
                 break;
         }
-
     }
-
 }
