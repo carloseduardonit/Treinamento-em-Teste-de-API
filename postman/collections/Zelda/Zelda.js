@@ -159,14 +159,17 @@ class Zelda {
         const tabButtons = document.querySelectorAll('.tab-button');
         const ativo = document.querySelector('.tab-button.active');
         let nome = ativo.dataset.tab;
+        
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
             }
             if (tabButtons[index].dataset.tab === tipo) {
                 Zelda.removaAtivos();
+                titulo2Resultado.innerText= `Resultado de ${tipo}:`;
                 this.exibeFormulario(tipo);
                 tabButtons[index].classList.add('active');
+                
                 break
             }
         }
