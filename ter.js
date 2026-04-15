@@ -19,9 +19,7 @@ btn_starWars.addEventListener('click', (event) => {
     Comum.removeManutencao();
 });
 class Comum {
-    constructor(parameters) {
-
-    }
+    constructor() {    }
     static colacaremManutencao() {
         if (!document.getElementsByClassName('star-wars-gif')[0]) {
             const img = document.createElement('img');
@@ -41,7 +39,34 @@ class Comum {
             starWarsGif.remove();
         }
     }
-
+    static exibeTab(objeto,tipo) {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const ativo = document.querySelector('.tab-button.active');
+        let nome = ativo.dataset.tab;
+        
+        for (let index = 0; index < tabButtons.length; index++) {
+            if (nome === tipo) {
+                return;
+            }
+            if (tabButtons[index].dataset.tab === tipo) {
+                objeto.removaAtivos();
+                titulo2Resultado.innerText= `Resultado de ${tipo}:`;
+                objeto.exibeFormulario(tipo);
+                tabButtons[index].classList.add('active');
+                
+                break
+            }
+        }
+    }
+    static removaAtivos() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        for (let index = 0; index < tabButtons.length; index++) {
+            if (tabButtons[index].classList.contains('active')) {
+                tabButtons[index].classList.remove('active');
+                break;
+            }
+        }
+    }
 }
 btn_zelda.addEventListener('click', async (event) => {
     event.preventDefault();
