@@ -6,6 +6,7 @@ class StarWars {
     }
     static loadFormulario() {
         this.loadBotao();
+        Raiz.exibeRaiz();
     }
 
     static loadBotao() {
@@ -55,7 +56,6 @@ class StarWars {
     }
 }
 class Raiz {
-
     constructor(){}
     static async exibeRaiz() {
         this.exibirParagrafodaRaiz(await this.getRaizes());
@@ -95,7 +95,6 @@ class Raiz {
         resultsContainer.innerHTML += `<p class="resultado"><strong>End-Point de Veículos: </strong> ${raizes.veiculos}`;
         resultsContainer.innerHTML += `<p class="resultado"><strong>End-Point de Espécies: </strong> ${raizes.especies}`;
         resultsContainer.innerHTML += `<p class="resultado"><strong>End-Point de Planetas: </strong> ${raizes.planetas}`;
-
     }
 }
 class Documentacao {
