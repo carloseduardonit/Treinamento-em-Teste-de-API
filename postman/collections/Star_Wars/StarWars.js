@@ -27,6 +27,7 @@ class StarWars {
     }
 
     static async exibeTab(tab) {
+        Comum.exibeTab(this,tab);
         switch (tab) {
             case 'Raiz':
                 Raiz.exibeRaiz();
@@ -54,6 +55,9 @@ class StarWars {
                 break;
         }
     }
+    static removaAtivos() {
+        Comum.removaAtivos();
+    }  
 }
 class Raiz {
     constructor(){}

@@ -42,7 +42,9 @@ class Comum {
     static exibeTab(objeto,tipo) {
         const tabButtons = document.querySelectorAll('.tab-button');
         const ativo = document.querySelector('.tab-button.active');
+        console.log("Ativo:", ativo);
         let nome = ativo.dataset.tab;
+        console.log("Nome:", nome);
         
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
@@ -51,9 +53,8 @@ class Comum {
             if (tabButtons[index].dataset.tab === tipo) {
                 objeto.removaAtivos();
                 titulo2Resultado.innerText= `Resultado de ${tipo}:`;
-                objeto.exibeFormulario(tipo);
                 tabButtons[index].classList.add('active');
-                
+                objeto.exibeFormulario(tipo);
                 break
             }
         }
