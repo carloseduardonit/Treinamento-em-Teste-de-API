@@ -12,7 +12,7 @@ btn_starWars.addEventListener('click', (event) => {
     event.preventDefault();
     clearMainContent();
     title.innerText = 'Star Wars';
-    h1Title.innerText = ' Star Wars';
+    h1Title.innerText = 'Treinamento em Teste de API: Star Wars';
     console.log('Star Wars');
     mainContent.innerHTML = '<h2>Star Wars</h2><p>Bem-vindo ao universo de Star Wars!</p>';
     StarWars.loadFormulario();
@@ -28,7 +28,7 @@ class Comum {
             img.style.maxHeight = '25%';
             img.style.marginLeft = 'auto';
             img.style.marginRight = 'auto';
-            img.src = 'Img/pngwing.com.png';
+            img.src = 'Img/EmManutencao.png';
             img.alt = 'Star Wars GIF';
             resultsContainer.appendChild(img);
         }
@@ -73,6 +73,7 @@ btn_zelda.addEventListener('click', async (event) => {
     event.preventDefault();
     clearMainContent();
     title.innerText = 'Zelda';
+    h1Title.innerText = 'Treinamento em Teste de API: Zelda';
     Zelda.loadFormulario();
     Comum.removeManutencao();
 });
