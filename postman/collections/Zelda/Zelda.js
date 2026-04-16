@@ -156,32 +156,10 @@ class Zelda {
         }
     }
     static exibeTab(tipo) {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const ativo = document.querySelector('.tab-button.active');
-        let nome = ativo.dataset.tab;
-        
-        for (let index = 0; index < tabButtons.length; index++) {
-            if (nome === tipo) {
-                return;
-            }
-            if (tabButtons[index].dataset.tab === tipo) {
-                Zelda.removaAtivos();
-                titulo2Resultado.innerText= `Resultado de ${tipo}:`;
-                this.exibeFormulario(tipo);
-                tabButtons[index].classList.add('active');
-                
-                break
-            }
-        }
+        Comum.exibeTab(this, tipo);
     }
     static removaAtivos() {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        for (let index = 0; index < tabButtons.length; index++) {
-            if (tabButtons[index].classList.contains('active')) {
-                tabButtons[index].classList.remove('active');
-                break;
-            }
-        }
+        Comum.removaAtivos();
     }
     static exibeMelhorPesquisa(item, tipo, valor) {
         switch (item) {
@@ -217,7 +195,7 @@ class Zelda {
             tipo.endsWith("ns") ? tipo.slice(0, -2) + "m" :
                 tipo.endsWith("s") ? tipo.slice(0, -1) : tipo;
         tipoItem[0].innerText = itemFormando;
-       
+
         switch (tipo) {
             case 'Jogos':
                 Jogos.gerarPanel();
@@ -249,7 +227,7 @@ class Zelda {
         }
     }
     static exibeDocumentacao() {
-        resultsContainer.innerHTML =`
+        resultsContainer.innerHTML = `
         <p class="ZeldaLink">Documentação</p>
         <ul>
         <li><a class="ZeldaLink" href= "https://github.com/carloseduardonit/Treinamento-em-Teste-de-API" target="_blank">Documentação do principal do repositorio</a></li>
@@ -257,7 +235,7 @@ class Zelda {
         <li><a class="ZeldaLink" href="https://docs.zelda.fanapis.com/docs" target="_blank">Documentação Oficial da Zelda API</a></li>
         </ul>
         `
-        titulo2Resultado.innerText= "";
+        titulo2Resultado.innerText = "";
     }
 }
 
@@ -1367,9 +1345,9 @@ class Lugares {
                 data.appearances.map(async (gameUrl) => {
                     try {
                         const gameResponse = await fetch(gameUrl);
-                        const gameData = await gameResponse.json();       
+                        const gameData = await gameResponse.json();
                         this.gms.push(gameData.data);
-                    }catch(error){
+                    } catch (error) {
                         console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
                     }
                 })
@@ -1385,11 +1363,11 @@ class Lugares {
                     }
                 })
             );
-            const lugarEscolhido ={
+            const lugarEscolhido = {
                 id: data.id,
                 name: data.name,
                 description: data.description,
-                games:this.gms,
+                games: this.gms,
                 habitantes: this.hbtnts
             }
             console.log("Dados encontrado em getLugarByName:", lugarEscolhido);
@@ -1406,14 +1384,14 @@ class Lugares {
         try {
             const response = await fetch(url);
             const responseJson = await response.json();
-            const data = responseJson.data;  
+            const data = responseJson.data;
             await Promise.all(
                 data.appearances.map(async (gameUrl) => {
                     try {
                         const gameResponse = await fetch(gameUrl);
-                        const gameData = await gameResponse.json();       
+                        const gameData = await gameResponse.json();
                         this.gms.push(gameData.data);
-                    }catch(error){
+                    } catch (error) {
                         console.error(`Erro ao buscar jogo ${gameUrl}:`, error);
                     }
                 })
@@ -1429,11 +1407,11 @@ class Lugares {
                     }
                 })
             );
-            const lugarEscolhido ={
+            const lugarEscolhido = {
                 id: data.id,
                 name: data.name,
                 description: data.description,
-                games:this.gms,
+                games: this.gms,
                 habitantes: this.hbtnts
             }
             console.log("Dados encontrado em getLugarByID:", lugarEscolhido);
@@ -1515,7 +1493,7 @@ class Lugares {
                 this.paragrafosLugar(await this.getLugarByName(valor));
                 break;
         }
-    }       
+    }
     static async paragrafosLugar(lugar) {
         if (!lugar || Object.keys(lugar).length === 0) {
             resultsContainer.innerHTML = '<p>Lugar não encontrado. Por favor, tente novamente.</p>';
