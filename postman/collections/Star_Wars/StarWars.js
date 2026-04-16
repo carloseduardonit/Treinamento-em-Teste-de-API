@@ -8,7 +8,12 @@ class StarWars {
         this.loadBotao();
         Raiz.exibeRaiz();
     }
-
+static exibeFormulario() {
+        if (!document.querySelector('.titulo1')) {
+        mainContent.innerHTML += `
+        <h1 class="titulo1">Star Wars API</h1>`
+        }
+    }
     static loadBotao() {
         mainContent.innerHTML = '1';
         const divisao = document.createElement('div');
@@ -101,6 +106,73 @@ class Raiz {
         resultsContainer.innerHTML += `<p class="resultado"><strong>End-Point de Planetas: </strong> ${raizes.planetas}`;
     }
 }
+class Pessoas {
+    static exibePessoas() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Pessoas</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.pessoas}" target="_blank">End-Point de Pessoas</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+class Filmes {
+    static exibeFilmes() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Filmes</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.filmes}" target="_blank">End-Point de Filmes</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+class NavesEspaciais {
+    static exibeNavesEspaciais() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Naves Espaciais</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.naves_espaciais}" target="_blank">End-Point de Naves Espaciais</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+class Veiculos {
+    static exibeVeiculos() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Veículos</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.veiculos}" target="_blank">End-Point de Veículos</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+class Especies {
+    static exibeEspecies() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Espécies</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.especies}" target="_blank">End-Point de Espécies</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+class Planetas {
+    static exibePlanetas() {
+        resultsContainer.innerHTML = `
+        <p class="ZeldaLink">Planetas</p>
+        <ul>
+        <li><a class="ZeldaLink" href="${Raizes.planetas}" target="_blank">End-Point de Planetas</a></li>
+        </ul>
+        `;
+        Comum.colacaremManutencao();
+    }
+}
+
 class Documentacao {
     constructor() {}    
     static exibeDocumentacao(){
