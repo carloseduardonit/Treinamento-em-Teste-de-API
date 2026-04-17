@@ -29,7 +29,7 @@ class Comum {
             img.style.marginLeft = 'auto';
             img.style.marginRight = 'auto';
             img.src = 'Img/EmManutencao.png';
-            img.alt = 'Star Wars GIF';
+            img.alt = 'Em Manutenção';
             resultsContainer.appendChild(img);
         }
     }
