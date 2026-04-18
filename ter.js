@@ -6,7 +6,27 @@ const h1Title = document.querySelector('h1#title');
 const mainContent = document.querySelector('main');
 const resultsContainer = document.getElementById('results-container');
 const titulo2Resultado = document.getElementById('Resultados');
+const nav = document.querySelector('p#pix');
+const ePIX = document.getElementById("ePIX")
 
+ePIX.addEventListener('mouseenter', (event) => {
+    event.preventDefault();
+    Comum.emitirSom();
+    if (nav.innerText === ``) {
+        nav.innerText = `Faz um 0,50 ou menos pix aí, é quase graça!😃☕`;
+        nav.style.color = 'red';
+        nav.style.fontWeight = 'bold';
+        nav.style.alignSelf = 'center';
+    }
+})
+ePIX.addEventListener('mouseleave', (event) => {
+    event.preventDefault();
+    Comum.emitirSom();
+    alert(nav.innerText)
+    if (nav.innerText!==``) {
+        nav.innerText = "";
+    }
+})
 
 btn_starWars.addEventListener('click', (event) => {
     event.preventDefault();
@@ -19,7 +39,13 @@ btn_starWars.addEventListener('click', (event) => {
     Comum.removeManutencao();
 });
 class Comum {
-    constructor() {    }
+    constructor() { }
+    static emitirSom() {
+        const audio = document.getElementById('audio');
+        if (audio.paused) {
+            audio.play();
+        }
+    }
     static colacaremManutencao() {
         if (!document.getElementsByClassName('star-wars-gif')[0]) {
             const img = document.createElement('img');
@@ -39,20 +65,20 @@ class Comum {
             starWarsGif.remove();
         }
     }
-    static exibeTab(objeto,tipo) {
+    static exibeTab(objeto, tipo) {
         const tabButtons = document.querySelectorAll('.tab-button');
         const ativo = document.querySelector('.tab-button.active');
         console.log("Ativo:", ativo);
         let nome = ativo.dataset.tab;
         console.log("Nome:", nome);
-        
+
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
             }
             if (tabButtons[index].dataset.tab === tipo) {
                 objeto.removaAtivos();
-                titulo2Resultado.innerText= `Resultado de ${tipo}:`;
+                titulo2Resultado.innerText = `Resultado de ${tipo}:`;
                 tabButtons[index].classList.add('active');
                 objeto.exibeFormulario(tipo);
                 break

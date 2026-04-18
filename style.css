@@ -58,6 +58,11 @@ p {
   bottom: 0;
   width: 100%;
 }
+img#ePIX{
+  width: 200px;
+  margin-top: 10px;
+}
+
 /* MAIN */
 main {
   background: white;

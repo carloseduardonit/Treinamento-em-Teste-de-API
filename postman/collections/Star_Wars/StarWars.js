@@ -39,6 +39,7 @@ class StarWars {
     }
     static exibirSchema() {
         const ativo = document.querySelector('.tab-button.active').dataset.tab;
+        alert(`Exibindo schema para a aba: ${ativo} esta em manutenção !!!`);
         switch (ativo) {
             case 'Pessoas':
                 Pessoas.getSchema();
@@ -159,69 +160,34 @@ class Pessoas {
         try {
             const response = await fetch(url);
             if (!response.ok) {
-                new Error("Erro na requisição no Metodo Pessoas.getPessoas()");
+                throw new Error("Erro na requisição no Metodo Pessoas.getPessoas()")
                 return;
             }
             const data = await response.json();
-            const results = data.results;
-            console.log("Responda: ", response, "\nDados: ", data);
-            const pessoasEscolhidas = await Promise.all(
-                results.map(pessoa => {
-                try {
-                    const filmes = await Promise.all(
-                        pessoa.films.map(async filme => {
-                        try {
-                            const responseFilme = await fetch(filme);
-                            if (!responseFilme.ok) {
-                                throw new Error(`Erro HTTP ao buscar filme: ${responseFilme.status}`);
-                            }
-                            const dataFilme = await responseFilme.json();
-                            return dataFilme.title; // Retorna o título do filme
-                        } catch (error) {
-                            console.error("Erro ao buscar filme: ", error);
-                            return "Título do filme não disponível";
-                        }
-                    }));
-                    const veiculos = await Promise.all(pessoa.vehicles.map(async veiculo => {
-                        try {
-                            const responseVeiculo = await fetch(veiculo);
-                            if (!responseVeiculo.ok) {
-                                throw new Error(`Erro HTTP ao buscar veiculo: ${responseVeiculo.status}`);
-                            }
-                            const dataVeiculo = await responseVeiculo.json();
-                            return dataVeiculo.name; // Retorna o nome do veiculo
-                        } catch (error) {
-                            console.error("Erro ao buscar veiculo: ", error);
-                            return "Veiculo não disponível";
-                        }
-                    }));
-
-                    return {
-                        nome: pessoa.name,
-                        altura: pessoa.height,
-                        peso: pessoa.mass,
-                        cor_cabelo: pessoa.hair_color,
-                        cor_pele: pessoa.skin_color,
-                        cor_olhos: pessoa.eye_color,
-                        ano_nascimento: pessoa.birth_year,
-                        genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
-                        url: pessoa.url,
-                        filmes = filmes.join(" | "),
-                        veiculos =veiculos.join(" | ")
-                    };
-
-                    console.log("Pessoas Escolhidas: ", pessoasEscolhidas);
-                    return { results: pessoasEscolhidas };
-                } catch (error) {
-                    console.error("Erro no Metodo Pessoas.getPessoas().pessoasEscolhidas: ", error);
-                }
-            }
-            ));
-            return pessoasEscolhidas;
+            const results = await Promise.all(data.results.map(async (pessoa) => {
+                let planetaResponse = "Desconecido";
+                return {
+                    nome: pessoa.name,
+                    altura: pessoa.height + " cm",
+                    peso: pessoa.mass + " kg",
+                    cor_cabelo: pessoa.hair_color === "n/a" || pessoa.hair_color === "none" ? "" : pessoa.hair_color,
+                    cor_pele: pessoa.skin_color=== "n/a" || pessoa.skin_color === "none" ? "" : pessoa.skin_color,
+                    cor_olhos: pessoa.eye_color,
+                    ano_nascimento: pessoa.birth_year === "unknown" ? "Desconhecido" : pessoa.birth_year.replace("BBY", " Anos"),
+                    genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
+                    planeta_natal: planetaResponse || "Desconecido",
+                    url: pessoa.url
+                };
+            }));
+            console.log("Responda: ", response, "\nDados: ", results);
+            return { results: results };
         } catch (error) {
             console.error("Erro no Metodo Pessoas.getPessoas(): ", error);
+            return { results: [] };
         }
     }
+
+
 
     /** Com defeito */
     static async getSchema() {
@@ -248,6 +214,7 @@ class Pessoas {
         const tabela = document.createElement("table");
         tabela.classList.add("tabela");
         tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID</th>
         <th class="coluna">Nome</th>
         <th class="coluna">Altura</th>
         <th class="coluna">Peso</th>
@@ -261,9 +228,10 @@ class Pessoas {
         </tr>
         `;
         let resultadosPessoas = Pessoas.results;
-
+        let id = 1;
         resultadosPessoas.forEach(pessoa => {
             tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${id++}</td>
             <td class="coluna">${pessoa.nome}</td>
             <td class="coluna">${pessoa.altura}</td>
             <td class="coluna">${pessoa.peso}</td>
