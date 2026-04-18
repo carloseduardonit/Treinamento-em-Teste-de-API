@@ -171,7 +171,7 @@ class Pessoas {
                     altura: pessoa.height + " cm",
                     peso: pessoa.mass + " kg",
                     cor_cabelo: pessoa.hair_color === "n/a" || pessoa.hair_color === "none" ? "" : pessoa.hair_color,
-                    cor_pele: pessoa.skin_color=== "n/a" || pessoa.skin_color === "none" ? "" : pessoa.skin_color,
+                    cor_pele: pessoa.skin_color === "n/a" || pessoa.skin_color === "none" ? "" : pessoa.skin_color,
                     cor_olhos: pessoa.eye_color,
                     ano_nascimento: pessoa.birth_year === "unknown" ? "Desconhecido" : pessoa.birth_year.replace("BBY", " Anos"),
                     genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
@@ -248,14 +248,73 @@ class Pessoas {
     }
 }
 class Filmes {
-    static exibeFilmes() {
+    static async exibeFilmes() {
         resultsContainer.innerHTML = `
         <p class="ZeldaLink">Filmes</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.filmes}" target="_blank">End-Point de Filmes</a></li>
         </ul>
         `;
+        this.exibeTabelaFilmes(await this.getFilmes());
         Comum.colacaremManutencao();
+
+    }
+    static async getFilmes() {
+        const url = Raizes.filmes;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("Erro na requisição no Metodo Filmes.getFilmes()")
+                return;
+            }
+            const data = await response.json();
+            const results = await Promise.all(data.results.map(async (filme) => {
+                    return {
+                        titulo: filme.title,
+                        episodio: filme.episode_id,
+                        diretor: filme.director,
+                        produtor: filme.producer,
+                        abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
+                        data_lancamento: filme.release_date
+                    };
+                })
+            );
+
+            console.log("Responda: ", response, "\nDados: ", data);
+
+            return { "results": results };
+        } catch (error) {
+            console.error("Erro no Metodo Filmes.getFilmes(): ", error);
+        }
+    }
+    static async exibeTabelaFilmes(Filmes) {
+        const tabela = document.createElement("table");
+        tabela.classList.add("tabela");
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID</th>
+        <th class="coluna">Título</th>
+        <th class="coluna">Episódio</th>
+        <th class="coluna">Diretor</th>
+        <th class="coluna">Produtor</th>
+        <th class="coluna">Abertura (Rascunho)</th>
+        <th class="coluna">Data de Lançamento</th>
+        </tr>
+        `;
+        let resultadosFilmes = Filmes.results;
+        let id = 1;
+        resultadosFilmes.forEach(filme => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${id++}</td>
+            <td class="coluna">${filme.titulo}</td>
+            <td class="coluna">${filme.episodio}</td>
+            <td class="coluna">${filme.diretor}</td>
+            <td class="coluna">${filme.produtor}</td>
+            <td class="coluna">${filme.abertura_rascunho}</td>
+            <td class="coluna">${filme.data_lancamento}</td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(tabela);
     }
 }
 class NavesEspaciais {
@@ -267,6 +326,81 @@ class NavesEspaciais {
         </ul>
         `;
         Comum.colacaremManutencao();
+    }
+    static async getNavesEspaciais() {
+            const url = Raizes.naves_espaciais;
+            console.log("URL:", url);
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("Erro na requisição no Metodo NavesEspaciais.getNavesEspaciais()")
+                    return;
+                }
+                const data = await response.json();
+                const results = await Promise.all(data.results.map(async (nave) => {
+                        return {
+                            nome: nave.name,
+                            modelo: nave.model,
+                            classe: nave.starship_class,
+                            manufacturer: nave.manufacturer,
+                            comprimento: nave.length,
+                            maxima_velocidade: nave.max_atmospheric_speed,
+                            tripulacao: nave.crew,
+                            passageiros: nave.passengers,
+                            capacidade_carga: nave.cargo_capacity,
+                            consumiveis: nave.consumables
+                        };
+                    })
+                );
+
+                console.log("Responda: ", response, "\nDados: ", data);
+
+                return { "results": results };
+
+            } catch (error) {
+                console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
+            }
+
+    }
+    static async exibeTabelaNavesEspaciais(NavesEspaciais) {
+        if (!NavesEspaciais || NavesEspaciais.length === 0) {
+            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+        }
+        const tabela = document.createElement("table");
+        tabela.classList.add("tabela");
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID</th>
+        <th class="coluna">Nome</th>
+        <th class="coluna">Modelo</th>
+        <th class="coluna">Classe</th>
+        <th class="coluna">Fabricante</th>
+        <th class="coluna">Comprimento</th>
+        <th class="coluna">Máxima Velocidade</th>
+        <th class="coluna">Tripulação</th>
+        <th class="coluna">Passageiros</th>
+        <th class="coluna">Capacidade de Carga</th>
+        <th class="coluna">Consumíveis</th>
+        </tr>
+        `;
+        let resultadosNaves = NavesEspaciais.results;
+        let id = 1;
+        resultadosNaves.forEach(nave => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${id++}</td>
+            <td class="coluna">${nave.nome}</td>
+            <td class="coluna">${nave.modelo}</td>
+            <td class="coluna">${nave.classe}</td>
+            <td class="coluna">${nave.manufacturer}</td>
+            <td class="coluna">${nave.comprimento}</td>
+            <td class="coluna">${nave.maxima_velocidade}</td>
+            <td class="coluna">${nave.tripulacao}</td>
+            <td class="coluna">${nave.passageiros}</td>
+            <td class="coluna">${nave.capacidade_carga}</td>
+            <td class="coluna">${nave.consumiveis}</td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(tabela);
+
     }
 }
 class Veiculos {

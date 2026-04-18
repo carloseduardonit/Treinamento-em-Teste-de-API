@@ -7,12 +7,13 @@ const mainContent = document.querySelector('main');
 const resultsContainer = document.getElementById('results-container');
 const titulo2Resultado = document.getElementById('Resultados');
 const nav = document.querySelector('p#pix');
-const ePIX = document.getElementById("ePIX")
-
+const ePIX = document.getElementById("ePIX");
+const icone_btn = document.getElementById('icone');
+let exibir =true;
 ePIX.addEventListener('mouseenter', (event) => {
     event.preventDefault();
     Comum.emitirSom();
-    if (nav.innerText === ``) {
+    if (nav.innerText === `` && exibir) {
         nav.innerText = `Faz um 0,50 ou menos pix aí, é quase graça!😃☕`;
         nav.style.color = 'red';
         nav.style.fontWeight = 'bold';
@@ -22,8 +23,9 @@ ePIX.addEventListener('mouseenter', (event) => {
 ePIX.addEventListener('mouseleave', (event) => {
     event.preventDefault();
     Comum.emitirSom();
-    alert(nav.innerText)
-    if (nav.innerText!==``) {
+    
+    if (nav.innerText!==``&& exibir) {
+        alert(nav.innerText)
         nav.innerText = "";
     }
 })
@@ -45,6 +47,18 @@ class Comum {
         if (audio.paused) {
             audio.play();
         }
+    }
+    static mutarAudio() {
+        const audio = document.getElementById('audio');
+        console.log("Áudio mutado:", audio.muted);
+        audio.muted = !audio.muted;
+        icone_btn.src = !audio.muted ? 'https://img.icons8.com/?size=30&id=kYZq65E0jeQG&format=png&color=000000' : 'https://img.icons8.com/?size=30&id=TRIthknYBFHG&format=png&color=000000';
+    }
+    static exibirTela(){
+        const icone2 = document.getElementById('icone2');
+        exibir = !exibir;
+        console.log("Exibir tela:", exibir);
+        icone2.src = exibir ? 'https://img.icons8.com/?size=30&id=67343&format=png&color=000000' : 'https://img.icons8.com/?size=30&id=67386&format=png&color=000000';
     }
     static colacaremManutencao() {
         if (!document.getElementsByClassName('star-wars-gif')[0]) {
