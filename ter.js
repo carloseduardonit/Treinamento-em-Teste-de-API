@@ -68,6 +68,7 @@ class Comum {
             img.style.maxHeight = '25%';
             img.style.marginLeft = 'auto';
             img.style.marginRight = 'auto';
+            img.style.display = 'block';
             img.src = 'Img/EmManutencao.png';
             img.alt = 'Em Manutenção';
             resultsContainer.appendChild(img);

@@ -65,6 +65,7 @@ img#ePIX{
 
 /* MAIN */
 main {
+  position: relative;
   background: white;
   color: #333;
   margin: 20px auto;
@@ -78,14 +79,24 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-content: center;
   box-shadow: 1 4px 20px rgba(0, 0, 0, 0.3);
 }
 main.container {
+  display: flex;
   flex-direction: column;
   align-items: center;
   overflow-x: none;
 }
+#results-container{
 
+  max-width: 100%;
+  max-height: 100%;
+  
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center;     /* Centraliza verticalmente */
+  align-content: center;
+}
 /* BOTÕES */
 button.menu-toggle {
   padding: 10px 15px;
@@ -149,12 +160,27 @@ li {
 }
 
 /* TABELA PROFISSIONAL */
-table {
+table.tabela1 {
   width: 95%;
+  max-width: 120px;
+  max-height: 200px;
+  margin: 0px 0px 100px;
   border-collapse: collapse;
+  background-color: #ffffff;
+  
+ 
+
+}
+table {
+  position: relative;
+  width: 95%;
+  
+  border-collapse: collapse; 
   border-radius: 12px;
   margin-top: 20px;
-  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: white; 
+  overflow: hidden;
 }
 
 th {

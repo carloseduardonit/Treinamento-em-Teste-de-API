@@ -123,17 +123,18 @@ class Raiz {
                 especies: responseJSon.species,
                 planetas: responseJSon.planets
             }
-            Raizes = raiz
-            console.log("Dados da Raiz: ", raiz);
+            Raizes = raiz;
+            console.log("Dados da Raiz: ", raiz, "Raizes: ",Raizes);
             return raiz;
         } catch (error) {
             console.error("Erro no Metodo GetRaizes(): ", error);
-            return {}
+            return {};
         }
     }
     static async exibirParagrafodaRaiz(raizes) {
         if (Array(raizes).length === 0) {
             resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            return;
         }
         resultsContainer.innerHTML = `<p class="resultado"><strong>End-Point de Pessoas: </strong> ${raizes.pessoas}`;
         resultsContainer.innerHTML += `<p class="resultado"><strong>End-Point de Filmes: </strong>${raizes.filmes}`;
@@ -204,11 +205,12 @@ class Pessoas {
             return data;
         } catch (error) {
             console.error("Erro no Metodo Pessoas.getSchema(): ", error);
+            return {};
         }
     }
     static async exibeTabelaPessoas(Pessoas) {
         if (!Pessoas || Pessoas.length === 0) {
-
+            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
         }
         //resultsContainer.innerHTML ="";
         const tabela = document.createElement("table");
@@ -270,15 +272,15 @@ class Filmes {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (filme) => {
-                    return {
-                        titulo: filme.title,
-                        episodio: filme.episode_id,
-                        diretor: filme.director,
-                        produtor: filme.producer,
-                        abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
-                        data_lancamento: filme.release_date
-                    };
-                })
+                return {
+                    titulo: filme.title,
+                    episodio: filme.episode_id,
+                    diretor: filme.director,
+                    produtor: filme.producer,
+                    abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
+                    data_lancamento: filme.release_date
+                };
+            })
             );
 
             console.log("Responda: ", response, "\nDados: ", data);
@@ -318,48 +320,49 @@ class Filmes {
     }
 }
 class NavesEspaciais {
-    static exibeNavesEspaciais() {
+    static async exibeNavesEspaciais() {
         resultsContainer.innerHTML = `
         <p class="ZeldaLink">Naves Espaciais</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.naves_espaciais}" target="_blank">End-Point de Naves Espaciais</a></li>
         </ul>
         `;
+        this.exibeTabelaNavesEspaciais(await this.getNavesEspaciais());
         Comum.colacaremManutencao();
     }
     static async getNavesEspaciais() {
-            const url = Raizes.naves_espaciais;
-            console.log("URL:", url);
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error("Erro na requisição no Metodo NavesEspaciais.getNavesEspaciais()")
-                    return;
-                }
-                const data = await response.json();
-                const results = await Promise.all(data.results.map(async (nave) => {
-                        return {
-                            nome: nave.name,
-                            modelo: nave.model,
-                            classe: nave.starship_class,
-                            manufacturer: nave.manufacturer,
-                            comprimento: nave.length,
-                            maxima_velocidade: nave.max_atmospheric_speed,
-                            tripulacao: nave.crew,
-                            passageiros: nave.passengers,
-                            capacidade_carga: nave.cargo_capacity,
-                            consumiveis: nave.consumables
-                        };
-                    })
-                );
-
-                console.log("Responda: ", response, "\nDados: ", data);
-
-                return { "results": results };
-
-            } catch (error) {
-                console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
+        const url = Raizes.naves_espaciais;
+        console.log("URL:", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("Erro na requisição no Metodo NavesEspaciais.getNavesEspaciais()")
+                return;
             }
+            const data = await response.json();
+            const results = await Promise.all(data.results.map(async (nave) => {
+                return {
+                    nome: nave.name,
+                    modelo: nave.model,
+                    classe: nave.starship_class,
+                    manufacturer: nave.manufacturer,
+                    comprimento: nave.length,
+                    maxima_velocidade: nave.max_atmospheric_speed,
+                    tripulacao: nave.crew,
+                    passageiros: nave.passengers,
+                    capacidade_carga: nave.cargo_capacity,
+                    consumiveis: nave.consumables
+                };
+            })
+            );
+
+            console.log("Responda: ", response, "\nDados: ", data);
+
+            return { "results": results };
+
+        } catch (error) {
+            console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
+        }
 
     }
     static async exibeTabelaNavesEspaciais(NavesEspaciais) {
@@ -367,7 +370,7 @@ class NavesEspaciais {
             resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
         }
         const tabela = document.createElement("table");
-        tabela.classList.add("tabela");
+        tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID</th>
         <th class="coluna">Nome</th>
@@ -404,25 +407,83 @@ class NavesEspaciais {
     }
 }
 class Veiculos {
-    static exibeVeiculos() {
+    static async exibeVeiculos() {
         resultsContainer.innerHTML = `
         <p class="ZeldaLink">Veículos</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.veiculos}" target="_blank">End-Point de Veículos</a></li>
         </ul>
         `;
+        this.exibeTabelaVeiculos(await this.getVeiculos);
         Comum.colacaremManutencao();
+    }
+    static async getVeiculos(url = Raizes.veiculos) {
+        console.log("URL:", url)
+        try {
+
+        } catch (error) {
+
+        }
+
+    }
+    static exibeTabelaVeiculos(Veiculos) {
+
     }
 }
 class Especies {
-    static exibeEspecies() {
+    static async exibeEspecies() {
         resultsContainer.innerHTML = `
         <p class="ZeldaLink">Espécies</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.especies}" target="_blank">End-Point de Espécies</a></li>
         </ul>
         `;
+        this.exibeTabelaEspecies(await getEspecies());
         Comum.colacaremManutencao();
+    }
+    static async getEspecies() {
+        const url = Raizes.especies;
+        return this.getEspecies(url);
+    }
+    static async getEspecies(url) {
+        console.log("URL: ", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("");
+                return;
+            }
+            const data = await response.json();
+            const resultado = await Promise.all(data.results.map(async (especie) => {
+                try {
+                    return {
+                        nome: especie.name,
+                        classificacao: especie.classification,
+                        designacao: especie.designation,
+                        altura_média: especie.average_height
+                    }
+
+                } catch (error) {
+                    console.log("Erro no metodo getEspecies",error);
+                }
+
+            }))
+            return {"results": resultado};
+        } catch (error) {
+            console.error("Erro no Metodo Especies.getEspecies(): ", error);
+        }
+    }
+    static exibeTabelaEspecies(Especies) {
+        if(!Especies){
+
+        }
+        const tabela = document.createElement("table");
+        tabela.classList("tabela");
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID</th>
+        <tr>`;
+        resultsContainer.appendChild(tabela);
+
     }
 }
 class Planetas {
