@@ -113,6 +113,7 @@ class Raiz {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
+                return [];
             }
             const responseJSon = await response.json();
             const raiz = {
@@ -124,15 +125,15 @@ class Raiz {
                 planetas: responseJSon.planets
             }
             Raizes = raiz;
-            console.log("Dados da Raiz: ", raiz, "Raizes: ",Raizes);
+            console.log("Dados da Raiz: ", raiz, "Raizes: ", Raizes);
             return raiz;
         } catch (error) {
             console.error("Erro no Metodo GetRaizes(): ", error);
-            return {};
+            return [];
         }
     }
     static async exibirParagrafodaRaiz(raizes) {
-        if (Array(raizes).length === 0) {
+        if (!raizes || raizes.length === 0 || Array(raizes).length === 0) {
             resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
             return;
         }
@@ -162,7 +163,7 @@ class Pessoas {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Erro na requisição no Metodo Pessoas.getPessoas()")
-                return;
+                return [];
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (pessoa) => {
@@ -184,7 +185,7 @@ class Pessoas {
             return { results: results };
         } catch (error) {
             console.error("Erro no Metodo Pessoas.getPessoas(): ", error);
-            return { results: [] };
+            return [];
         }
     }
 
@@ -205,12 +206,13 @@ class Pessoas {
             return data;
         } catch (error) {
             console.error("Erro no Metodo Pessoas.getSchema(): ", error);
-            return {};
+            return [];
         }
     }
     static async exibeTabelaPessoas(Pessoas) {
         if (!Pessoas || Pessoas.length === 0) {
-            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            return;
         }
         //resultsContainer.innerHTML ="";
         const tabela = document.createElement("table");
@@ -268,7 +270,7 @@ class Filmes {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Erro na requisição no Metodo Filmes.getFilmes()")
-                return;
+                return [];
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (filme) => {
@@ -288,6 +290,7 @@ class Filmes {
             return { "results": results };
         } catch (error) {
             console.error("Erro no Metodo Filmes.getFilmes(): ", error);
+            return [];
         }
     }
     static async exibeTabelaFilmes(Filmes) {
@@ -355,15 +358,12 @@ class NavesEspaciais {
                 };
             })
             );
-
             console.log("Responda: ", response, "\nDados: ", data);
-
             return { "results": results };
-
         } catch (error) {
             console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
+            return {};
         }
-
     }
     static async exibeTabelaNavesEspaciais(NavesEspaciais) {
         if (!NavesEspaciais || NavesEspaciais.length === 0) {
@@ -420,7 +420,13 @@ class Veiculos {
     static async getVeiculos(url = Raizes.veiculos) {
         console.log("URL:", url)
         try {
-
+            const response = await fetch(url);
+            if(response.ok){
+                console.log("")
+            }
+            const data  = response.json();
+            const result = data.results;
+            return result;
         } catch (error) {
 
         }
@@ -464,17 +470,17 @@ class Especies {
                     }
 
                 } catch (error) {
-                    console.log("Erro no metodo getEspecies",error);
+                    console.log("Erro no metodo getEspecies", error);
                 }
 
             }))
-            return {"results": resultado};
+            return { "results": resultado };
         } catch (error) {
             console.error("Erro no Metodo Especies.getEspecies(): ", error);
         }
     }
     static exibeTabelaEspecies(Especies) {
-        if(!Especies){
+        if (!Especies) {
 
         }
         const tabela = document.createElement("table");

@@ -1,6 +1,7 @@
 const btn_starWars = document.getElementById('StarWars');
 const btn_zelda = document.getElementById('Zelda');
 const btn_clear = document.getElementById('clear');
+const btn_home =document.getElementById('Home');
 const title = document.querySelector('title');
 const h1Title = document.querySelector('h1#title');
 const mainContent = document.querySelector('main');
@@ -10,6 +11,10 @@ const nav = document.querySelector('p#pix');
 const ePIX = document.getElementById("ePIX");
 const icone_btn = document.getElementById('icone');
 let exibir =true;
+btn_home.addEventListener('click',(event) =>{
+    mainContent.innerText ="Bem-vindo ao treinamento em teste de API! Este ambiente foi projetado para ajudá-lo a aprender e praticar suas habilidades de teste de API usando Postman. Aqui, você pode explorar diferentes cenários de teste, criar suas próprias coleções e validar as respostas das APIs. Sinta-se à vontade para experimentar, aprender e se divertir enquanto aprimora suas habilidades de teste de API!";
+    resultsContainer.innerText="";
+});
 ePIX.addEventListener('mouseenter', (event) => {
     event.preventDefault();
     Comum.emitirSom();
@@ -25,7 +30,7 @@ ePIX.addEventListener('mouseleave', (event) => {
     Comum.emitirSom();
     
     if (nav.innerText!==``&& exibir) {
-        alert(nav.innerText)
+        alert(nav.innerText);
         nav.innerText = "";
     }
 })
