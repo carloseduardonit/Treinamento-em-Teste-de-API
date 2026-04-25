@@ -9,7 +9,9 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
 
 ## Possiveis testes
 
-- [⏳] [Animes API](https://animechan.vercel.app/)
+- [❌] [Animes API](https://animechan.vercel.app/)
+   - [✅] ler a documentação da Animechan
+   - [❌] Precisa pagar a autenticação
 - [⏳] [Clash of Clans API](https://developer.clashofclans.com/)
 - [⏳] [deck of cards API](https://deckofcardsapi.com/)
 - [⏳] [Design Patterns](https://refactoring.guru/pt-br/design-patterns/builder/java/example#lang-features)
