@@ -4,6 +4,7 @@ const btn_Pesquisar = document.getElementById('search-button');
 const btn_Limpar = document.getElementById('clear-button');
 const btn_Schema = document.getElementById('schema-button');
 
+
 class StarWars {
     constructor() {
 
@@ -11,6 +12,8 @@ class StarWars {
     static loadFormulario() {
         this.loadBotao();
         Raiz.exibeRaiz();
+        console.log("Raix",Raizes);
+        this.LiberarOUBloquearBotao();
     }
     static exibeFormulario() {
         if (!document.querySelector('.titulo1')) {
@@ -29,9 +32,33 @@ class StarWars {
         `;
             mainContent.appendChild(form);
         }
+    }
+    static LiberarOUBloquearBotao(){
+        const tabs = document.querySelectorAll('.tab-button').values;
+        console.log(tabs);
+        const tabsLiberado = ['Raiz', "Documentacao"];
+        let bloqueado=  [];
+        let nomeTab
+        for(const tab of tabs){
+            nomeTab = tab.data.tab;
+            for (const liberado of tabsLiberado) {
+                if (tab === liberado && Raizes.length === 0) {
+                    return;  
+                }
+            }
+            bloqueado.push(tab);
+            console.log(bloqueado);
+        };
+    }
+    static removeFormulario(){
+        const  ativo = document.querySelector('.tab-button.active').dataset.tab;
+        const form = document.getElementById("search-form");
+        const titulo1 = document.querySelector(".titulo1");
 
-
-
+        if(ativo ==='Raiz' || ativo === 'Documentacao'){
+            form.remove();
+            titulo1.remove();
+        }
     }
     static exibirMelhorPesquisa() {
         const ativo = document.querySelector('.tab-button.active');
@@ -93,6 +120,7 @@ class StarWars {
                 Documentacao.exibeDocumentacao();
                 break;
         }
+        this.removeFormulario();
     }
     static removaAtivos() {
         Comum.removaAtivos();
@@ -134,7 +162,8 @@ class Raiz {
     }
     static async exibirParagrafodaRaiz(raizes) {
         if (!raizes || raizes.length === 0 || Array(raizes).length === 0) {
-            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            resultsContainer.innerHTML = "<p><strong>End-Points não foram encontrados, por isso as demais abas será bloqueadas!!!</strong></p>"
+            Comum.colacaremManutencao();
             return;
         }
         resultsContainer.innerHTML = `<p class="resultado"><strong>End-Point de Pessoas: </strong> ${raizes.pessoas}`;
@@ -153,8 +182,7 @@ class Pessoas {
         <li><a class="ZeldaLink" href="${Raizes.pessoas}" target="_blank">End-Point de Pessoas</a></li>
         </ul>
         `;
-        this.exibeTabelaPessoas(await this.getPessoas());
-        Comum.colacaremManutencao();
+        this.exibeTabelaPessoas(await this.getPessoas());    
     }
     static async getPessoas() {
         const url = Raizes.pessoas;
@@ -212,6 +240,7 @@ class Pessoas {
     static async exibeTabelaPessoas(Pessoas) {
         if (!Pessoas || Pessoas.length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            Comum.colacaremManutencao();
             return;
         }
         //resultsContainer.innerHTML ="";
@@ -260,8 +289,6 @@ class Filmes {
         </ul>
         `;
         this.exibeTabelaFilmes(await this.getFilmes());
-        Comum.colacaremManutencao();
-
     }
     static async getFilmes() {
         const url = Raizes.filmes;
@@ -294,6 +321,11 @@ class Filmes {
         }
     }
     static async exibeTabelaFilmes(Filmes) {
+        if(!Filmes || Filmes.length === 0){
+            resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>";
+            Comum.colacaremManutencao();
+            return;
+        }
         const tabela = document.createElement("table");
         tabela.classList.add("tabela");
         tabela.innerHTML = `<tr class="linha">
@@ -331,7 +363,7 @@ class NavesEspaciais {
         </ul>
         `;
         this.exibeTabelaNavesEspaciais(await this.getNavesEspaciais());
-        Comum.colacaremManutencao();
+        
     }
     static async getNavesEspaciais() {
         const url = Raizes.naves_espaciais;
@@ -340,7 +372,7 @@ class NavesEspaciais {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Erro na requisição no Metodo NavesEspaciais.getNavesEspaciais()")
-                return;
+                return[];
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (nave) => {
@@ -362,12 +394,14 @@ class NavesEspaciais {
             return { "results": results };
         } catch (error) {
             console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
-            return {};
+            return [];
         }
     }
     static async exibeTabelaNavesEspaciais(NavesEspaciais) {
         if (!NavesEspaciais || NavesEspaciais.length === 0) {
-            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
+            Comum.colacaremManutencao();
+            return;
         }
         const tabela = document.createElement("table");
         tabela.classList.add("tabela1");
@@ -477,11 +511,12 @@ class Especies {
             return { "results": resultado };
         } catch (error) {
             console.error("Erro no Metodo Especies.getEspecies(): ", error);
+            return [];
         }
     }
     static exibeTabelaEspecies(Especies) {
-        if (!Especies) {
-
+        if (!Especies || Especies.length === 0) {
+            console.log("")
         }
         const tabela = document.createElement("table");
         tabela.classList("tabela");
