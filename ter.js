@@ -1,7 +1,8 @@
 const btn_starWars = document.getElementById('StarWars');
 const btn_zelda = document.getElementById('Zelda');
 const btn_clear = document.getElementById('clear');
-const btn_home =document.getElementById('Home');
+const btn_home = document.getElementById('Home');
+const btn_aguarde = document.getElementsByClassName('aguarde')
 const title = document.querySelector('title');
 const h1Title = document.querySelector('h1#title');
 const mainContent = document.querySelector('main');
@@ -10,10 +11,10 @@ const titulo2Resultado = document.getElementById('Resultados');
 const nav = document.querySelector('p#pix');
 const ePIX = document.getElementById("ePIX");
 const icone_btn = document.getElementById('icone');
-let exibir =true;
-btn_home.addEventListener('click',(event) =>{
-    mainContent.innerText ="Bem-vindo ao treinamento em teste de API! Este ambiente foi projetado para ajudá-lo a aprender e praticar suas habilidades de teste de API usando Postman. Aqui, você pode explorar diferentes cenários de teste, criar suas próprias coleções e validar as respostas das APIs. Sinta-se à vontade para experimentar, aprender e se divertir enquanto aprimora suas habilidades de teste de API!";
-    resultsContainer.innerText="";
+let exibir = true;
+btn_home.addEventListener('click', (event) => {
+    mainContent.innerText = "Bem-vindo ao treinamento em teste de API! Este ambiente foi projetado para ajudá-lo a aprender e praticar suas habilidades de teste de API usando Postman. Aqui, você pode explorar diferentes cenários de teste, criar suas próprias coleções e validar as respostas das APIs. Sinta-se à vontade para experimentar, aprender e se divertir enquanto aprimora suas habilidades de teste de API!";
+    resultsContainer.innerText = "";
 });
 ePIX.addEventListener('mouseenter', (event) => {
     event.preventDefault();
@@ -24,16 +25,16 @@ ePIX.addEventListener('mouseenter', (event) => {
         nav.style.fontWeight = 'bold';
         nav.style.alignSelf = 'center';
     }
-})
+});
 ePIX.addEventListener('mouseleave', (event) => {
     event.preventDefault();
     Comum.emitirSom();
-    
-    if (nav.innerText!==``&& exibir) {
+
+    if (nav.innerText !== `` && exibir) {
         alert(nav.innerText);
         nav.innerText = "";
     }
-})
+});
 
 btn_starWars.addEventListener('click', (event) => {
     event.preventDefault();
@@ -61,7 +62,7 @@ class Comum {
         audio.muted = !audio.muted;
         icone_btn.src = !audio.muted ? 'https://img.icons8.com/?size=30&id=kYZq65E0jeQG&format=png&color=000000' : 'https://img.icons8.com/?size=30&id=TRIthknYBFHG&format=png&color=000000';
     }
-    static exibirTela(){
+    static exibirTela() {
         const icone2 = document.getElementById('icone2');
         exibir = !exibir;
         console.log("Exibir tela:", exibir);
