@@ -13,8 +13,14 @@ Este repositório contém um projeto de teste de API desenvolvido como parte do 
    - [✅] ler a documentação da Animechan
    - [❌] Precisa pagar a autenticação
 - [⏳] [Clash of Clans API](https://developer.clashofclans.com/)
-
+   - [✅] ler a documentação da Clash of Clans
+   - [⏳] Precisa realizar cadastro
 - [⏳] [deck of cards API](https://deckofcardsapi.com/)
+   - [✅] ler a documentação da Deck of Cards 
+   - [⚙️] Elaborar da Pagina WeB
+   - [⏳] Coletar evidencias (prints, vídeos, etc) dos testes realizados na Star Wars API.
+   - [⏳] Exportar a coleção de testes da Star Wars API para o formato JSON e disponibilizar no repositório.
+   - [⏳] Criar um script em JavaScript para automatizar a execução dos testes da Star Wars API utilizando o Newman, a ferramenta de linha de comando do Postman.
 - [⏳] [Design Patterns](https://refactoring.guru/pt-br/design-patterns/builder/java/example#lang-features)
 - [⏳] [Disney API](https://disneyapi.dev/)
 - [⏳] [Food Fact API](https://world.openfoodfacts.org/data)
