@@ -92,7 +92,7 @@ class Comum {
         console.log("Ativo:", ativo);
         let nome = ativo.dataset.tab;
         console.log("Nome:", nome);
-
+        
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
@@ -129,7 +129,8 @@ btn_deckofcards.addEventListener('click',async(event)=>{
     clearMainContent();
     title.innerText= 'Deck of Cards';
     h1Title.innerText = 'Treinamento em Teste de API: Deck of Cards';
-    console.log('Deck of Cards')
+    console.log('Deck of Cards');
+    DeckofCards.exibeFormulario();
 })
 btn_clear.addEventListener('click', (event) => {
     event.preventDefault();

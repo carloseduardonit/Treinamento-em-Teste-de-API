@@ -1,0 +1,10 @@
+/* 1. Container com perspectiva */ 
+.scene { perspective: 600px; } 
+/* 2. Preserva o espaço 3D */ 
+.card-3d { transform-style: preserve-3d; transition: transform 0.6s ease; } 
+/* 3. Esconde o lado de trás */ 
+.face { backface-visibility: hidden; } 
+/* 4. Frente começa rotacionada */ 
+.card-front { transform: rotateY(180deg); } 
+/* 5. Classe .flipped vira a carta */ 
+.card-3d.flipped { transform: rotateY(180deg); }
