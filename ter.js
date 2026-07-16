@@ -1,5 +1,6 @@
 const btn_starWars = document.getElementById('StarWars');
 const btn_zelda = document.getElementById('Zelda');
+const btn_deckofcards = document.getElementById('DeckofCards');
 const btn_clear = document.getElementById('clear');
 const btn_home = document.getElementById('Home');
 const btn_aguarde = document.getElementsByClassName('aguarde')
@@ -94,7 +95,7 @@ class Comum {
         console.log("Ativo:", ativo);
         let nome = ativo.dataset.tab;
         console.log("Nome:", nome);
-
+        
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
@@ -126,7 +127,14 @@ btn_zelda.addEventListener('click', async (event) => {
     Zelda.loadFormulario();
     Comum.removeManutencao();
 });
-
+btn_deckofcards.addEventListener('click',async(event)=>{
+    event.preventDefault();
+    clearMainContent();
+    title.innerText= 'Deck of Cards';
+    h1Title.innerText = 'Treinamento em Teste de API: Deck of Cards';
+    console.log('Deck of Cards');
+    DeckofCards.exibeFormulario();
+})
 btn_clear.addEventListener('click', (event) => {
     event.preventDefault();
     title.innerText = 'Treinamento em Teste de API';
