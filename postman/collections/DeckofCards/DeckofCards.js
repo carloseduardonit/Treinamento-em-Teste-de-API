@@ -10,7 +10,7 @@ class DeckofCards {
     static removaAtivos() {
         Comum.removaAtivos();
     }
-    static async embaralheCartas(quantidadesBaralhos = 1) {
+    static async embaralheCartas(quantidadesBaralhos ) {
         if (quantidadesBaralhos <= 0) {
             throw new Error("Erro no metodo embaralheCartas() a quatidade de baralho e igual ou menos do que Zero!!");
             return [];
@@ -45,6 +45,7 @@ class DeckofCards {
         }
     }
     static resultadoCartas(Cartas) {
+        resultsContainer.innerHTML = "";
         if (!Cartas || !Cartas.baralho) {
             console.log("Erro no metodo resultadoCartas() o resultado do embaralhamento e invalido!!");
             return;
@@ -77,8 +78,8 @@ class DeckofCards {
         Comum.exibeTab(this, tab);
         switch (tab) {
             case "EmbaralharCarta":
-                if (deck_id === "") { this.resultadoCartas(await this.embaralheCartas()); }
-                break;
+            if (deck_id === "") { this.resultadoCartas(await this.embaralheCartas()); }
+            break;
             case "CompreCarta":
                 this.resultadoCartas(await this.embaralheCartas());
                 break;
@@ -92,16 +93,32 @@ class DeckofCards {
         const divisao = document.createElement('div');
         divisao.setAttribute('id', 'tabs');
         divisao.innerHTML = `
-        <button class="tab-button active" data-tab="EmbaralharCarta" onclick="DeckofCards.exibeTab('EmbaralharCarta')">Embaralhar a cartas</button>
+        <button class="tab-button" data-tab="EmbaralharCarta" onclick="DeckofCards.exibeTab('EmbaralharCarta')">Embaralhar a cartas</button>
         <button class="tab-button" data-tab="CompreCarta" onclick="DeckofCards.exibeTab('CompreCarta')">Compre uma carta</button>
         <button class="tab-button" data-tab="Embaralheascartas" onclick="DeckofCards.exibeTab('Embaralheascartas')">Embaralhe as cartas</button>
-        <button class="tab-button" data-tab="Documentacao" onclick="DeckofCards.exibeTab('Documentacao')">Documentação</button>`
+        <button class="tab-button active" data-tab="Documentacao" onclick="DeckofCards.exibeTab('Documentacao')">Documentação</button>`
         mainContent.innerHTML = ``;
         mainContent.appendChild(divisao);
     }
+
+    
     static exibeDocumentacao() {
-        resultsContainer.innerHTML = 'a';
+        resultsContainer.innerHTML = `<h2>Documentação da API Deck of Cards</h2>
+        <p>A API Deck of Cards é uma API RESTful que permite criar, embaralhar e comprar cartas de baralho. Ela é baseada em um baralho padrão de 52 cartas, mas também suporta baralhos personalizados e múltiplos baralhos.</p>
+        <h3>Endpoints</h3>
+        <ul>
+            <li><strong>/api/deck/new/shuffle/</strong>: Cria um novo baralho embaralhado. Aceita um parâmetro opcional <code>deck_count</code> para especificar o número de baralhos a serem criados.</li>
+            <li><strong>/api/deck/{deck_id}/draw/</strong>: Compra cartas do baralho especificado por <code>deck_id</code>. Aceita um parâmetro obrigatório <code>count</code> para especificar o número de cartas a serem compradas.</li>
+            <li><strong>/api/deck/{deck_id}/shuffle/</strong>: Embaralha o baralho especificado por <code>deck_id</code>.</li>
+        </ul>
+        `;
     }
+
+
+
+
+
+
 
     static flipCard() {
         const card = document.querySelector('.card-3d');
