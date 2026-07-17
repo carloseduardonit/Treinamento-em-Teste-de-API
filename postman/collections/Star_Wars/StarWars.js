@@ -12,7 +12,7 @@ class StarWars {
     static loadFormulario() {
         this.loadBotao();
         Raiz.exibeRaiz();
-        console.log("Raix",Raizes);
+        console.log("Raiz",Raizes);
         this.LiberarOUBloquearBotao();
     }
     static exibeFormulario() {
@@ -184,8 +184,9 @@ class Pessoas {
         `;
         this.exibeTabelaPessoas(await this.getPessoas());    
     }
-    static async getPessoas() {
-        const url = Raizes.pessoas;
+    
+    
+    static async getPessoas(url=Raizes.pessoas) {
         console.log("URL:", url);
         try {
             const response = await fetch(url);
@@ -216,7 +217,6 @@ class Pessoas {
             return [];
         }
     }
-
 
 
     /** Com defeito */
@@ -290,8 +290,7 @@ class Filmes {
         `;
         this.exibeTabelaFilmes(await this.getFilmes());
     }
-    static async getFilmes() {
-        const url = Raizes.filmes;
+    static async getFilmes(url=Raizes.filmes) {
         console.log("URL:", url);
         try {
             const response = await fetch(url);
@@ -307,7 +306,7 @@ class Filmes {
                     diretor: filme.director,
                     produtor: filme.producer,
                     abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
-                    data_lancamento: filme.release_date
+                    data_lancamento: String(filme.release_date).substring(8, 10)+"/"+String(filme.release_date).substring(5, 7)+"/"+String(filme.release_date).substring(0, 4)
                 };
             })
             );
@@ -362,11 +361,10 @@ class NavesEspaciais {
         <li><a class="ZeldaLink" href="${Raizes.naves_espaciais}" target="_blank">End-Point de Naves Espaciais</a></li>
         </ul>
         `;
-        this.exibeTabelaNavesEspaciais(await this.getNavesEspaciais());
+        this.exibeTabelaNavesEspaciais(await this.getNavesEspaciais(Raizes.naves_espaciais));
         
     }
-    static async getNavesEspaciais() {
-        const url = Raizes.naves_espaciais;
+    static async getNavesEspaciais(url) {
         console.log("URL:", url);
         try {
             const response = await fetch(url);
@@ -382,16 +380,20 @@ class NavesEspaciais {
                     classe: nave.starship_class,
                     manufacturer: nave.manufacturer,
                     comprimento: nave.length,
-                    maxima_velocidade: nave.max_atmospheric_speed,
+                    maxima_velocidade: nave.max_atmosphering_speed,
                     tripulacao: nave.crew,
                     passageiros: nave.passengers,
                     capacidade_carga: nave.cargo_capacity,
                     consumiveis: nave.consumables
                 };
             })
+            
             );
-            console.log("Responda: ", response, "\nDados: ", data);
-            return { "results": results };
+            const atualPagina = url;
+            const anteriorPagina = data.previous || "-";
+            const proximaPagina = data.next || "-";
+            console.log("Responda: ", response, "\nDados: ", data, "\nPróxima página: ", proximaPagina, "\nAnterior página: ", anteriorPagina);
+            return { "results": results, "anteriorPagina": anteriorPagina, "atualPagina": atualPagina, "proximaPagina": proximaPagina };
         } catch (error) {
             console.error("Erro no Metodo NavesEspaciais.getNavesEspaciais(): ", error);
             return [];
@@ -436,7 +438,31 @@ class NavesEspaciais {
             <td class="coluna">${nave.consumiveis}</td>
             </tr>`;
         });
+        resultsContainer.innerHTML = "";
         resultsContainer.appendChild(tabela);
+        if (NavesEspaciais.anteriorPagina !== "-") {
+            const botaoAnterior = document.createElement("button");
+            botaoAnterior.textContent = "Página Anterior";
+            botaoAnterior.classList.add("menu-toggle");
+            botaoAnterior.addEventListener("click", async () => {
+                const anteriorPagina = NavesEspaciais.anteriorPagina;
+                const resultadoAnterior = await this.getNavesEspaciais(anteriorPagina);
+                this.exibeTabelaNavesEspaciais(resultadoAnterior);
+            });
+            resultsContainer.appendChild(botaoAnterior);
+        }
+        if (NavesEspaciais.proximaPagina !== "-") {
+            const botaoProxima = document.createElement("button");
+            botaoProxima.textContent = "Próxima Página";
+            botaoProxima.classList.add("menu-toggle");
+            botaoProxima.addEventListener("click", async () => {
+                const proximaPagina = NavesEspaciais.proximaPagina;
+                console.log("Proxima Página:", proximaPagina);
+                const resultadoProximo = await this.getNavesEspaciais(proximaPagina);
+                this.exibeTabelaNavesEspaciais(resultadoProximo);
+            });
+            resultsContainer.appendChild(botaoProxima);
+        }
 
     }
 }
