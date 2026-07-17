@@ -1,65 +1,93 @@
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/Img/icons8-json-16.png" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="ter.js" defer></script>
-    <script src="postman\collections\Zelda\Zelda.js" defer></script>
-    <script src="postman\collections\Star_Wars\StarWars.js" defer></script>
-    <script src="postman/collections/DeckofCards/DeckofCards.js" defer> </script>
-    <title>Treinamento em Teste de API</title>
-  </head>
-  <body>
-    <header class="menu"></header>
-    <div class="container">
-      <nav>
-        <ul>
-          <button class="menu-toggle" id="Home">Home</button>
-          <button class="menu-toggle" id="StarWars">Star Wars</button>
-          <button class="menu-toggle" id="Zelda">Zelda</button>
-          <button class="menu-toggle" id="DeckofCards">Deck of Cards</button>
-          <button class="menu-toggle" id="SobreMim">A historia do Desenvolvedor</button>
-          <button class="menu-toggle" id="clear">Limpar</button>
-          <audio id="audio">
-              <!--source src="\Img\o pix.mp3" type="audio/mpeg"-->
-              <source src="\Img\e-o-pix-nada-ainda.mp3" type="audio/mp3">
-          Seu navegador não suporta este elemento de áudio.
-          </audio>
 
-          <img src="https://simulador-de-emprestimo-two.vercel.app/image/Qr%20PIX.jpg" id="ePIX"   alt="Pix para ajudar o projeto" />
-        </ul>
-        <p id="pix"></p>
-      </nav>
-      <div class="content" id="main-content">
-        <h1 id="title">Treinamento em Teste de API:</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/Img/icons8-json-16.png" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="ter.js" defer></script>
+  <script src="postman\collections\Zelda\Zelda.js" defer></script>
+  <script src="postman\collections\Star_Wars\StarWars.js" defer></script>
+  <script src="postman/collections/DeckofCards/DeckofCards.js" defer> </script>
+  <title>Treinamento em Teste de API</title>
+</head>
+
+<body>
+  <header class="menu"></header>
+  <div class="container">
+    <nav>
+      <ul>
+        <button class="menu-toggle" id="Home">Home</button>
+        <button class="menu-toggle" id="Zelda">Zelda</button>
+        <button class="menu-toggle" id="StarWars">Star Wars</button>
+        <button class="menu-toggle" id="clear">Limpar</button>
+        <nav>
+          <audio id="audio">
+            <!--source src="\Img\o pix.mp3" type="audio/mpeg"-->
+            <source src="\Img\e-o-pix-nada-ainda.mp3" type="audio/mp3">
+            Seu navegador não suporta este elemento de áudio.
+          </audio>
+          <img src="https://simulador-de-emprestimo-two.vercel.app/image/Qr%20PIX.jpg" id="ePIX"
+            alt="Pix para ajudar o projeto" />
+        </nav>
+      </ul>
+      <p id="pix"></p>
+    </nav>
+    <div class="content" id="main-content">
+      <h1 id="title">Treinamento em Teste de API:</h1>
       <main>
-       <div id="description">
-        <p>Bem-vindo ao treinamento em teste de API! Este ambiente foi projetado para ajudá-lo a aprender e praticar suas habilidades de teste de API usando Postman. Aqui, você  
-pode explorar diferentes cenários de teste, criar suas próprias coleções e validar as respostas das APIs. Sinta-se à vontade para experimentar, aprender e se divertir enquanto aprimora suas habilidades de teste de API!</p>
+        <div id="description">
+          <p>Bem-vindo ao treinamento em teste de API! Este ambiente foi projetado para ajudá-lo a aprender e praticar
+            suas habilidades de teste de API usando Postman. Aqui, você
+            pode explorar diferentes cenários de teste, criar suas próprias coleções e validar as respostas das APIs.
+            Sinta-se à vontade para experimentar, aprender e se divertir enquanto aprimora suas habilidades de teste de
+            API!</p>
         </div>
       </main>
       <main class="results">
         <h2 id="Resultados">Resultados:</h2>
         <div id="results-container"></div>
       </main>
-      </div>
     </div>
+  </div>
 
-    <footer><a href="https://t.me/Carlaol" target="_blank"><img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram&logoColor=2CA5E0" alt="Telegram" /></a> 
-      <a href="https://api.whatsapp.com/send?1=pt_BR&phone=5521985745077" target="_blank"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp" /></a> 
-      <a href="mailto:carlostecnico@mail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-333333?style=for-the-badge&logo=gmail&logoColor=red" alt="Gmail" /></a> 
-      <a href="https://x.com/Carlao_Me_Ajuda" target="_blank"><img src="https://img.shields.io/badge/X-000?style=for-the-badge&logo=x" alt="X" /></a> 
-      <a href="https://www.instagram.com/carlao.me.ajuda/" target="_blank"><img src="https://img.shields.io/badge/-Instagram-%23E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" /></a> 
-      <a href="https://www.linkedin.com/in/carlos-eduardo-dos-s-figueiredo/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-      <a href="https://www.facebook.com/carloseduardonit" target="_blank"><img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook" /></a> 
-      <a href="https://github.com/carloseduardonit/" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>  
-      <a href=https://discord.com/channels/@carloseduardonit/ target="_blank"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a> 
-      <a href="https://slack.com/" target="_blank"><img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white" alt="Slack" /></a> 
-      <a href="https://trailblazer.me/id/cdossantosfigueiredo" target="_blank"><img src="https://img.shields.io/badge/Salesforce-00A1E0.svg?style=for-the-badge&logo=Salesforce&logoColor=white" alt="Salesforce" /></a>
-      <img  id="icone" src="https://img.icons8.com/?size=30&id=kYZq65E0jeQG&format=png&color=000000" onclick="Comum.mutarAudio()"/> 
-      <img id="icone2" src="https://img.icons8.com/?size=30&id=67343&format=png&color=000000" onclick="Comum.exibirTela()"/>     
+  <footer><a href="https://t.me/Carlaol" target="_blank"><img
+        src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram&logoColor=2CA5E0"
+        alt="Telegram" /></a>
+    <a href="https://api.whatsapp.com/send?1=pt_BR&phone=5521985745077" target="_blank"><img
+        src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white"
+        alt="WhatsApp" /></a>
+    <a href="mailto:carlostecnico@mail.com" target="_blank"><img
+        src="https://img.shields.io/badge/Gmail-333333?style=for-the-badge&logo=gmail&logoColor=red" alt="Gmail" /></a>
+    <a href="https://x.com/Carlao_Me_Ajuda" target="_blank"><img
+        src="https://img.shields.io/badge/X-000?style=for-the-badge&logo=x" alt="X" /></a>
+    <a href="https://www.instagram.com/carlao.me.ajuda/" target="_blank"><img
+        src="https://img.shields.io/badge/-Instagram-%23E4405F?style=for-the-badge&logo=instagram&logoColor=white"
+        alt="Instagram" /></a>
+    <a href="https://www.linkedin.com/in/carlos-eduardo-dos-s-figueiredo/" target="_blank"><img
+        src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"
+        alt="LinkedIn" /></a>
+    <a href="https://www.facebook.com/carloseduardonit" target="_blank"><img
+        src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white"
+        alt="Facebook" /></a>
+    <a href="https://github.com/carloseduardonit/" target="_blank"><img
+        src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"
+        alt="GitHub" /></a>
+    <a href=https://discord.com/channels/@carloseduardonit/ target="_blank"><img
+        src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"
+        alt="Discord" /></a>
+    <a href="https://slack.com/" target="_blank"><img
+        src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"
+        alt="Slack" /></a>
+    <a href="https://trailblazer.me/id/cdossantosfigueiredo" target="_blank"><img
+        src="https://img.shields.io/badge/Salesforce-00A1E0.svg?style=for-the-badge&logo=Salesforce&logoColor=white"
+        alt="Salesforce" /></a>
+    <img id="icone" src="https://img.icons8.com/?size=30&id=kYZq65E0jeQG&format=png&color=000000"
+      onclick="Comum.mutarAudio()" />
+    <img id="icone2" src="https://img.icons8.com/?size=30&id=67343&format=png&color=000000"
+      onclick="Comum.exibirTela()" />
     <footer>
-  </body>
+</body>
+
 </html>

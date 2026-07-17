@@ -39,14 +39,13 @@ ePIX.addEventListener('mouseleave', (event) => {
 
 btn_starWars.addEventListener('click', (event) => {
     event.preventDefault();
-    //clearMainContent();
-    //title.innerText = 'Star Wars';
-    //h1Title.innerText = 'Treinamento em Teste de API: Star Wars';
-    //console.log('Star Wars');
-    //mainContent.innerHTML = '<h2>Star Wars</h2><p>Bem-vindo ao universo de Star Wars!</p>';
-    //StarWars.loadFormulario();
-    //Comum.removeManutencao();
-    alert("API esta com problemas de certificação")
+    clearMainContent();
+    title.innerText = 'Star Wars';
+    h1Title.innerText = 'Treinamento em Teste de API: Star Wars';
+    console.log('Star Wars');
+    mainContent.innerHTML = '<h2>Star Wars</h2><p>Bem-vindo ao universo de Star Wars!</p>';
+    StarWars.loadFormulario();
+    Comum.removeManutencao();
     Comum.colacaremManutencao;
 });
 class Comum {
