@@ -410,6 +410,8 @@ class NavesEspaciais {
             Comum.colacaremManutencao();
             return;
         }
+        resultsContainer.innerHTML = "";
+        this.exibeNavesEspaciais()
         const tabela = document.createElement("table");
         tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
@@ -527,7 +529,7 @@ class Especies {
                         nome: especie.name,
                         classificacao: especie.classification,
                         designacao: especie.designation,
-                        altura_média: especie.average_height !== "n/a" ? especie.average_height + " cm" : "-"
+                        altura_média: especie.average_height !== "n/a" && especie.average_height !== "unknown" ? especie.average_height + " cm" : "-"
                     }
 
                 } catch (error) {
@@ -560,37 +562,41 @@ class Especies {
         <tr>`;
         let id = 1;
         let especiesResultado = Especie.results;
-        especiesResultado.forEach(especie => {
+        especiesResultado.forEach(esp => {
             tabela.innerHTML += `<tr class="linha">
                 <td class="coluna">${id++}</td>
-                <td class="coluna">${especie.nome}</td>
-                <td class="coluna">${especie.classificacao}</td>
-                <td class="coluna">${especie.designacao}</td>
-                <td class="coluna">${especie.altura_média}</td>
+                <td class="coluna">${esp.nome}</td>
+                <td class="coluna">${esp.classificacao}</td>
+                <td class="coluna">${esp.designacao}</td>
+                <td class="coluna">${esp.altura_média}</td>
                 <tr>
             `
         });
         resultsContainer.appendChild(tabela);
         console.log(Especie)
-        let btn_anterior = Especie.anteriorPagina;
-        if (btn_anterior !== "-") {
-            let anterior = document.createElement("button");
-            anterior.textContent = "Página Anterior"
-            anterior.classList.add("menu-toggle");
-            anterior.addEventListener('click', (event) => {
-                this.exibeTabelaEspecies(this.getEspecies(btn_anterior));
+        
+        if (Especie.anteriorPagina !== "-") {
+            let botaoAnterior = document.createElement("button");
+            botaoAnterior.textContent = "Página Anterior"
+            botaoAnterior.classList.add("menu-toggle");
+            botaoAnterior.addEventListener('click', async () => {
+                const anteriorPagina = Especie.anteriorPagina;
+                const resultadoAnterior =  await this.getEspecies(anteriorPagina);
+                this.exibeTabelaEspecies(resultadoAnterior);
             });
-            resultsContainer.appendChild(anterior);
+            resultsContainer.appendChild(botaoAnterior);
         }
-        let btn_proxima = "-";
-        if (btn_proxima !== "-") {
-            let proxima = document.createElement("button");
-            proxima.textContent = "Próxima Página"
-            proxima.classList.add("menu-toggle");
-            proxima.addEventListener("click", (event) => {
-                this.exibeTabelaEspecies(this.getEspecies(btn_proxima));
+        
+        if (Especie.proximaPagina !== "-") {
+            const botaoProxima = document.createElement("button");
+            botaoProxima.textContent = "Próxima Página"
+            botaoProxima.classList.add("menu-toggle");
+            botaoProxima.addEventListener("click", async() => {
+                const proximaPagina = Especie.proximaPagina;
+                const resultadoProximo= await  this.getEspecies(Especie.proximaPagina);
+                this.exibeTabelaEspecies(resultadoProximo);
             });
-            resultsContainer.appendChild(proxima);
+            resultsContainer.appendChild(botaoProxima);
         }
 
     }
