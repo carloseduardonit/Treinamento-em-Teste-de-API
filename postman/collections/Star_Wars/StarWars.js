@@ -552,7 +552,7 @@ class Especies {
         resultsContainer.innerHTML = "";
         this.exibeEspecies();
         const tabela = document.createElement("table");
-        tabela.classList.add("tabela");
+        tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID</th>
         <th class="coluna">Nome</th>
