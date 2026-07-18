@@ -445,7 +445,6 @@ class NavesEspaciais {
             <td class="coluna">${nave.consumiveis}</td>
             </tr>`;
         });
-        resultsContainer.innerHTML = "";
         resultsContainer.appendChild(tabela);
         if (NavesEspaciais.anteriorPagina !== "-") {
             const botaoAnterior = document.createElement("button");
@@ -551,6 +550,7 @@ class Especies {
             return;
         }
         resultsContainer.innerHTML = "";
+        this.exibeEspecies();
         const tabela = document.createElement("table");
         tabela.classList.add("tabela");
         tabela.innerHTML = `<tr class="linha">
