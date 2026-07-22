@@ -97,30 +97,24 @@ class StarWars {
         switch (tab) {
             case 'Raiz':
                 Raiz.exibeRaiz();
-
                 break;
             case 'Pessoas':
-                Pessoas.exibePessoas();
                 Pessoas.exibeTabelaPessoas(await Pessoas.getPessoas());
                 break;
             case 'Filmes':
-                Filmes.exibeFilmes();
                 Filmes.exibeTabelaFilmes(await Filmes.getFilmes());
                 break;
             case 'Naves Espaciais':
-                NavesEspaciais.exibeNavesEspaciais();
                 NavesEspaciais.exibeTabelaNavesEspaciais(await NavesEspaciais.getNavesEspaciais());
                 break;
             case 'Veículos':
-                Veiculos.exibeVeiculos();
                 Veiculos.exibeTabelaVeiculos(await Veiculos.getVeiculos());
                 break;
             case 'Espécies':
-                Especies.exibeEspecies();
                 Especies.exibeTabelaEspecies(await Especies.getEspecies());
                 break;
             case 'Planetas':
-                Planetas.exibePlanetas();
+                Planetas.exibeTabelaPlanetas(await Planetas.getPlanetas());
                 break;
             case 'Documentacao':
                 Documentacao.exibeDocumentacao();
@@ -133,6 +127,19 @@ class StarWars {
     }
     static limpar() {
 
+    }
+    static async obterNome(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+
+            }
+            const data = await response.json();
+            const nome = await data.name;
+            return nome;
+        } catch (error) {
+
+        }
     }
 }
 class Raiz {
@@ -186,11 +193,8 @@ class Pessoas {
         <p class="ZeldaLink">Pessoas</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.pessoas}" target="_blank">End-Point de Pessoas</a></li>
-        </ul>
-        `;
-
+        </ul>`;
     }
-
 
     static async getPessoas(url = Raizes.pessoas) {
         console.log("URL:", url);
@@ -202,7 +206,12 @@ class Pessoas {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (pessoa) => {
-                let planetaResponse = "Desconecido";
+                let planetaResponse = await StarWars.obterNome(pessoa.homeworld);
+                let especiesResponse;
+                let filmesResponse;
+                let veiculosResponse = await Promise.all(pessoa.vehicles.map(async(veiculo)=>{
+                    return await StarWars.obterNome(veiculo);}));
+                let naveResponse;
                 return {
                     nome: pessoa.name,
                     altura: pessoa.height + " cm",
@@ -212,7 +221,11 @@ class Pessoas {
                     cor_olhos: pessoa.eye_color,
                     ano_nascimento: pessoa.birth_year === "unknown" ? "Desconhecido" : pessoa.birth_year.replace("BBY", " Anos"),
                     genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
-                    planeta_natal: planetaResponse || "Desconecido",
+                    da_especie : especiesResponse || "-",
+                    esta_filme: filmesResponse || "-",
+                    planeta_natal: planetaResponse || "Desconhecido",
+                    possuiu_veiculos: veiculosResponse || "Desconhecido",
+                    possuiu_naves: naveResponse|| "-",
                     url: pessoa.url
                 };
             }));
@@ -249,7 +262,8 @@ class Pessoas {
             Comum.colacaremManutencao();
             return;
         }
-        //resultsContainer.innerHTML ="";
+        resultsContainer.innerHTML = "";
+        this.exibePessoas();
         const tabela = document.createElement("table");
         tabela.classList.add("tabela");
         tabela.innerHTML = `<tr class="linha">
@@ -262,7 +276,11 @@ class Pessoas {
         <th class="coluna">Cor dos Olhos</th>
         <th class="coluna">Ano de Nascimento</th>
         <th class="coluna">Gênero</th>
+        <th class="coluna">Da especie</th>
+        <th class="coluna">Estava no filme</th>
         <th class="coluna">Planeta Natal</th>
+        <th class="coluna">Possuiu Veiculos</th>
+        <th class="coluna">Possuiu Naves</th>
         <th class="coluna">URL</th>
         </tr>
         `;
@@ -279,7 +297,12 @@ class Pessoas {
             <td class="coluna">${pessoa.cor_olhos}</td>
             <td class="coluna">${pessoa.ano_nascimento}</td>
             <td class="coluna">${pessoa.genero}</td>
+            <td class="coluna">${pessoa.da_especie}</td>
+            <td class="coluna">${pessoa.esta_filme}</td>
             <td class="coluna">${pessoa.planeta_natal}</td>
+
+            <td class="coluna">${pessoa.possuiu_veiculos}</td>
+            <td class="coluna">${pessoa.possuiu_naves}</td>
             <td class="coluna"><a href="${pessoa.url}" target="_blank">Ver Detalhes</a></td>
             </tr>`;
         });
@@ -292,9 +315,7 @@ class Filmes {
         <p class="ZeldaLink">Filmes</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.filmes}" target="_blank">End-Point de Filmes</a></li>
-        </ul>
-        `;
-
+        </ul>`;
     }
     static async getFilmes(url = Raizes.filmes) {
         console.log("URL:", url);
@@ -314,11 +335,8 @@ class Filmes {
                     abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
                     data_lancamento: String(filme.release_date).substring(8, 10) + "/" + String(filme.release_date).substring(5, 7) + "/" + String(filme.release_date).substring(0, 4)
                 };
-            })
-            );
-
+            }));
             console.log("Responda: ", response, "\nDados: ", data);
-
             return { "results": results };
         } catch (error) {
             console.error("Erro no Metodo Filmes.getFilmes(): ", error);
@@ -331,7 +349,8 @@ class Filmes {
             Comum.colacaremManutencao();
             return;
         }
-
+        resultsContainer.innerHTML = "";
+        this.exibeFilmes();
         const tabela = document.createElement("table");
         tabela.classList.add("tabela");
         tabela.innerHTML = `<tr class="linha">
@@ -366,8 +385,7 @@ class NavesEspaciais {
         <p class="ZeldaLink">Naves Espaciais</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.naves_espaciais}" target="_blank">End-Point de Naves Espaciais</a></li>
-        </ul>
-        `;
+        </ul>`;
     }
     static async getNavesEspaciais(url = Raizes.naves_espaciais) {
         console.log("URL:", url);
@@ -391,9 +409,7 @@ class NavesEspaciais {
                     capacidade_carga: nave.cargo_capacity,
                     consumiveis: nave.consumables
                 };
-            })
-
-            );
+            }));
             const atualPagina = url;
             const anteriorPagina = data.previous || "-";
             const proximaPagina = data.next || "-";
@@ -404,6 +420,7 @@ class NavesEspaciais {
             return [];
         }
     }
+
     static async exibeTabelaNavesEspaciais(NavesEspaciais) {
         if (!NavesEspaciais || NavesEspaciais.length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
@@ -426,8 +443,7 @@ class NavesEspaciais {
         <th class="coluna">Passageiros</th>
         <th class="coluna">Capacidade de Carga</th>
         <th class="coluna">Consumíveis</th>
-        </tr>
-        `;
+        </tr>`;
         let resultadosNaves = NavesEspaciais.results;
         let id = 1;
         resultadosNaves.forEach(nave => {
@@ -480,25 +496,32 @@ class Veiculos {
         <li><a class="ZeldaLink" href="${Raizes.veiculos}" target="_blank">End-Point de Veículos</a></li>
         </ul>
         `;
-        this.exibeTabelaVeiculos(await this.getVeiculos);
+
         Comum.colacaremManutencao();
     }
     static async getVeiculos(url = Raizes.veiculos) {
         console.log("URL:", url)
         try {
             const response = await fetch(url);
-            if (response.ok) {
-                console.log("")
+            if (!response.ok) {
+                console.log("");
+                return [];
             }
-            const data = response.json();
-            const result = data.results;
-            return result;
+            const data = await response.json();
+            const result = await data.results;
+            return { "result": result };
         } catch (error) {
-
+            return [];
         }
 
     }
     static exibeTabelaVeiculos(Veiculos) {
+        if (!Veiculos || Veiculos.length === 0) {
+            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>";
+            Comum.colacaremManutencao();
+            return;
+        }
+        this.exibeVeiculos();
 
     }
 }
@@ -508,9 +531,7 @@ class Especies {
         <p class="ZeldaLink">Espécies</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.especies}" target="_blank">End-Point de Espécies</a></li>
-        </ul>
-        `;
-        
+        </ul>`;
     }
 
     static async getEspecies(url = Raizes.especies) {
@@ -574,26 +595,26 @@ class Especies {
         });
         resultsContainer.appendChild(tabela);
         console.log(Especie)
-        
+
         if (Especie.anteriorPagina !== "-") {
             let botaoAnterior = document.createElement("button");
             botaoAnterior.textContent = "Página Anterior"
             botaoAnterior.classList.add("menu-toggle");
             botaoAnterior.addEventListener('click', async () => {
                 const anteriorPagina = Especie.anteriorPagina;
-                const resultadoAnterior =  await this.getEspecies(anteriorPagina);
+                const resultadoAnterior = await this.getEspecies(anteriorPagina);
                 this.exibeTabelaEspecies(resultadoAnterior);
             });
             resultsContainer.appendChild(botaoAnterior);
         }
-        
+
         if (Especie.proximaPagina !== "-") {
             const botaoProxima = document.createElement("button");
             botaoProxima.textContent = "Próxima Página"
             botaoProxima.classList.add("menu-toggle");
-            botaoProxima.addEventListener("click", async() => {
+            botaoProxima.addEventListener("click", async () => {
                 const proximaPagina = Especie.proximaPagina;
-                const resultadoProximo= await  this.getEspecies(Especie.proximaPagina);
+                const resultadoProximo = await this.getEspecies(Especie.proximaPagina);
                 this.exibeTabelaEspecies(resultadoProximo);
             });
             resultsContainer.appendChild(botaoProxima);
@@ -607,15 +628,79 @@ class Planetas {
         <p class="ZeldaLink">Planetas</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.planetas}" target="_blank">End-Point de Planetas</a></li>
-        </ul>
-        `;
-        Comum.colacaremManutencao();
+        </ul> `;
     }
 
     static async getPlanetas(url = Raizes.planetas) {
-
+        console.log("URL: ", url);
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Erro na requisição no Metodo Planetas.getPlanetas()`);
+                return [];
+            }
+            const data = await response.json();
+            const results = await Promise.all(data.results.map(async (planeta) => {
+                return {
+                    nome: planeta.name,
+                    periodo_de_rotacao: planeta.rotation_period,
+                    periodo_orbital: planeta.orbital_period,
+                    diametro: planeta.diameter,
+                    clima: planeta.climate,
+                    gravidade: planeta.gravity,
+                    terreno: planeta.terrain,
+                    agua_de_superficie: planeta.surface_water,
+                    populacao: planeta.population !== "unknown" ? planeta.population : "-"
+                }
+            }));
+            console.log(results, data);
+            return { "results": results, "anteriorPagina": data.previous || "-", "atualPagina": url, "proximaPagina": data.next || "-" };
+        } catch (error) {
+            console.error("Erro")
+            return [];
+        }
     }
-    static async exibeTabelaPlanetas(Planetas) {
+
+    static async exibeTabelaPlanetas(Planeta) {
+        if (!Planeta || Planeta.length === 0) {
+            resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>";
+            Comum.colacaremManutencao();
+            return;
+        }
+        let id = 1;
+        resultsContainer.innerHTML = "";
+        this.exibePlanetas();
+        const tabela = document.createElement("table");
+        tabela.classList.add("tabela1");
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">ID</th>
+        <th class="coluna">Nome</th>
+        <th class="coluna">Periodo de rotação</th>
+        <th class="coluna">Periodo orbital</th>
+        <th class="coluna">Diametro</th>
+        <th class="coluna">Clima</th>
+        <th class="coluna">Gravidade</th>
+        <th class="coluna">Terreno</th>
+        <th class="coluna">agua de superficie</th>
+        <th class="coluna">populacao</th>
+        <th class="coluna"></th>
+        </tr>`;
+        let planetasResultado = Planeta.results;
+        planetasResultado.forEach(plan => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${id++}</td>
+            <td class="coluna">${plan.nome}</td>
+            <td class="coluna">${plan.periodo_de_rotacao}</td>
+            <td class="coluna">${plan.periodo_orbital}</td>
+            <td class="coluna">${plan.diametro}</td>
+            <td class="coluna">${plan.clima}</td>
+            <td class="coluna">${plan.gravidade}</td>
+            <td class="coluna">${plan.terreno}</td>
+            <td class="coluna">${plan.agua_de_superficie}</td>
+            <td class="coluna">${plan.populacao}</td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(tabela);
 
     }
 }
