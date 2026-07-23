@@ -66,7 +66,7 @@ class StarWars {
     }
     static exibirSchema() {
         const ativo = document.querySelector('.tab-button.active').dataset.tab;
-        alert(`Exibindo schema para a aba: ${ativo} esta em manutenção !!!`);
+        alert(`Exibindo schema para a aba: ${ativo} está em manutenção !!!`);
         switch (ativo) {
             case 'Pessoas':
                 Pessoas.getSchema();
@@ -136,7 +136,8 @@ class StarWars {
             }
             const data = await response.json();
             const nome = await data.name;
-            return nome;
+            const titulo = await data.title;
+            return nome || titulo || "-";
         } catch (error) {
 
         }
@@ -207,12 +208,20 @@ class Pessoas {
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (pessoa) => {
                 let planetaResponse = await StarWars.obterNome(pessoa.homeworld);
-                let especiesResponse;
-                let filmesResponse;
-                let veiculosResponse = await Promise.all(pessoa.vehicles.map(async(veiculo)=>{
-                    return await StarWars.obterNome(veiculo);}));
-                let naveResponse;
+                let especiesResponse = await Promise.all(pessoa.species.map(async (especie) => {
+                    return await StarWars.obterNome(especie);
+                }));
+                let filmesResponse = await Promise.all(pessoa.films.map(async (filme) => {
+                    return await StarWars.obterNome(filme);
+                }));
+                let veiculosResponse = await Promise.all(pessoa.vehicles.map(async (veiculo) => {
+                    return await StarWars.obterNome(veiculo);
+                }));
+                let naveResponse = await Promise.all(pessoa.starships.map(async (nave) => {
+                    return await StarWars.obterNome(nave);
+                }));
                 return {
+                    id: String(pessoa.url).slice(-3,-1).replace("/",""),
                     nome: pessoa.name,
                     altura: pessoa.height + " cm",
                     peso: pessoa.mass + " kg",
@@ -221,16 +230,16 @@ class Pessoas {
                     cor_olhos: pessoa.eye_color,
                     ano_nascimento: pessoa.birth_year === "unknown" ? "Desconhecido" : pessoa.birth_year.replace("BBY", " Anos"),
                     genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
-                    da_especie : especiesResponse || "-",
-                    esta_filme: filmesResponse || "-",
-                    planeta_natal: planetaResponse || "Desconhecido",
-                    possuiu_veiculos: veiculosResponse || "Desconhecido",
-                    possuiu_naves: naveResponse|| "-",
+                    da_especie: String(especiesResponse).replaceAll(",", ", \n") || "-",
+                    esta_filme: String(filmesResponse).replaceAll(",", ", \n") || "-",
+                    planeta_natal: String(planetaResponse).replaceAll(",", ", \n") || "Desconhecido",
+                    possuiu_veiculos: String(veiculosResponse).replaceAll(",", ", \n") || "Desconhecido",
+                    possuiu_naves: String(naveResponse).replaceAll(",", ", \n") || "-",
                     url: pessoa.url
                 };
             }));
             console.log("Responda: ", response, "\nDados: ", results);
-            return { results: results };
+            return { results: results, anteriorPagina: data.previous || "-", atualPagina: url, proximaPagina: data.next || "-" };
         } catch (error) {
             console.error("Erro no Metodo Pessoas.getPessoas(): ", error);
             return [];
@@ -265,9 +274,9 @@ class Pessoas {
         resultsContainer.innerHTML = "";
         this.exibePessoas();
         const tabela = document.createElement("table");
-        tabela.classList.add("tabela");
+        tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
-        <th class="coluna">ID</th>
+        <th class="coluna">#</th>
         <th class="coluna">Nome</th>
         <th class="coluna">Altura</th>
         <th class="coluna">Peso</th>
@@ -285,10 +294,11 @@ class Pessoas {
         </tr>
         `;
         let resultadosPessoas = Pessoas.results;
-        let id = 1;
+    
         resultadosPessoas.forEach(pessoa => {
+           
             tabela.innerHTML += `<tr class="linha">
-            <td class="coluna">${id++}</td>
+            <td class="coluna">${pessoa.id}</td>
             <td class="coluna">${pessoa.nome}</td>
             <td class="coluna">${pessoa.altura}</td>
             <td class="coluna">${pessoa.peso}</td>
@@ -300,13 +310,34 @@ class Pessoas {
             <td class="coluna">${pessoa.da_especie}</td>
             <td class="coluna">${pessoa.esta_filme}</td>
             <td class="coluna">${pessoa.planeta_natal}</td>
-
             <td class="coluna">${pessoa.possuiu_veiculos}</td>
             <td class="coluna">${pessoa.possuiu_naves}</td>
             <td class="coluna"><a href="${pessoa.url}" target="_blank">Ver Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
+        if (Pessoas.anteriorPagina !== "-") {
+            const botaoAnterior = document.createElement("button");
+            botaoAnterior.classList.add("menu-toggle");
+            botaoAnterior.textContent = "Página Anterior"
+            botaoAnterior.addEventListener("click", async () => {
+                const anteriorPagina = Pessoas.anteriorPagina;
+                const resultadoAnterior = await this.getPessoas(anteriorPagina);
+                this.exibeTabelaPessoas(resultadoAnterior);
+            });
+            resultsContainer.appendChild(botaoAnterior);
+        }
+        if (Pessoas.proximaPagina !== "-") {
+            const botaoProxima = document.createElement("button");
+            botaoProxima.classList.add("menu-toggle");
+            botaoProxima.textContent = "Proxima Página"
+            botaoProxima.addEventListener("click", async () => {
+                const proximaPagina = Pessoas.proximaPagina;
+                const resultadoProximo = await this.getPessoas(proximaPagina);
+                this.exibeTabelaPessoas(resultadoProximo);
+            });
+            resultsContainer.appendChild(botaoProxima);
+        }
     }
 }
 class Filmes {
@@ -327,13 +358,33 @@ class Filmes {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (filme) => {
+                let personagemResponse = await Promise.all(filme.characters.map(async (personagem) => {
+                    return await StarWars.obterNome(personagem);
+                }));
+                let planetaResponse = await Promise.all(filme.planets.map(async (planeta) => {
+                    return await StarWars.obterNome(planeta);
+                }));
+                let naveResponse = await Promise.all(filme.starships.map(async (nave) => {
+                    return await StarWars.obterNome(nave);
+                }));
+                let veiculosResponse = await Promise.all(filme.vehicles.map(async (veiculo) => {
+                    return await StarWars.obterNome(veiculo);
+                }));
+                let especiesResponse = await Promise.all(filme.species.map(async (especie) => {
+                    return await StarWars.obterNome(especie);
+                }));
                 return {
                     titulo: filme.title,
                     episodio: filme.episode_id,
                     diretor: filme.director,
                     produtor: filme.producer,
                     abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
-                    data_lancamento: String(filme.release_date).substring(8, 10) + "/" + String(filme.release_date).substring(5, 7) + "/" + String(filme.release_date).substring(0, 4)
+                    data_lancamento: String(filme.release_date).substring(8, 10) + "/" + String(filme.release_date).substring(5, 7) + "/" + String(filme.release_date).substring(0, 4),
+                    ha_personagens: personagemResponse,
+                    ha_planetas: planetaResponse,
+                    ha_naves: naveResponse,
+                    ha_veiculos: veiculosResponse,
+                    ha_especies: especiesResponse
                 };
             }));
             console.log("Responda: ", response, "\nDados: ", data);
@@ -361,6 +412,11 @@ class Filmes {
         <th class="coluna">Produtor</th>
         <th class="coluna">Abertura (Rascunho)</th>
         <th class="coluna">Data de Lançamento</th>
+        <th class="coluna">Há personagens?</th>
+        <th class="coluna">Há planetas?</th>
+        <th class="coluna">Há Naves Espaciais?</th>
+        <th class="coluna">Há Veiculos?</th>
+        <th class="coluna">Há quais especies?</th>
         </tr>
         `;
         let resultadosFilmes = Filmes.results;
@@ -374,6 +430,11 @@ class Filmes {
             <td class="coluna">${filme.produtor}</td>
             <td class="coluna">${filme.abertura_rascunho}</td>
             <td class="coluna">${filme.data_lancamento}</td>
+            <td class="coluna">${filme.ha_personagens}</td>
+            <td class="coluna">${filme.ha_planetas}</td>
+            <td class="coluna">${filme.ha_naves}</td>
+            <td class="coluna">${filme.ha_veiculos}</td>
+            <td class="coluna">${filme.ha_especies}</td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
