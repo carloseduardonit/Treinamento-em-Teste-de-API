@@ -763,17 +763,25 @@ class Planetas {
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (planeta) => {
             let aux = await StarWars.obterID(await planeta.url);
+            let filmeResponse = await Promise.all(planeta.films.map(async (filme) => {
+                return await StarWars.obterNome(filme);
+            }));
+            let pessoaResponse = await Promise.all(planeta.residents.map(async (residente) => {
+                return await StarWars.obterNome(residente);
+            }));
                 return {
                     id: aux,
                     nome: planeta.name,
-                    periodo_de_rotacao: planeta.rotation_period,
-                    periodo_orbital: planeta.orbital_period,
-                    diametro: planeta.diameter,
-                    clima: planeta.climate,
+                    periodo_de_rotacao: StarWars.tratarString(planeta.rotation_period),
+                    periodo_orbital: StarWars.tratarString(planeta.orbital_period),
+                    diametro: StarWars.tratarString(planeta.diameter),
+                    clima: StarWars.tratarString(planeta.climate),
                     gravidade: StarWars.tratarString(planeta.gravity),
                     terreno: StarWars.tratarString(planeta.terrain),
                     agua_de_superficie: StarWars.tratarString(planeta.surface_water),
                     populacao: StarWars.tratarString(planeta.population) !== "-" ? planeta.population + " habitantes" : "-",
+                    filmes: filmeResponse.join(", \n") || "-",
+                    residents: pessoaResponse.join(", \n") || "-",
                     url: planeta.url
                 }
             }));
@@ -806,7 +814,9 @@ class Planetas {
         <th class="coluna">Terreno</th>
         <th class="coluna">Agua de Superficie</th>
         <th class="coluna">Populacao</th>
-        <th class="coluna"></th>
+        <th class="coluna">Filmes</th>
+        <th class="coluna">Residentes</th>
+        <th class="coluna">Detalhes</th>
         </tr>`;
         let planetasResultado = Planeta.results;
         planetasResultado.forEach(plan => {
@@ -821,10 +831,36 @@ class Planetas {
             <td class="coluna">${plan.terreno}</td>
             <td class="coluna">${plan.agua_de_superficie}</td>
             <td class="coluna">${plan.populacao}</td>
+            <td class="coluna">${plan.filmes}</td>
+            <td class="coluna">${plan.residents}</td>
             <td class="coluna"><a class="ZeldaLink" href="${plan.url}" target="_blank">Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
+        if (Planeta.anteriorPagina !== "-") {
+            const botaoAnterior = document.createElement("button");
+            botaoAnterior.textContent = "Página Anterior";
+            botaoAnterior.classList.add("menu-toggle");
+            botaoAnterior.addEventListener("click", async () => {
+                const anteriorPagina = Planeta.anteriorPagina;
+                const resultadoAnterior = await this.getPlanetas(anteriorPagina);
+                this.exibeTabelaPlanetas(resultadoAnterior);
+            });
+            resultsContainer.appendChild(botaoAnterior);
+        }
+        if (Planeta.proximaPagina !== "-") {
+            const botaoProxima = document.createElement("button");
+            botaoProxima.textContent = "Próxima Página";
+            botaoProxima.classList.add("menu-toggle");
+            botaoProxima.addEventListener("click", async () => {
+                const proximaPagina = Planeta.proximaPagina;
+                console.log("Proxima Página:", proximaPagina);
+                const resultadoProximo = await this.getPlanetas(proximaPagina);
+                this.exibeTabelaPlanetas(resultadoProximo);
+            });
+            resultsContainer.appendChild(botaoProxima);
+        }
+
 
     }
 }
