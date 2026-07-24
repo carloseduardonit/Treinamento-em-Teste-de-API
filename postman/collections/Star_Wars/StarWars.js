@@ -206,7 +206,6 @@ class Pessoas {
         <li><a class="ZeldaLink" href="${Raizes.pessoas}" target="_blank">End-Point de Pessoas</a></li>
         </ul>`;
     }
-
     static async getPessoas(url = Raizes.pessoas) {
         console.log("URL:", url);
         try {
@@ -256,8 +255,6 @@ class Pessoas {
             return [];
         }
     }
-
-
     /** Com defeito */
     static async getSchema() {
         const url = Raizes.pessoas + "schema";
@@ -321,7 +318,7 @@ class Pessoas {
             <td class="coluna">${pessoa.planeta_natal}</td>
             <td class="coluna">${pessoa.possuiu_veiculos}</td>
             <td class="coluna">${pessoa.possuiu_naves}</td>
-            <td class="coluna"><a href="${pessoa.url}" target="_blank">Ver Detalhes</a></td>
+            <td class="coluna"><a href="${pessoa.url}" target="_blank" class="ZeldaLink">Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
@@ -391,11 +388,11 @@ class Filmes {
                     produtor: filme.producer,
                     abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
                     data_lancamento: String(filme.release_date).substring(8, 10) + "/" + String(filme.release_date).substring(5, 7) + "/" + String(filme.release_date).substring(0, 4),
-                    ha_personagens: personagemResponse,
-                    ha_planetas: planetaResponse,
-                    ha_naves: naveResponse,
-                    ha_veiculos: veiculosResponse,
-                    ha_especies: especiesResponse
+                    ha_personagens: String(personagemResponse).replaceAll(",",", \n") || "-",
+                    ha_planetas: String(planetaResponse).replaceAll(",",", ") || "-",
+                    ha_naves: String(naveResponse).replaceAll(",",", ") || "-",
+                    ha_veiculos: String(veiculosResponse).replaceAll(",",", ") || "-",
+                    ha_especies: String(especiesResponse).replaceAll(",",", ") || "-"
                 };
             }));
             console.log("Responda: ", response, "\nDados: ", data);
@@ -414,7 +411,7 @@ class Filmes {
         resultsContainer.innerHTML = "";
         this.exibeFilmes();
         const tabela = document.createElement("table");
-        tabela.classList.add("tabela");
+        tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
         <th class="coluna">ID</th>
         <th class="coluna">Título</th>
@@ -428,6 +425,7 @@ class Filmes {
         <th class="coluna">Há Naves Espaciais?</th>
         <th class="coluna">Há Veiculos?</th>
         <th class="coluna">Há quais especies?</th>
+        <th class="coluna">Detalhes</th>
         </tr>
         `;
         let resultadosFilmes = Filmes.results;
@@ -446,6 +444,7 @@ class Filmes {
             <td class="coluna">${filme.ha_naves}</td>
             <td class="coluna">${filme.ha_veiculos}</td>
             <td class="coluna">${filme.ha_especies}</td>
+            <td class="coluna"><a href="${Raizes.filmes}${filme.id}/" target="_blank" class="ZeldaLink">Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
@@ -473,6 +472,9 @@ class NavesEspaciais {
                 let filmeResponse = await Promise.all(nave.films.map(async (filme) => {
                     return await StarWars.obterNome(filme);
                 }));
+                let pessoaResponse = await Promise.all(nave.pilots.map(async (piloto) => {
+                    return await StarWars.obterNome(piloto);
+                }));
                 return {
                     id: aux,
                     nome: nave.name,
@@ -480,11 +482,12 @@ class NavesEspaciais {
                     classe: nave.starship_class,
                     manufacturer: nave.manufacturer,
                     comprimento: nave.length,
-                    maxima_velocidade: nave.max_atmosphering_speed,
-                    tripulacao: nave.crew,
-                    passageiros: nave.passengers,
-                    capacidade_carga: nave.cargo_capacity,
-                    consumiveis: nave.consumables,
+                    maxima_velocidade:StarWars.tratarString(nave.max_atmosphering_speed),
+                    tripulacao: StarWars.tratarString(nave.crew),
+                    passageiros: StarWars.tratarString(nave.passengers),
+                    capacidade_carga: StarWars.tratarString(nave.cargo_capacity),
+                    consumiveis: StarWars.tratarString(nave.consumables),
+                    quem_pilotou: pessoaResponse.join(", \n") || "-",
                     esta_filme: filmeResponse.join(", \n") || "-"
                 };
             }));
@@ -521,7 +524,9 @@ class NavesEspaciais {
         <th class="coluna">Passageiros</th>
         <th class="coluna">Capacidade de Carga</th>
         <th class="coluna">Consumíveis</th>
+        <th class="coluna">Quem Pilotou</th>
         <th class="coluna">Estava no Filmes</th>
+        <th class="coluna">Detalhes</th>
         </tr>`;
         let resultadosNaves = NavesEspaciais.results;
         resultadosNaves.forEach(nave => {
@@ -537,7 +542,9 @@ class NavesEspaciais {
             <td class="coluna">${nave.passageiros}</td>
             <td class="coluna">${nave.capacidade_carga}</td>
             <td class="coluna">${nave.consumiveis}</td>
+            <td class="coluna">${nave.quem_pilotou}</td>
             <td class="coluna">${nave.esta_filme}</td>
+            <td class="coluna"><a href="${Raizes.naves_espaciais}${nave.id}/" target="_blank" class="ZeldaLink">Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
