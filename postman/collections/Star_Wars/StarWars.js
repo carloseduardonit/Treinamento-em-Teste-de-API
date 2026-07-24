@@ -142,6 +142,16 @@ class StarWars {
 
         }
     }
+    static tratarString(string) {
+        let aux = String(string).toLowerCase();
+        if (aux === "n/a" || aux === "none" || aux === "unknown") {
+            return "-";
+        }
+        return string;
+    }
+    static async obterID(url) {
+        return String(url).slice(-3, -1).replace("/", "");
+    }
 }
 class Raiz {
     constructor() { }
@@ -220,16 +230,17 @@ class Pessoas {
                 let naveResponse = await Promise.all(pessoa.starships.map(async (nave) => {
                     return await StarWars.obterNome(nave);
                 }));
+                let aux = await StarWars.obterID(await pessoa.url);
                 return {
-                    id: String(pessoa.url).slice(-3,-1).replace("/",""),
+                    id: aux,
                     nome: pessoa.name,
                     altura: pessoa.height + " cm",
                     peso: pessoa.mass + " kg",
-                    cor_cabelo: pessoa.hair_color === "n/a" || pessoa.hair_color === "none" ? "" : pessoa.hair_color,
-                    cor_pele: pessoa.skin_color === "n/a" || pessoa.skin_color === "none" ? "" : pessoa.skin_color,
-                    cor_olhos: pessoa.eye_color,
-                    ano_nascimento: pessoa.birth_year === "unknown" ? "Desconhecido" : pessoa.birth_year.replace("BBY", " Anos"),
-                    genero: pessoa.gender === "N/A" ? "" : pessoa.gender === "male" ? "Masculino" : "Feminino",
+                    cor_cabelo: StarWars.tratarString(pessoa.hair_color),
+                    cor_pele: StarWars.tratarString(pessoa.skin_color),
+                    cor_olhos: StarWars.tratarString(pessoa.eye_color),
+                    ano_nascimento: StarWars.tratarString(pessoa.birth_year) === "-" ? "-" : pessoa.birth_year.replace("BBY", " Anos"),
+                    genero: StarWars.tratarString(pessoa.gender) === "-" ? "-" : pessoa.gender === "male" ? "Masculino" : "Feminino",
                     da_especie: String(especiesResponse).replaceAll(",", ", \n") || "-",
                     esta_filme: String(filmesResponse).replaceAll(",", ", \n") || "-",
                     planeta_natal: String(planetaResponse).replaceAll(",", ", \n") || "Desconhecido",
@@ -294,9 +305,7 @@ class Pessoas {
         </tr>
         `;
         let resultadosPessoas = Pessoas.results;
-    
         resultadosPessoas.forEach(pessoa => {
-           
             tabela.innerHTML += `<tr class="linha">
             <td class="coluna">${pessoa.id}</td>
             <td class="coluna">${pessoa.nome}</td>
@@ -373,7 +382,9 @@ class Filmes {
                 let especiesResponse = await Promise.all(filme.species.map(async (especie) => {
                     return await StarWars.obterNome(especie);
                 }));
+                let aux = await StarWars.obterID(await filme.url);
                 return {
+                    id: aux,
                     titulo: filme.title,
                     episodio: filme.episode_id,
                     diretor: filme.director,
@@ -458,7 +469,12 @@ class NavesEspaciais {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (nave) => {
+                let aux = await StarWars.obterID(await nave.url);
+                let filmeResponse = await Promise.all(nave.films.map(async (filme) => {
+                    return await StarWars.obterNome(filme);
+                }));
                 return {
+                    id: aux,
                     nome: nave.name,
                     modelo: nave.model,
                     classe: nave.starship_class,
@@ -468,7 +484,8 @@ class NavesEspaciais {
                     tripulacao: nave.crew,
                     passageiros: nave.passengers,
                     capacidade_carga: nave.cargo_capacity,
-                    consumiveis: nave.consumables
+                    consumiveis: nave.consumables,
+                    esta_filme: filmeResponse.join(", \n") || "-"
                 };
             }));
             const atualPagina = url;
@@ -493,7 +510,7 @@ class NavesEspaciais {
         const tabela = document.createElement("table");
         tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
-        <th class="coluna">ID</th>
+        <th class="coluna">#</th>
         <th class="coluna">Nome</th>
         <th class="coluna">Modelo</th>
         <th class="coluna">Classe</th>
@@ -504,12 +521,12 @@ class NavesEspaciais {
         <th class="coluna">Passageiros</th>
         <th class="coluna">Capacidade de Carga</th>
         <th class="coluna">Consumíveis</th>
+        <th class="coluna">Estava no Filmes</th>
         </tr>`;
         let resultadosNaves = NavesEspaciais.results;
-        let id = 1;
         resultadosNaves.forEach(nave => {
             tabela.innerHTML += `<tr class="linha">
-            <td class="coluna">${id++}</td>
+            <td class="coluna">${nave.id}</td>
             <td class="coluna">${nave.nome}</td>
             <td class="coluna">${nave.modelo}</td>
             <td class="coluna">${nave.classe}</td>
@@ -520,6 +537,7 @@ class NavesEspaciais {
             <td class="coluna">${nave.passageiros}</td>
             <td class="coluna">${nave.capacidade_carga}</td>
             <td class="coluna">${nave.consumiveis}</td>
+            <td class="coluna">${nave.esta_filme}</td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
@@ -605,12 +623,29 @@ class Especies {
             }
             const data = await response.json();
             const resultado = await Promise.all(data.results.map(async (especie) => {
+                let aux= await StarWars.obterID(await especie.url);
+                let pessoaResponse = await Promise.all(especie.people.map(async (pessoa) => {
+                    return await StarWars.obterNome(pessoa);
+                }));
+                let filmeResponse = await Promise.all(especie.films.map(async (filme) => {
+                    return await StarWars.obterNome(filme);
+                }));
                 try {
                     return {
+                        id: aux,
                         nome: especie.name,
                         classificacao: especie.classification,
                         designacao: especie.designation,
-                        altura_média: especie.average_height !== "n/a" && especie.average_height !== "unknown" ? especie.average_height + " cm" : "-"
+                        altura_média: StarWars.tratarString(especie.average_height) !== "-" ? especie.average_height + " cm" : "-",
+                        cor_da_pele: StarWars.tratarString(especie.skin_colors),
+                        cor_do_cabelo: StarWars.tratarString(especie.hair_colors),
+                        cor_dos_olhos: StarWars.tratarString(especie.eye_colors),
+                        expectativa_vida_media: StarWars.tratarString(especie.average_lifespan) !== "-" ? especie.average_lifespan + " anos" : "-",
+                        linguagem: StarWars.tratarString(especie.language),
+                        planeta_natal: StarWars.tratarString(await StarWars.obterNome(especie.homeworld)) || "-",
+                        pessoas: pessoaResponse.join(", \n") || "-",
+                        esta_filme: filmeResponse.join(", \n") || "-",
+                        url: especie.url
                     }
 
                 } catch (error) {
@@ -636,21 +671,39 @@ class Especies {
         const tabela = document.createElement("table");
         tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
-        <th class="coluna">ID</th>
+        <th class="coluna">#</th>
         <th class="coluna">Nome</th>
         <th class="coluna">Classificação</th>
         <th class="coluna">Designação</th>
         <th class="coluna">Altura Média</th>
+        <th class="coluna">Cor da Pele</th>
+        <th class="coluna">Cor do Cabelo</th>
+        <th class="coluna">Cor dos Olhos</th>
+        <th class="coluna">Expectativa de Vida Média</th>
+        <th class="coluna">Linguagem</th>
+        <th class="coluna">Planeta Natal</th>
+        <th class="coluna">São das especies</th>
+        <th class="coluna">Estava no Filmes</th>
+        <th class="coluna">Detalhes</th>
         <tr>`;
-        let id = 1;
+        
         let especiesResultado = Especie.results;
         especiesResultado.forEach(esp => {
             tabela.innerHTML += `<tr class="linha">
-                <td class="coluna">${id++}</td>
+                <td class="coluna">${esp.id}</td>
                 <td class="coluna">${esp.nome}</td>
                 <td class="coluna">${esp.classificacao}</td>
                 <td class="coluna">${esp.designacao}</td>
                 <td class="coluna">${esp.altura_média}</td>
+                <td class="coluna">${esp.cor_da_pele}</td>
+                <td class="coluna">${esp.cor_do_cabelo}</td>
+                <td class="coluna">${esp.cor_dos_olhos}</td>
+                <td class="coluna">${esp.expectativa_vida_media}</td>
+                <td class="coluna">${esp.linguagem}</td>
+                <td class="coluna">${esp.planeta_natal}</td>
+                <td class="coluna">${esp.pessoas}</td>
+                <td class="coluna">${esp.esta_filme}</td>
+                <td class="coluna"><a class="ZeldaLink" href="${esp.url}" target="_blank">Detalhes</a></td>
                 <tr>
             `
         });
@@ -702,16 +755,19 @@ class Planetas {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (planeta) => {
+            let aux = await StarWars.obterID(await planeta.url);
                 return {
+                    id: aux,
                     nome: planeta.name,
                     periodo_de_rotacao: planeta.rotation_period,
                     periodo_orbital: planeta.orbital_period,
                     diametro: planeta.diameter,
                     clima: planeta.climate,
-                    gravidade: planeta.gravity,
-                    terreno: planeta.terrain,
-                    agua_de_superficie: planeta.surface_water,
-                    populacao: planeta.population !== "unknown" ? planeta.population : "-"
+                    gravidade: StarWars.tratarString(planeta.gravity),
+                    terreno: StarWars.tratarString(planeta.terrain),
+                    agua_de_superficie: StarWars.tratarString(planeta.surface_water),
+                    populacao: StarWars.tratarString(planeta.population) !== "-" ? planeta.population + " habitantes" : "-",
+                    url: planeta.url
                 }
             }));
             console.log(results, data);
@@ -728,13 +784,12 @@ class Planetas {
             Comum.colacaremManutencao();
             return;
         }
-        let id = 1;
         resultsContainer.innerHTML = "";
         this.exibePlanetas();
         const tabela = document.createElement("table");
         tabela.classList.add("tabela1");
         tabela.innerHTML = `<tr class="linha">
-        <th class="coluna">ID</th>
+        <th class="coluna">#</th>
         <th class="coluna">Nome</th>
         <th class="coluna">Periodo de rotação</th>
         <th class="coluna">Periodo orbital</th>
@@ -742,14 +797,14 @@ class Planetas {
         <th class="coluna">Clima</th>
         <th class="coluna">Gravidade</th>
         <th class="coluna">Terreno</th>
-        <th class="coluna">agua de superficie</th>
-        <th class="coluna">populacao</th>
+        <th class="coluna">Agua de Superficie</th>
+        <th class="coluna">Populacao</th>
         <th class="coluna"></th>
         </tr>`;
         let planetasResultado = Planeta.results;
         planetasResultado.forEach(plan => {
             tabela.innerHTML += `<tr class="linha">
-            <td class="coluna">${id++}</td>
+            <td class="coluna">${plan.id}</td>
             <td class="coluna">${plan.nome}</td>
             <td class="coluna">${plan.periodo_de_rotacao}</td>
             <td class="coluna">${plan.periodo_orbital}</td>
@@ -759,6 +814,7 @@ class Planetas {
             <td class="coluna">${plan.terreno}</td>
             <td class="coluna">${plan.agua_de_superficie}</td>
             <td class="coluna">${plan.populacao}</td>
+            <td class="coluna"><a class="ZeldaLink" href="${plan.url}" target="_blank">Detalhes</a></td>
             </tr>`;
         });
         resultsContainer.appendChild(tabela);
