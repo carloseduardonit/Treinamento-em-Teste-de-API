@@ -4,11 +4,8 @@ const btn_Pesquisar = document.getElementById('search-button');
 const btn_Limpar = document.getElementById('clear-button');
 const btn_Schema = document.getElementById('schema-button');
 
-
 class StarWars {
-    constructor() {
-
-    }
+    constructor() {    }
     static loadFormulario() {
         this.loadBotao();
         Raiz.exibeRaiz();
@@ -580,10 +577,7 @@ class Veiculos {
         <p class="ZeldaLink">Veículos</p>
         <ul>
         <li><a class="ZeldaLink" href="${Raizes.veiculos}" target="_blank">End-Point de Veículos</a></li>
-        </ul>
-        `;
-
-        Comum.colacaremManutencao();
+        </ul>`;
     }
     static async getVeiculos(url = Raizes.veiculos) {
         console.log("URL:", url)
@@ -594,8 +588,32 @@ class Veiculos {
                 return [];
             }
             const data = await response.json();
-            const result = await data.results;
-            return { "result": result };
+            const result = await Promise.all(data.results.map(async (veiculo) => {
+                let aux = await StarWars.obterID(await veiculo.url);
+                let filmeResponse = await Promise.all(veiculo.films.map(async (filme) => {
+                    return await StarWars.obterNome(filme);
+                }));
+                let pessoaResponse = await Promise.all(veiculo.pilots.map(async (piloto) => {
+                    return await StarWars.obterNome(piloto);
+                }));
+                return {
+                    id: aux,
+                    nome: StarWars.tratarString(veiculo.name),
+                    modelo: StarWars.tratarString(veiculo.model),
+                    classe:  StarWars.tratarString(veiculo.vehicle_class),
+                    manufacturer: StarWars.tratarString(veiculo.manufacturer),
+                    comprimento: StarWars.tratarString(veiculo.length),
+                    maxima_velocidade: StarWars.tratarString(veiculo.max_atmosphering_speed),
+                    tripulacao: StarWars.tratarString(veiculo.crew),
+                    passageiros: StarWars.tratarString(veiculo.passengers),
+                    capacidade_carga: StarWars.tratarString(veiculo.cargo_capacity),
+                    consumiveis: StarWars.tratarString(veiculo.consumables),
+                    quem_pilotou: pessoaResponse.join(", \n") || "-",
+                    esta_filme: filmeResponse.join(", \n") || "-"
+                };
+            }));
+            console.log("Dados:", data);
+            return { "result": result, "anteriorPagina": data.previous || "-", "atualPagina": url, "proximaPagina": data.next || "-" };
         } catch (error) {
             return [];
         }
@@ -608,7 +626,66 @@ class Veiculos {
             return;
         }
         this.exibeVeiculos();
-
+        const tabela = document.createElement("table");
+        tabela.classList.add("tabela1");
+        tabela.innerHTML = `<tr class="linha">
+        <th class="coluna">#</th>
+        <th class="coluna">Nome</th>
+        <th class="coluna">Modelo</th>
+        <th class="coluna">Classe</th>
+        <th class="coluna">Fabricante</th>
+        <th class="coluna">Comprimento</th>
+        <th class="coluna">Máxima Velocidade</th>
+        <th class="coluna">Tripulação</th>
+        <th class="coluna">Passageiros</th>
+        <th class="coluna">Capacidade de Carga</th>
+        <th class="coluna">Consumíveis</th>
+        <th class="coluna">Quem Pilotou</th>
+        <th class="coluna">Estava no Filmes</th>
+        <th class="coluna">Detalhes</th>
+        </tr>`;
+        Veiculos.result.forEach(veic => {
+            tabela.innerHTML += `<tr class="linha">
+            <td class="coluna">${veic.id}</td>
+            <td class="coluna">${veic.nome}</td>
+            <td class="coluna">${veic.modelo}</td>
+            <td class="coluna">${veic.classe}</td>
+            <td class="coluna">${veic.manufacturer}</td>
+            <td class="coluna">${veic.comprimento}</td>
+            <td class="coluna">${veic.maxima_velocidade}</td>
+            <td class="coluna">${veic.tripulacao}</td>
+            <td class="coluna">${veic.passageiros}</td>
+            <td class="coluna">${veic.capacidade_carga}</td>
+            <td class="coluna">${veic.consumiveis}</td>
+            <td class="coluna">${veic.quem_pilotou}</td>
+            <td class="coluna">${veic.esta_filme}</td>
+            <td class="coluna"><a href="${Raizes.veiculos}${veic.id}/" target="_blank" class="ZeldaLink">Detalhes</a></td>
+            </tr>`;
+        });
+        resultsContainer.appendChild(tabela);
+        if (Veiculos.anteriorPagina !== "-") {
+            const botaoAnterior = document.createElement("button");
+            botaoAnterior.textContent = "Página Anterior";
+            botaoAnterior.classList.add("menu-toggle");
+            botaoAnterior.addEventListener("click", async () => {
+                const anteriorPagina = Veiculos.anteriorPagina;
+                const resultadoAnterior = await this.getVeiculos(anteriorPagina);
+                this.exibeTabelaVeiculos(resultadoAnterior);
+            });
+            resultsContainer.appendChild(botaoAnterior);
+        }
+        if (Veiculos.proximaPagina !== "-") {
+            const botaoProxima = document.createElement("button");
+            botaoProxima.textContent = "Próxima Página";
+            botaoProxima.classList.add("menu-toggle");
+            botaoProxima.addEventListener("click", async () => {
+                const proximaPagina = Veiculos.proximaPagina;
+                console.log("Proxima Página:", proximaPagina);
+                const resultadoProximo = await this.getVeiculos(proximaPagina);
+                this.exibeTabelaVeiculos(resultadoProximo);
+            });
+            resultsContainer.appendChild(botaoProxima);
+        }
     }
 }
 class Especies {
@@ -864,7 +941,6 @@ class Planetas {
 
     }
 }
-
 class Documentacao {
     constructor() { }
     static exibeDocumentacao() {
