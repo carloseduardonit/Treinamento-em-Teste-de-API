@@ -270,8 +270,29 @@ class Pessoas {
             return [];
         }
     }
+    static exibeParagrafo(Pessoas) {
+        let paragrafo = document.createElement("p");
+        paragrafo.classList.add("resultado");
+        paragrafo.innerHTML=`
+        <Strong>ID: </Strong> ${Pessoas.id} <br>
+        <Strong>Nome: </Strong> ${Pessoas.nome} <br>
+        <Strong>Altura: </Strong> ${Pessoas.altura} <br>
+        <Strong>Peso: </Strong> ${Pessoas.peso} <br>
+        <Strong>Cor do Cabelo: </Strong> ${Pessoas.cor_cabelo} <br>
+        <Strong>Cor da Pele: </Strong> ${Pessoas.cor_pele} <br>
+        <Strong>Cor dos Olhos: </Strong> ${Pessoas.cor_olhos} <br>
+        <Strong>Ano de Nascimento: </Strong> ${Pessoas.ano_nascimento} <br>
+        <Strong>Gênero: </Strong> ${Pessoas.genero} <br>
+        <Strong>Da Espécie: </Strong> ${Pessoas.da_especie} <br>
+        <Strong>Estava no Filme: </Strong> ${Pessoas.esta_filme} <br>
+        <Strong>Planeta Natal: </Strong> ${Pessoas.planeta_natal} <br>
+        <Strong>Possuiu Veículos: </Strong> ${Pessoas.possuiu_veiculos} <br>
+        <Strong>Possuiu Naves: </Strong> ${Pessoas.possuiu_naves} <br>
+        <Strong>URL: </Strong> <a href="${Pessoas.url}" target="_blank" class="ZeldaLink">Detalhes</a>`;
+        resultsContainer.appendChild(paragrafo);
+    }
     static async exibeTabelaPessoas(Pessoas) {
-        if (!Pessoas || Pessoas.length === 0) {
+        if (!Pessoas || Array.isArray(Pessoas) && Array(Pessoas).length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
             Comum.colacaremManutencao();
             return;
@@ -400,7 +421,7 @@ class Filmes {
         }
     }
     static async exibeTabelaFilmes(Filmes) {
-        if (!Filmes || Filmes.length === 0) {
+    if (!Filmes || !Array.isArray(Filmes) && Array(Filmes).length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>";
             Comum.colacaremManutencao();
             return;
@@ -500,7 +521,7 @@ class NavesEspaciais {
     }
 
     static async exibeTabelaNavesEspaciais(NavesEspaciais) {
-        if (!NavesEspaciais || NavesEspaciais.length === 0) {
+        if (!NavesEspaciais || !Array.isArray(NavesEspaciais) && Array(NavesEspaciais).length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>"
             Comum.colacaremManutencao();
             return;
@@ -568,7 +589,6 @@ class NavesEspaciais {
             });
             resultsContainer.appendChild(botaoProxima);
         }
-
     }
 }
 class Veiculos {
@@ -620,7 +640,7 @@ class Veiculos {
 
     }
     static exibeTabelaVeiculos(Veiculos) {
-        if (!Veiculos || Veiculos.length === 0) {
+        if (!Veiculos || !Array.isArray(Veiculos) && Array(Veiculos).length === 0) {
             resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>";
             Comum.colacaremManutencao();
             return;
@@ -696,7 +716,6 @@ class Especies {
         <li><a class="ZeldaLink" href="${Raizes.especies}" target="_blank">End-Point de Espécies</a></li>
         </ul>`;
     }
-
     static async getEspecies(url = Raizes.especies) {
         console.log("URL: ", url);
         try {
@@ -731,13 +750,10 @@ class Especies {
                         esta_filme: filmeResponse.join(", \n") || "-",
                         url: especie.url
                     }
-
                 } catch (error) {
                     console.log("Erro no metodo getEspecies", error);
                 }
-
-            }))
-
+            }));
             console.log("dados: ", data, "\nresultado: ", resultado)
             return { "results": resultado, "anteriorPagina": data.previous || "-", "atualPagina": url, "proximaPagina": data.next || "-" };
         } catch (error) {
@@ -746,8 +762,9 @@ class Especies {
         }
     }
     static exibeTabelaEspecies(Especie) {
-        if (!Especie || Especie.length === 0) {
-            console.log("");
+        if (!Especie || !Array.isArray(Especie) && Array(Especie).length === 0) {
+            resultsContainer.innerHTML = "<p><strong>End-Point não foi encontrado !!!</strong></p>";
+            Comum.colacaremManutencao();
             return;
         }
         resultsContainer.innerHTML = "";
@@ -770,7 +787,6 @@ class Especies {
         <th class="coluna">Estava no Filmes</th>
         <th class="coluna">Detalhes</th>
         <tr>`;
-        
         let especiesResultado = Especie.results;
         especiesResultado.forEach(esp => {
             tabela.innerHTML += `<tr class="linha">
@@ -788,12 +804,10 @@ class Especies {
                 <td class="coluna">${esp.pessoas}</td>
                 <td class="coluna">${esp.esta_filme}</td>
                 <td class="coluna"><a class="ZeldaLink" href="${esp.url}" target="_blank">Detalhes</a></td>
-                <tr>
-            `
+                <tr>`
         });
         resultsContainer.appendChild(tabela);
         console.log(Especie)
-
         if (Especie.anteriorPagina !== "-") {
             let botaoAnterior = document.createElement("button");
             botaoAnterior.textContent = "Página Anterior"
@@ -805,7 +819,6 @@ class Especies {
             });
             resultsContainer.appendChild(botaoAnterior);
         }
-
         if (Especie.proximaPagina !== "-") {
             const botaoProxima = document.createElement("button");
             botaoProxima.textContent = "Próxima Página"
@@ -817,7 +830,6 @@ class Especies {
             });
             resultsContainer.appendChild(botaoProxima);
         }
-
     }
 }
 class Planetas {
@@ -828,7 +840,6 @@ class Planetas {
         <li><a class="ZeldaLink" href="${Raizes.planetas}" target="_blank">End-Point de Planetas</a></li>
         </ul> `;
     }
-
     static async getPlanetas(url = Raizes.planetas) {
         console.log("URL: ", url);
         try {
@@ -869,9 +880,8 @@ class Planetas {
             return [];
         }
     }
-
     static async exibeTabelaPlanetas(Planeta) {
-        if (!Planeta || Planeta.length === 0) {
+        if (!Planeta || Array.isArray(Planeta) || Array(Planeta).length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>";
             Comum.colacaremManutencao();
             return;
@@ -937,8 +947,6 @@ class Planetas {
             });
             resultsContainer.appendChild(botaoProxima);
         }
-
-
     }
 }
 class Documentacao {
