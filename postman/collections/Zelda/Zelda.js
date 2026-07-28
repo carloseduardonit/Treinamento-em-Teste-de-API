@@ -22,9 +22,7 @@ class Zelda {
         <button class="tab-button" data-tab="Documentacao" onclick="Zelda.exibeTab('Documentacao')">Documentação</button>`
         mainContent.innerHTML = ``;
         mainContent.appendChild(divisao);
-
     }
-
     static gerarPanel() {
         Jogos.gerarPanel();
     }
@@ -46,7 +44,6 @@ class Zelda {
             </tr>`;
         });
         resultsContainer.appendChild(table);
-
     }
     static async apareceunaMasmorras(masmorras, tipoAparição = 'Apareceu') {
         resultsContainer.innerHTML += `<p class="resposta"><strong>${tipoAparição} em  ${masmorras.length === 1 ? masmorras.length + " masmorra" : masmorras.length + " masmorras"}: </strong></p>`;

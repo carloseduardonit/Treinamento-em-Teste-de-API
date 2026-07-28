@@ -5,7 +5,7 @@ const btn_Limpar = document.getElementById('clear-button');
 const btn_Schema = document.getElementById('schema-button');
 
 class StarWars {
-    constructor() {    }
+    constructor() { }
     static loadFormulario() {
         this.loadBotao();
         Raiz.exibeRaiz();
@@ -57,9 +57,29 @@ class StarWars {
             titulo1.remove();
         }
     }
-    static exibirMelhorPesquisa() {
+    static exibirMelhorPesquisa(Tipo, Pesquisa) {
         const ativo = document.querySelector('.tab-button.active');
-
+        switch (ativo.dataset.tab) {
+            case 'Pessoas':
+            Pessoas.exibeParagrafo(Pessoas.getPessoas(Tipo, Pesquisa));
+                break;
+            case 'Filmes':
+                Filmes.exibeParagrafo(Filmes.getFilmes(Tipo, Pesquisa));
+                break;
+            case 'Naves Espaciais':
+                NavesEspaciais.exibeParagrafo(NavesEspaciais.getNavesEspaciais(Tipo, Pesquisa));
+                break;
+            case 'Veículos':
+                Veiculos.exibeParagrafo(Veiculos.getVeiculos(Tipo, Pesquisa));
+                break;
+            case 'Espécies':
+                Especies.exibeParagrafo(Especies.getEspecies(Tipo, Pesquisa));
+                break;
+            case 'Planetas':
+                Planetas.exibeParagrafo(Planetas.getPlanetas(Tipo, Pesquisa));
+                break;
+            
+        }
     }
     static exibirSchema() {
         const ativo = document.querySelector('.tab-button.active').dataset.tab;
@@ -273,7 +293,7 @@ class Pessoas {
     static exibeParagrafo(Pessoas) {
         let paragrafo = document.createElement("p");
         paragrafo.classList.add("resultado");
-        paragrafo.innerHTML=`
+        paragrafo.innerHTML = `
         <Strong>ID: </Strong> ${Pessoas.id} <br>
         <Strong>Nome: </Strong> ${Pessoas.nome} <br>
         <Strong>Altura: </Strong> ${Pessoas.altura} <br>
@@ -406,11 +426,11 @@ class Filmes {
                     produtor: filme.producer,
                     abertura_rascunho: filme.opening_crawl.length > 150 ? filme.opening_crawl.substring(0, 150) + "..." : filme.opening_crawl,
                     data_lancamento: String(filme.release_date).substring(8, 10) + "/" + String(filme.release_date).substring(5, 7) + "/" + String(filme.release_date).substring(0, 4),
-                    ha_personagens: String(personagemResponse).replaceAll(",",", \n") || "-",
-                    ha_planetas: String(planetaResponse).replaceAll(",",", ") || "-",
-                    ha_naves: String(naveResponse).replaceAll(",",", ") || "-",
-                    ha_veiculos: String(veiculosResponse).replaceAll(",",", ") || "-",
-                    ha_especies: String(especiesResponse).replaceAll(",",", ") || "-"
+                    ha_personagens: String(personagemResponse).replaceAll(",", ", \n") || "-",
+                    ha_planetas: String(planetaResponse).replaceAll(",", ", ") || "-",
+                    ha_naves: String(naveResponse).replaceAll(",", ", ") || "-",
+                    ha_veiculos: String(veiculosResponse).replaceAll(",", ", ") || "-",
+                    ha_especies: String(especiesResponse).replaceAll(",", ", ") || "-"
                 };
             }));
             console.log("Responda: ", response, "\nDados: ", data);
@@ -421,7 +441,7 @@ class Filmes {
         }
     }
     static async exibeTabelaFilmes(Filmes) {
-    if (!Filmes || !Array.isArray(Filmes) && Array(Filmes).length === 0) {
+        if (!Filmes || !Array.isArray(Filmes) && Array(Filmes).length === 0) {
             resultsContainer.innerHTML += "<p><strong>End-Point não foi encontrado !!!</strong></p>";
             Comum.colacaremManutencao();
             return;
@@ -500,7 +520,7 @@ class NavesEspaciais {
                     classe: nave.starship_class,
                     manufacturer: nave.manufacturer,
                     comprimento: nave.length,
-                    maxima_velocidade:StarWars.tratarString(nave.max_atmosphering_speed),
+                    maxima_velocidade: StarWars.tratarString(nave.max_atmosphering_speed),
                     tripulacao: StarWars.tratarString(nave.crew),
                     passageiros: StarWars.tratarString(nave.passengers),
                     capacidade_carga: StarWars.tratarString(nave.cargo_capacity),
@@ -620,7 +640,7 @@ class Veiculos {
                     id: aux,
                     nome: StarWars.tratarString(veiculo.name),
                     modelo: StarWars.tratarString(veiculo.model),
-                    classe:  StarWars.tratarString(veiculo.vehicle_class),
+                    classe: StarWars.tratarString(veiculo.vehicle_class),
                     manufacturer: StarWars.tratarString(veiculo.manufacturer),
                     comprimento: StarWars.tratarString(veiculo.length),
                     maxima_velocidade: StarWars.tratarString(veiculo.max_atmosphering_speed),
@@ -726,7 +746,7 @@ class Especies {
             }
             const data = await response.json();
             const resultado = await Promise.all(data.results.map(async (especie) => {
-                let aux= await StarWars.obterID(await especie.url);
+                let aux = await StarWars.obterID(await especie.url);
                 let pessoaResponse = await Promise.all(especie.people.map(async (pessoa) => {
                     return await StarWars.obterNome(pessoa);
                 }));
@@ -850,13 +870,13 @@ class Planetas {
             }
             const data = await response.json();
             const results = await Promise.all(data.results.map(async (planeta) => {
-            let aux = await StarWars.obterID(await planeta.url);
-            let filmeResponse = await Promise.all(planeta.films.map(async (filme) => {
-                return await StarWars.obterNome(filme);
-            }));
-            let pessoaResponse = await Promise.all(planeta.residents.map(async (residente) => {
-                return await StarWars.obterNome(residente);
-            }));
+                let aux = await StarWars.obterID(await planeta.url);
+                let filmeResponse = await Promise.all(planeta.films.map(async (filme) => {
+                    return await StarWars.obterNome(filme);
+                }));
+                let pessoaResponse = await Promise.all(planeta.residents.map(async (residente) => {
+                    return await StarWars.obterNome(residente);
+                }));
                 return {
                     id: aux,
                     nome: planeta.name,

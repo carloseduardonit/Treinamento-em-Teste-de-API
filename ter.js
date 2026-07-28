@@ -94,7 +94,6 @@ class Comum {
         console.log("Ativo:", ativo);
         let nome = ativo.dataset.tab;
         console.log("Nome:", nome);
-        
         for (let index = 0; index < tabButtons.length; index++) {
             if (nome === tipo) {
                 return;
