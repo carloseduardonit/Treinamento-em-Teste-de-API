@@ -123,6 +123,54 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 - Payload de visualização personalizado para exibir os dados dos endpoints em uma tabela formatada.
 
 ``` html
+
+var template = `
+  <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8"/>
+      <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #1a1a2e; color: #eee; padding: 16px; font-size: 13px;}
+        h2 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: #fff; }
+        .subtitle { font-size: 11px; color: #aaa; margin-bottom: 14px; }
+        .grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px;}
+        .card {background: #16213e; border: 1px solid #0f3460; border-radius: 8px; padding: 14px 12px; position: relative; transition: transform 0.15s ease, box-shadow 0.15s ease;}
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.4); border-color: #ff6c37; }
+        .card-icon { font-size: 22px; margin-bottom: 8px; display: block; }
+        .card-label { font-size: 13px; font-weight: 600; text-transform: capitalize; color: #fff; margin-bottom: 6px; }
+        .card-url { font-size: 10px; color: #aaa; word-break: break-all; font-family: monospace; }
+        .badge { position: absolute; top: 8px; right: 8px; background: #ff6c37; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+        .footer { margin-top: 14px; font-size: 10px; color: #888; text-align: right; }
+      </style>
+    </head>
+    <body>
+      <h2>&#11088; SWAPI &mdash; Root Endpoints</h2>
+      <p class="subtitle">GET https://swapi.dev/api/ &nbsp;&middot;&nbsp; 200 OK &nbsp;&middot;&nbsp; 6 endpoints</p>
+      <div class="grid" id="grid"></div>
+      <div class="footer">Source: The Star Wars API (swapi.dev)</div>
+      <script>
+        var icons = { people: "&#x1F9D1;&#x200D;&#x1F680;", planets: "&#x1FA90;", films: "&#x1F3AC;", species: "&#x1F47D;", vehicles: "&#x1F697;", starships: "&#x1F680;" };
+        pm.getData(function(err, value) {
+          var resp = value.response;
+          var grid = document.getElementById("grid");
+          Object.keys(resp).forEach(function(key) {
+            var card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = '<span class="badge">GET</span><span class="card-icon">' + (icons[key] || "&#x1F517;") + '</span><div class="card-label">' + key + '</div><div class="card-url">' + resp[key] + '</div>';
+            grid.appendChild(card);
+          });
+        });
+      </script>
+    </body>
+    </html>
+`;
+
+function constructVisualizerPayload() {
+    return { response: pm.response.json() };
+}
+
+pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 ##### resultado esperado:
