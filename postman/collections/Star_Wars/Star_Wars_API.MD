@@ -122,7 +122,7 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
 
 - Payload de visualização personalizado para exibir os dados dos endpoints em uma tabela formatada.
 
-``` html
+```html
 
 var template = `
   <!DOCTYPE html>
@@ -166,17 +166,19 @@ var template = `
     </html>
 `;
 
-function constructVisualizerPayload() {
-    return { response: pm.response.json() };
-}
+  function constructVisualizerPayload() {
+      return { response: pm.response.json() };
+  }
 
-pm.visualizer.set(template, constructVisualizerPayload());
+  pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
 ##### resultado esperado:
 - A resposta deve conter um objeto JSON com as seguintes propriedades: "people", "planets", "films", "species", "vehicles" e "starships".
 - Cada propriedade deve conter uma URL válida que aponta para o endpoint correspondente da API.
 - O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
+![Evidencia do 1.1 - Obter endpoint](/postman/collections/Star_Wars/Recurso/1.1%20-%20Obter%20endpoint.gif)
 
 </details>
 
