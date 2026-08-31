@@ -530,7 +530,7 @@ var template = `
 ##### Script de teste de Post-response:
 - Implementação do codigo para o teste de API:
 
-|```javascript
+```javascript
 ```
 
 - Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
@@ -553,7 +553,7 @@ var template = `
 ##### Script de teste de Post-response:
 - Implementação do codigo para o teste de API:
 
-|```javascript
+```javascript
 ```
 
 - Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
