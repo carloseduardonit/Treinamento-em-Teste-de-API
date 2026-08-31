@@ -173,7 +173,7 @@ var template = `
   pm.visualizer.set(template, constructVisualizerPayload());
 ```
 
-##### resultado esperado:
+##### Resultado esperado:
 - A resposta deve conter um objeto JSON com as seguintes propriedades: "people", "planets", "films", "species", "vehicles" e "starships".
 - Cada propriedade deve conter uma URL válida que aponta para o endpoint correspondente da API.
 - O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
@@ -202,7 +202,7 @@ var template = `
 
 #### 2.1 Obter lista de todas pessoas
 
-###### Script de teste de Post-response:
+##### Script de teste de Post-response:
 
 - Implementação do codigo para o teste de API:
 ```javascript
@@ -502,10 +502,12 @@ var template = `
 ``` html
 ```
 
-##### resultado esperado:
+##### Resultado esperado:
 - A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma pessoa.
 - Cada objeto de pessoa deve conter as seguintes propriedades: "name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year", "gender", "homeworld", "films", "species", "vehicles", "starships", "created", "edited", "url".
 - O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
+![Evidencia do 2.1 Obter lista de todas pessoas](/postman/collections/Star_Wars/Recurso/2.1 Obter lista de todas pessoas.gif)
 
 </details>
 
