@@ -528,20 +528,46 @@ var template = `
 </summary>
 
 ##### Script de teste de Post-response:
-
-</details>
-</details>
-
 - Implementação do codigo para o teste de API:
 
-|DE isso| PARA isso|
-|:---|:---|
-|``` javascrit
+|```javascript
 ```
-| ``` javascrit
-```|
 
 - Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
+
+```html
+```
+
+##### Resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma pessoa.
+- Cada objeto de pessoa deve conter as seguintes propriedades: "name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year", "gender", "homeworld", "films", "species", "vehicles", "starships", "created", "edited", "url".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
+</details>
+<details>
+<summary>
+
+#### 2.3 Obter por Nome da pessoa
+</summary>
+
+##### Script de teste de Post-response:
+- Implementação do codigo para o teste de API:
+
+|```javascript
+```
+
+- Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
+
+```html
+```
+
+##### Resultado esperado:
+- A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando uma pessoa.
+- Cada objeto de pessoa deve conter as seguintes propriedades: "name", "height", "mass", "hair_color", "skin_color", "eye_color", "birth_year", "gender", "homeworld", "films", "species", "vehicles", "starships", "created", "edited", "url".
+- O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
+
+</details>
+</details>
 ---
 [Topo](#estudo-no-the-star-wars-api)
 
@@ -636,7 +662,7 @@ var template = `
 ``` html
 ```
 
-##### resultado esperado:
+##### Resultado esperado:
 - A resposta deve conter um objeto JSON com uma propriedade "results" que é um array de objetos, cada um representando um filme.
 - Cada objeto de filme deve conter as seguintes propriedades: "title", "episode_id", "opening_crawl", "director", "producer", "release_date", "characters", "planets", "starships", "vehicles", "species", "created", "edited", "url".
 - O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
