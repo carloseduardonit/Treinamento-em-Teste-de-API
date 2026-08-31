@@ -200,12 +200,7 @@ var template = `
   GET https://swapi.dev/api/people/
 ```
 
-> [!NOTE]
-> Useful information that users should know, even when skimming content.
-
-
-
-> [!IMPORTANT]
+>[!IMPORTANT]
 >
 > Ao fazer uma `Pesquisa por nome` ao inves de  trazer um unico registro  retorna `a pagina` em que o regitro faz parte.
 
