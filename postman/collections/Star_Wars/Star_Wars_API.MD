@@ -111,8 +111,8 @@ A coleção de testes para a Star Wars API está organizada da seguinte forma:
     for (let property of properties) {
       var url = responseJson[property];
       pm.expect(url).to.match(/^https:\/\/swapi\.dev\/api\/[^\/]+\/$/);
-      console.log(url)
-      pm.environment.set(property, responseJson[property]);
+      console.log(String (url).slice(0,-1));
+      pm.environment.set(property, String(responseJson[property]).slice(0, -1));
     }
   });
   pm.test("Verifica o status code é 200", () => {
@@ -199,6 +199,9 @@ var template = `
 ``` url
   GET https://swapi.dev/api/people/
 ```
+
+> Note
+>  Ao fazer uma `Pesquisa por nome` ao inves de  trazer um unico registro  retorna `a pagina` em que o regitro faz parte
 
 #### 2.1 Obter lista de todas pessoas
 
