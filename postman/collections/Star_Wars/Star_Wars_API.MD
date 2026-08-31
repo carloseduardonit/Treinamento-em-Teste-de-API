@@ -206,8 +206,12 @@ var template = `
 > a aplicação retorna `toda a página em que o registro está localizado`. 
 > É necessário corrigir esse comportamento para que a pesquisa apresente somente o registro encontrado.
 
+<details open>
+<summary>
 
 #### 2.1 Obter lista de todas pessoas
+
+</summary>
 
 ##### Script de teste de Post-response:
 
@@ -515,6 +519,10 @@ var template = `
 - O status code da resposta deve ser 200, indicando que a requisição foi bem-sucedida.
 
 ![Evidencia do 2.1 Obter lista de todas pessoas](/postman/collections/Star_Wars/Recurso/2.1 Obter lista de todas pessoas.gif)
+
+</details>
+
+#### 2.2 Obter por ID da pessoa
 
 </details>
 
