@@ -205,9 +205,9 @@ var template = `
 
 
 
-> [!NOTE]
+> [!IMPORTANT]
 >
-> Ao fazer uma `Pesquisa por nome` ao inves de  trazer um unico registro  retorna `a pagina` em que o regitro faz parte
+> Ao fazer uma `Pesquisa por nome` ao inves de  trazer um unico registro  retorna `a pagina` em que o regitro faz parte.
 
 #### 2.1 Obter lista de todas pessoas
 
