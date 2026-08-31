@@ -202,7 +202,10 @@ var template = `
 
 >[!IMPORTANT]
 >
-> Ao fazer uma `Pesquisa por nome` ao inves de  trazer um unico registro  retorna `a pagina` em que o regitro faz parte.
+> Ao realizar uma `pesquisa por nome`, em vez de retornar apenas o registro correspondente, 
+> a aplicação retorna `toda a página em que o registro está localizado`. 
+> É necessário corrigir esse comportamento para que a pesquisa apresente somente o registro encontrado.
+
 
 #### 2.1 Obter lista de todas pessoas
 
