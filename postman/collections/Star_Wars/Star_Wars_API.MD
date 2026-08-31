@@ -533,12 +533,14 @@ var template = `
 </details>
 
 - Implementação do codigo para o teste de API:
+
 |DE isso| PARA isso|
 |:---|:---|
 |``` javascrit
 ```
 | ``` javascrit
 ```|
+
 - Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
 ---
 [Topo](#estudo-no-the-star-wars-api)
