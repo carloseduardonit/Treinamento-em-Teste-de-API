@@ -521,11 +521,25 @@ var template = `
 ![Evidencia do 2.1 Obter lista de todas pessoas](/postman/collections/Star_Wars/Recurso/2.1 Obter lista de todas pessoas.gif)
 
 </details>
+<details>
+<summary>
 
 #### 2.2 Obter por ID da pessoa
+</summary>
+
+##### Script de teste de Post-response:
 
 </details>
+</details>
 
+- Implementação do codigo para o teste de API:
+|DE isso| PARA isso|
+|:---|:---|
+|``` javascrit
+```
+| ``` javascrit
+```|
+- Payload de visualização personalizado para exibir os dados dos filmes em uma tabela formatada.
 ---
 [Topo](#estudo-no-the-star-wars-api)
 
@@ -544,7 +558,7 @@ var template = `
 ```
 #### 3.1 Obter lista de todos filmes
 
-###### Script de teste de Post-response:
+##### Script de teste de Post-response:
 
 - Implementação do codigo para o teste de API:
 ```javascript
