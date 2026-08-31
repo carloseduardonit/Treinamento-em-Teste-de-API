@@ -568,6 +568,7 @@ var template = `
 
 </details>
 </details>
+
 ---
 [Topo](#estudo-no-the-star-wars-api)
 
